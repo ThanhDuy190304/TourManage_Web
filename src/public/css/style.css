@@ -1,0 +1,85 @@
+/* styles.css */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.header-container {
+    position: relative;
+}
+
+.header-bg {
+    background-image: url('../img/Slider.jpg');
+    width: 100%;
+    height: calc(100vw / 2);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.logo_container a {
+    color: white;
+    /* Để đảm bảo màu chữ là trắng */
+    text-decoration: none;
+    /* Bỏ gạch chân */
+    font-weight: 600;
+    /* Độ dày chữ */
+}
+
+.navbar {
+    background-color: rgba(18, 11, 11, 0.51);
+}
+
+.button {
+    background-size: cover;
+    /* Đảm bảo hình ảnh lấp đầy nút */
+    background-position: center;
+    /* Đặt hình ảnh ở giữa */
+}
+
+.bg-search-icon {
+    background-image: url('../img/SearchButton.png');
+    /* Đường dẫn đến hình ảnh tìm kiếm */
+}
+
+.bg-user-icon {
+    background-image: url('../img/user-icon.png');
+    /* Đường dẫn đến hình ảnh người dùng */
+}
+
+#background-search {
+    background-image: url('../img/Search_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+
+.why_choose {
+    background-image: url('../img/Home/why_choose_bg.jpg');
+    /* Đường dẫn đến ảnh của bạn */
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    /* Tùy chỉnh kích thước ảnh để lấp đầy khu vực */
+    background-position: center;
+    /* Đặt ảnh ở giữa */
+    background-repeat: no-repeat;
+    /* Không lặp lại ảnh */
+}
+
+@layer utilities {
+
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+}
