@@ -582,10 +582,6 @@ video {
   inset: 0px;
 }
 
-.left-0 {
-  left: 0px;
-}
-
 .top-0 {
   top: 0px;
 }
@@ -733,8 +729,16 @@ video {
   margin-top: 2rem;
 }
 
+.mb-32 {
+  margin-bottom: 8rem;
+}
+
 .block {
   display: block;
+}
+
+.inline-block {
+  display: inline-block;
 }
 
 .flex {
@@ -795,10 +799,6 @@ video {
 
 .h-full {
   height: 100%;
-}
-
-.min-h-\[95vh\] {
-  min-height: 95vh;
 }
 
 .w-10 {
@@ -887,10 +887,6 @@ video {
 
 .grid-cols-\[2fr_1fr\] {
   grid-template-columns: 2fr 1fr;
-}
-
-.grid-cols-\[2fr_1fr_1fr_1fr\] {
-  grid-template-columns: 2fr 1fr 1fr 1fr;
 }
 
 .grid-rows-2 {
@@ -1101,11 +1097,6 @@ video {
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
 }
 
-.bg-gray-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-
 .bg-gray-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(107 114 128 / var(--tw-bg-opacity));
@@ -1114,6 +1105,11 @@ video {
 .bg-gray-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+}
+
+.bg-green-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(20 83 45 / var(--tw-bg-opacity));
 }
 
 .bg-slate-50 {
@@ -1129,38 +1125,6 @@ video {
 .bg-yellow-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(234 179 8 / var(--tw-bg-opacity));
-}
-
-.bg-opacity-40 {
-  --tw-bg-opacity: 0.4;
-}
-
-.bg-opacity-50 {
-  --tw-bg-opacity: 0.5;
-}
-
-.bg-\[url\(\'\/src\/img\/Contract_Log_Sign\/background_register\.jpg\'\)\] {
-  background-image: url('/src/img/Contract_Log_Sign/background_register.jpg');
-}
-
-.bg-\[url\(\'\/src\/img\/Contract_Log_Sign\/footerPic\.jpg\'\)\] {
-  background-image: url('/src/img/Contract_Log_Sign/footerPic.jpg');
-}
-
-.bg-\[url\(\'\/src\/img\/background_register\.jpg\'\)\] {
-  background-image: url('/src/img/background_register.jpg');
-}
-
-.bg-\[url\(\'\.\/src\/img\/Contract_Log_Sign\/\'\)\] {
-  background-image: url('./src/img/Contract_Log_Sign/');
-}
-
-.bg-\[url\(\'\.\/src\/img\/Contract_Log_Sign\/\.jpg\'\)\] {
-  background-image: url('./src/img/Contract_Log_Sign/.jpg');
-}
-
-.bg-\[url\(\'\.\/src\/img\/Contract_Log_Sign\/background_register\.jpg\'\)\] {
-  background-image: url('./src/img/Contract_Log_Sign/background_register.jpg');
 }
 
 .bg-cover {
@@ -1246,11 +1210,6 @@ video {
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-}
-
-.py-10 {
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
 }
 
 .py-2 {
@@ -1475,6 +1434,11 @@ video {
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-green-950:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(5 46 22 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-yellow-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(202 138 4 / var(--tw-bg-opacity));
@@ -1497,11 +1461,6 @@ video {
 .hover\:text-green-700:hover {
   --tw-text-opacity: 1;
   color: rgb(21 128 61 / var(--tw-text-opacity));
-}
-
-.hover\:text-green-950:hover {
-  --tw-text-opacity: 1;
-  color: rgb(5 46 22 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover {

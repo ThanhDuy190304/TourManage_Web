@@ -5,19 +5,23 @@ const tourPlaces = [
         img: "/img/Home/HaLong.jpg",
         alt: "Ha Long image",
         title: "Ha Long Bay",
-        description: "Ha Long Bay captivates with emerald waters and towering limestone cliffs."
+        description: "Ha Long Bay captivates with emerald waters and towering limestone cliffs.",
+        link: "/tours/Ha Long Bay"
     },
+
     {
         img: "/img/Home/Huế.jpg",
         alt: "Hue image",
         title: "Hue ancient capital",
-        description: "Hue Ancient Capital stands out with its ancient architecture and rich cultural heritage."
+        description: "Hue Ancient Capital stands out with its ancient architecture and rich cultural heritage.",
+        link: "/tours/Hue"
     },
     {
         img: "/img/Home/TPHCM.jpg",
         alt: "Ho Chi Minh City image",
         title: "Ho Chi Minh City",
-        description: "Ho Chi Minh City is vibrant with a dynamic lifestyle and diverse cultural features."
+        description: "Ho Chi Minh City is vibrant with a dynamic lifestyle and diverse cultural features.",
+        link: "/tours/Ho Chi Minh City"
     }
 ];
 
@@ -87,9 +91,8 @@ const feedbackContainer = document.getElementById('feedback-container'); // ID c
 // Tạo HTML cho các địa điểm du lịch
 tourPlaces.forEach(place => {
     const link = document.createElement('a');
-    link.href = "#";
+    link.href = place.link;
     link.className = "flex flex-col text-left flex-1 transition transform hover:scale-105 hover:shadow-[0_35px_40px_-15px_rgba(0,0,0,0.3)] py-4 px-4";
-
     const img = document.createElement('img');
     img.src = place.img;
     img.alt = place.alt;
