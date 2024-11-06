@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body>
+
+    <section class="register">
+        <div class="grid grid-cols-[2fr_1fr] p-10">
+            <div class="bg-cover bg-center w-full h-full p-28"
+                style="background-image: url('/img/Contract_Log_Sign/background_register.jpg')">
+                <h1 class="font-bold text-white text-3xl ml-10 mt-56"> GoFinance </h1>
+                <p class="text-white ml-10"> The most popular peer-to-peer lending in SEA </p>
+                <button class="bg-blue-500 py-1 px-4 ml-10 rounded-full mt-3 text-white"> Read more </button>
+            </div>
+            <div class="mt-64 pl-16 pr-16">
+                <h1 class="font-bold text-2xl"> Hello! </h1>
+                <p> Sign Up to Get Started </p>
+
+                <!-- Hiển thị thông báo nếu có -->
+                {{#if message}}
+                <div class="mt-4 p-3 rounded-lg text-red-500">
+                    {{message}}
+                </div>
+                {{/if}}
+
+                <!-- Form đăng ký -->
+                <form id="registerForm" action="/register" method="POST" onsubmit="return validateForm()">
+                    <div class="grid grid-rows-4 mt-7 gap-y-4">
+                        <input type="text" id="userName" name="user_name" placeholder="👤 Username"
+                            class="rounded-full border border-gray-400 p-3 text-gray-400" />
+                        <input type="password" id="password" name="password" placeholder="🔒 Password"
+                            class="rounded-full border border-gray-400 p-3 text-gray-400" />
+                        <button type="submit" class="rounded-full p-3 text-white bg-blue-700 text-center">
+                            Register
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function validateForm() {
+            const userName = document.getElementById('userName').value.trim();
+            const password = document.getElementById('password').value.trim();
+            if (!userName || !password) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>

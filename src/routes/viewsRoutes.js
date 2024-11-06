@@ -4,6 +4,7 @@ const router = express.Router();
 //Route connect Home Page
 router.get('/', (req, res) => {
     res.render('home', {
+        layout: 'main',
         title: 'Home Page',
         scripts: '<script src="/js/home.js"></script>'
     });
@@ -12,6 +13,7 @@ router.get('/', (req, res) => {
 //Route connect AboutUS
 router.get('/about', (req, res) => {
     res.render('about', {
+        layout: 'main',
         title: 'About Us Page',
     });
 });
@@ -20,18 +22,22 @@ router.get('/about', (req, res) => {
 //Route connect Contact 
 router.get('/contact', (req, res) => {
     res.render('contact', {
+        layout: 'main',
         title: 'Contact Us Page',
     });
 });
 
-//Route connect Login
 router.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'views', 'login.html'));
+    res.render('login', {
+        layout: false,
+        title: 'Login Page',
+    });
 });
 
-//Route connect Register
 router.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'views', 'register.html'));
+    res.render('register', {
+        layout: false,
+        title: 'Register Page',
+    });
 });
-
 module.exports = router;
