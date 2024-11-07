@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const db = require('../../config/db'); // Giả sử bạn có một tệp db.js để kết nối với cơ sở dữ liệu
 
 const Tour = {
 	getToursByLocation: async (location_name) => {
@@ -10,7 +10,7 @@ const Tour = {
 		`;
 		const values = [location_name];
 		try {
-			const result = await pool.query(query, values);
+			const result = await db.query(query, values);
 			return result.rows;
 		} catch (err) {
 			throw new Error('Error fetching tours by location: ' + err.message);
@@ -24,7 +24,7 @@ const Tour = {
 					left join tour_images t_i ON t.tour_id = t_i.tour_id 
 					WHERE t_i.img_id = 1`;
 		try {
-			const result = await pool.query(query); // Remove values here
+			const result = await db.query(query); // Remove values here
 			return result.rows;
 		} catch (err) {
 			throw new Error('Error fetching tours by location: ' + err.message);
@@ -43,7 +43,7 @@ const Tour = {
         WHERE t.tour_id = $1`;
 		const values = [tour_id];
 		try {
-			const result = await pool.query(query, values);
+			const result = await db.query(query, values);
 			return result.rows;
 		} catch (err) {
 			throw new Error('Error fetching tours by location: ' + err.message);

@@ -1,5 +1,5 @@
 // src/tour/locationModel.js
-const db = require('../config/db'); // Giả sử bạn có một tệp db.js để kết nối với cơ sở dữ liệu
+const db = require('../../config/db'); // Giả sử bạn có một tệp db.js để kết nối với cơ sở dữ liệu
 
 const Location = {
     getLocationByName: async (location_name) => {

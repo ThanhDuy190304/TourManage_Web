@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const tourController = require('../tour/tourController');
+const tourController = require('../modules/tour/tourController');
 
 router.get('/tours/:location_name', tourController.getToursByLocation);
 router.get('/tours', tourController.getPopularTours);
