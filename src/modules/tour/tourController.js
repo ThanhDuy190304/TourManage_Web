@@ -19,9 +19,9 @@ const tourController = {
             res.status(500).json({ error: err.message });
         }
     },
-    getPopularTours: async (req, res) => {
+    getAllTours: async (req, res) => {
         try {
-            const tours = await Tour.getPopularTours();
+            const tours = await Tour.getAllTours();
 
             res.render('tours', {
                 layout: 'main',

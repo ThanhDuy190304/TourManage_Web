@@ -13,12 +13,7 @@ const pool = new Pool({
     }
 });
 
-// Hàm để thực hiện truy vấn
-const query = (text, params) => {
-    return pool.query(text, params);
-};
 
-// Xuất các hàm để sử dụng ở nơi khác
 module.exports = {
-    query,
+    query: (text, params) => pool.query(text, params),
 };

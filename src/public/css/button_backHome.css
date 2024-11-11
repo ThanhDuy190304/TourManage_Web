@@ -1,0 +1,92 @@
+/* Wrapper cho button custom */
+.custom-button-wrapper {
+    position: fixed;
+    /* Dùng fixed để nó cố định ở vị trí góc trái */
+    top: 10px;
+    /* Khoảng cách từ trên */
+    left: 10px;
+    /* Khoảng cách từ trái */
+    z-index: 10;
+    /* Đảm bảo nó nằm trên các phần tử khác */
+}
+
+/* Cấu hình cho link */
+.custom-button-wrapper .link_wrapper {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+/* Cấu hình cho button (link) */
+.custom-button-wrapper .link_wrapper a {
+    display: block;
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    background: #234d20;
+    /* Màu xanh đậm */
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 3px solid #234d20;
+    /* Màu xanh đậm */
+    transition: all .35s;
+    border-radius: 5px;
+    /* Để có góc bo tròn */
+}
+
+
+
+/* Hiệu ứng hover cho link */
+.custom-button-wrapper a:hover {
+    width: 150px;
+    border: 3px solid #234d20;
+    /* Màu xanh đậm hơn */
+    background: transparent;
+    color: #234d20;
+    /* Màu xanh đậm hơn */
+}
+
+/* Hiệu ứng hover cho icon */
+.custom-button-wrapper a:hover+.icon {
+    border: 3px solid #234d20;
+    /* Màu xanh đậm hơn */
+    right: -25%;
+}
+
+@media (max-width: 768px) {
+
+    /* Ẩn chữ 'Back Home' và chỉ hiển thị icon mũi tên */
+    .custom-button-wrapper .link_wrapper a {
+        width: 40px;
+        padding: 0;
+        text-transform: none;
+        font-size: 0;
+        /* Ẩn text */
+    }
+
+    /* Chuyển mũi tên về trái */
+    .custom-button-wrapper .link_wrapper a:before {
+        content: '\2190';
+        /* Mã ký tự Unicode cho mũi tên trái */
+        font-size: 30px;
+        text-align: center;
+        display: block;
+    }
+
+    /* Sửa icon mũi tên về phía trái */
+    .custom-button-wrapper .icon {
+        right: auto;
+        left: 0;
+        transform: rotate(0deg);
+    }
+
+    /* Hiệu ứng hover cho icon */
+    .custom-button-wrapper a:hover+.icon {
+        right: auto;
+        left: -25%;
+    }
+}

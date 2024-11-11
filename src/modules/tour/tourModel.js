@@ -15,10 +15,9 @@ const Tour = {
 		} catch (err) {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
-
 	},
 
-	getPopularTours: async () => {
+	getAllTours: async () => {
 		const query = `SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url 
 					FROM tours t 
 					left join tour_images t_i ON t.tour_id = t_i.tour_id 
