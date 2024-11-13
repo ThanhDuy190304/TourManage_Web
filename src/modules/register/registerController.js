@@ -1,4 +1,5 @@
 const registerModel = require('./registerModel');
+const argon2 = require('argon2');
 
 async function registerUser(req, res) {
     const { user_name, email, password, confirmPassword } = req.body;
@@ -13,7 +14,9 @@ async function registerUser(req, res) {
 
     try {
         // Tạo người dùng mới
-        await registerModel.registerUser(user_name, email, password);
+        const encryptionPassword = await argon2.hash(password); // mã hóa mật khẩu
+
+        await registerModel.registerUser(user_name, email, encryptionPassword); // thay đổi mật khẩu cũ thành mật khẩu đã mã hóa
         res.redirect('/login?message=Registered successfully, please login!');
 
     } catch (error) {
