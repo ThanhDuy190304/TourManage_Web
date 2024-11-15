@@ -3,7 +3,7 @@ const db = require('../../config/db'); // Giả sử bạn có một tệp db.js
 const Tour = {
 	getToursByLocation: async (location_name) => {
 		const query = `
-		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url
+		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
 		from tours t inner join locations l on t.location_id = l.location_id
 					inner join tour_images t_i on t.tour_id = t_i.tour_id
 				where l.location_name = $1 and t_i.img_id = 1
@@ -18,7 +18,7 @@ const Tour = {
 	},
 
 	getAllTours: async () => {
-		const query = `SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url 
+		const query = `SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
 					FROM tours t 
 					left join tour_images t_i ON t.tour_id = t_i.tour_id 
 					WHERE t_i.img_id = 1`;
@@ -48,7 +48,23 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 
-	}
+	},
+
+	getToursByIDLocation: async (location_id, tour_id) => {
+		const query = `
+		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
+		from tours t inner join locations l on t.location_id = l.location_id
+					inner join tour_images t_i on t.tour_id = t_i.tour_id
+				where l.location_id = $1 and t_i.img_id = 1 and t.tour_id != $2
+		`;
+		const values = [location_id, tour_id];
+		try {
+			const result = await db.query(query, values);
+			return result.rows;
+		} catch (err) {
+			throw new Error('Error fetching tours by location: ' + err.message);
+		}
+	},
 };
 
 module.exports = Tour;

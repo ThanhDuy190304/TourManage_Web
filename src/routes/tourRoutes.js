@@ -4,6 +4,6 @@ const tourController = require('../modules/tour/tourController');
 
 router.get('/:location_name', tourController.getToursByLocation);
 router.get('/', tourController.getAllTours);
-router.get('/tour_detail/:tour_id', tourController.getTourByID);
+router.get('/tour_detail/:tour_id/:location_id', tourController.getTourByID);
 
 module.exports = router;

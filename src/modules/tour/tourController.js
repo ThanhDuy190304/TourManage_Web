@@ -37,12 +37,14 @@ const tourController = {
     },
 
     getTourByID: async (req, res) => {
-        const { tour_id } = req.params
+        const { tour_id, location_id } = req.params
         try {
             const tour_detail = await Tour.getTourByID(tour_id);
+            const related = await Tour.getToursByIDLocation(location_id, tour_id);
             res.render('tour_detail', {
                 layout: 'main',
                 tour_detail,
+                related,
                 title: tour_detail[0].title
             });
 
