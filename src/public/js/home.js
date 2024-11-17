@@ -1,5 +1,3 @@
-// home.js
-
 const tourPlaces = [
     {
         img: "/img/Home/HaLong.jpg",
