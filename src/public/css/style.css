@@ -25,28 +25,35 @@ body {
     /* Độ dày chữ */
 }
 
-.navbar {
+#navbar {
     background-color: rgba(18, 11, 11, 0.51);
 }
 
-.button {
+#navbar .button {
     background-size: cover;
     /* Đảm bảo hình ảnh lấp đầy nút */
     background-position: center;
     /* Đặt hình ảnh ở giữa */
+    width: 28px;
+    /* Tương ứng với w-3 */
+    height: 28px;
 }
 
-.bg-search-icon {
+#navbar .bg-search-icon {
     background-image: url('../img/SearchButton.png');
     /* Đường dẫn đến hình ảnh tìm kiếm */
 }
 
-.bg-user-icon {
+#navbar .bg-user-icon {
     background-image: url('../img/user-icon.png');
     /* Đường dẫn đến hình ảnh người dùng */
 }
 
-#background-search {
+#navbar .bg-user-icon:hover {
+    background-image: url('../img/user-icon-hover.png');
+}
+
+#navbar #background-search {
     background-image: url('../img/Search_bg.jpg');
     background-size: cover;
     background-position: center;
@@ -82,4 +89,41 @@ body {
         scrollbar-width: none;
         /* Firefox */
     }
+}
+
+@media (max-width: 768px) {
+    #navbar .logo-container {
+        display: none;
+    }
+
+    #navbar .nav-list {
+        display: none;
+        /* Ẩn nav-list */
+        position: absolute;
+        top: 0;
+        left: -100%;
+        /* Ẩn sang bên trái */
+        height: 100vh;
+        width: 70%;
+        /* Chiếm 70% chiều rộng */
+        background-color: rgba(18, 11, 11, 0.7);
+        padding: 2rem 1rem;
+        /* Thêm khoảng cách bên trong nav-list */
+        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        /* Hiển thị các phần tử theo cột */
+        gap: 1.5rem;
+        /* Tạo khoảng cách đều giữa các phần tử */
+    }
+
+    #navbar .nav-list.show {
+        display: flex;
+        padding-top: 60px;
+        left: 0;
+        /* Hiện nav-list từ bên trái */
+    }
+
 }
