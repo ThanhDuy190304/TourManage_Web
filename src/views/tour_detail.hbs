@@ -11,7 +11,7 @@
                         tour</button>
                     <button class="px-4 py-2 bg-gray-500 text-white rounded-full hover:bg-yellow-600 btn">Add to
                         Cart</button>
-                    <p class="text-2xl font-bold text-gray-600 mb-4">{{tour_detail.[0].prices}}</p>
+                    <p class="text-2xl font-bold text-gray-600 mb-4">${{tour_detail.[0].prices}}</p>
                 </div>
                 <p class="text-gray-600 mb-4">{{tour_detail.[0].brief}}</p>
                 <h2 class="text-2xl font-semibold mb-2">Detail of Tour</h2>
@@ -36,14 +36,14 @@
         <div class="space-y-8 col-span-3">
             <!-- Recent Posts -->
             <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="font-semibold mb-4 text-4xl font-medium">Recent Post</h3>
+                <h3 class="font-semibold mb-4 text-4xl font-medium">Related Tour</h3>
                 <ul class="space-y-3">
-                    {{#each tour_detail}}
+                    {{#each (limit related 3)}}
                     <li class="flex gap-8 items-center">
                         <img src="{{this.img_url}}" alt="Traveler" class="w-6/12 rounded-lg mb-4">
                         <div>
-                            <a href="#" class="text-blue-500 text-lg font-medium hover:underline">Tour Da Lat</a>
-                            <p class="text-sm text-gray-500 mt-4">14 Dec 2022</p>
+                            <a href="/tours/tour_detail/{{this.tour_id}}/{{this.location_id}}" class="text-blue-500 text-lg font-medium hover:underline">{{this.title}}</a>
+                            <p class="text-sm text-gray-500 mt-4">${{this.prices}}</p>
                         </div>
                     </li>
                     {{/each}}

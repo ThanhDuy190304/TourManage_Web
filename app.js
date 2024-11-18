@@ -4,6 +4,13 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const Handlebars = require('handlebars');
+
+// Đăng ký helper limit
+Handlebars.registerHelper('limit', function(array, limit) {
+    return array.slice(0, limit);
+});
+
 
 const viewsRoutes = require('./src/routes/viewsRoutes'); // Điều hướng view
 const tourRoutes = require('./src/routes/tourRoutes');  // Điều hướng tour
@@ -17,7 +24,6 @@ app.engine('hbs', exphbs.engine({
     extname: '.hbs',
     defaultLayout: 'main' // Layout chính
 }));
-
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'src', 'views'))
 

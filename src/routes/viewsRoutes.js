@@ -1,13 +1,21 @@
 const express = require('express');
 const router = express.Router();
-
+const Tour = require('../modules/tour/tourModel');
 //Route connect Home Page
-router.get('/', (req, res) => {
-    res.render('home', {
-        layout: 'main',
-        title: 'Home Page',
-        scripts: '<script src="/js/home.js"></script>'
-    });
+router.get('/', async (req, res) => {
+    try {
+        const bestdealTours = await Tour.getBestdealTours();
+        const bestrateTours = await Tour.getBestrateTours();
+        res.render('home', {
+            layout: 'main',
+            bestdealTours,
+            bestrateTours,
+            title: 'Home Page',
+            scripts: '<script src="/js/home.js"></script>'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 //Route connect AboutUS

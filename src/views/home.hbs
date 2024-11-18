@@ -26,6 +26,36 @@
         </div>
     </section>
 
+    <section class="relative py-20 px-8 homePage">
+        <p class="text-3xl mb-3 font-bold ">Best deal tours</p>
+        <div id="bestdeal-container" class="flex overflow-x-auto flex-nowrap bg-slate-50 space-x-8 mt-16 p-4  ">
+            {{#each bestdealTours}}
+            <div class="px-2 py-2 flex flex-col justify-between bg-white rounded-lg items-center min-w-64 w-64 h-80 shadow-lg">
+                <img src="{{this.img_url}}" alt="" class="rounded-lg h-32 object-cover w-full">
+                <h4 class="font-semibold text-2xl text-center title">{{this.title}}</h4>
+                <p class="text-lg text-gray-500 text-center">Price: ${{this.prices}}</p>
+                <p class="text-lg text-gray-500 text-center">Voucher: {{this.voucher}}%</p>
+                <p class="text-gray-600 text-center overflow-hidden text-ellipsis whitespace-normal desc">{{this.brief}}</p>
+            </div>
+            {{/each}}
+        </div>
+    </section>
+
+    <section class="relative py-20 px-8 homePage">
+        <p class="text-3xl mb-3 font-bold ">Best rate tours</p>
+        <div id="bestdeal-container" class="flex overflow-x-auto flex-nowrap bg-slate-50 space-x-8 mt-16 p-4  ">
+            {{#each bestrateTours}}
+            <div class="px-2 py-2 flex flex-col justify-between bg-white rounded-lg items-center min-w-64 w-64 h-80 shadow-lg">
+                <img src="{{this.img_url}}" alt="" class="rounded-lg h-32 object-cover w-full">
+                <h4 class="font-semibold text-2xl text-center title">{{this.title}}</h4>
+                <p class="text-lg text-gray-500 text-center">Price: ${{this.prices}}</p>
+                <p class="text-lg text-gray-500 text-center">Rate: {{this.rate}} Star</p>
+                <p class="text-gray-600 text-center overflow-hidden text-ellipsis whitespace-normal desc">{{this.brief}}</p>
+            </div>
+            {{/each}}
+        </div>
+    </section>
+
     <section class="relative py-20 px-8">
         <p class="text-3xl mb-3 text-gray-500">TESTIMONIAL</p>
         <h3 class="font-bold text-3xl">What our clients say</h3>
