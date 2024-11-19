@@ -1,4 +1,5 @@
 /* styles.css */
+
 body {
     font-family: 'Poppins', sans-serif;
 }
@@ -34,15 +35,12 @@ body {
     /* Đảm bảo hình ảnh lấp đầy nút */
     background-position: center;
     /* Đặt hình ảnh ở giữa */
-    width: 28px;
+    width: 36px;
     /* Tương ứng với w-3 */
-    height: 28px;
+    height: 36px;
 }
 
-#navbar .bg-search-icon {
-    background-image: url('../img/SearchButton.png');
-    /* Đường dẫn đến hình ảnh tìm kiếm */
-}
+
 
 #navbar .bg-user-icon {
     background-image: url('../img/user-icon.png');
@@ -53,14 +51,68 @@ body {
     background-image: url('../img/user-icon-hover.png');
 }
 
-#background-search {
-    background-image: url('../img/Search_bg.jpg');
-    background-size: cover;
-    background-position: center;
+#navbar .search__container {
+    position: relative;
+    /* Để đảm bảo nút tìm kiếm được đặt tương đối với container */
+}
+
+#navbar .search__input {
     width: 100%;
-    height: 100%;
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+    padding: 12px 24px;
+    background-color: transparent;
+    font-size: 14px;
+    line-height: 18px;
+    color: white;
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 95% center;
+    border-radius: 50px;
+    border: 1px solid white;
+    transition: all 250ms ease-in-out;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+#navbar .search__input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+#navbar .search__input:hover,
+#navbar .search__input:focus {
+    padding: 12px 0;
+    outline: 0;
+    border: 1px solid transparent;
+    border-bottom: 1px solid white;
+    border-radius: 0;
+    background-position: 100% center;
+}
+
+.search__container {
+    display: flex;
+    align-items: center;
+}
+
+#navbar .search__button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-image: url('../img/SearchButton.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    /* Thêm hiệu ứng chuyển đổi khi hover */
+}
+
+#navbar .search__button:hover {
+    transform: translateY(-50%) scale(1.2);
+    /* Thu nhỏ nút khi hover */
 }
 
 .why_choose {

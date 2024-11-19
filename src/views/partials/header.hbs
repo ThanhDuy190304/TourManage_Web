@@ -29,36 +29,22 @@
             </li>
         </ul>
 
-        <ul class="flex space-x-8 justify-items-end ml-auto">
+        <ul class="flex space-x-8 justify-items-end ml-auto items-center">
             <li>
-                <button class="button bg-search-icon w-5 h-5 flex items-center justify-center">
-                    <span class="sr-only">Search</span>
-                </button>
+                <div class="search__container">
+                    <input class="search__input" id="searchInput" type="text" placeholder="Search">
+                    <button class="search__button" id="searchButton"></button> <!-- Nút tìm kiếm -->
+                </div>
+
             </li>
             <li>
-                <a href="/login" class="button bg-user-icon w-5 h-5 flex items-center justify-center">
+                <a href="/login" class="button bg-user-icon flex items-center justify-center">
                     <span class="sr-only">User</span>
                 </a>
             </li>
-
         </ul>
+
     </nav>
 </header>
 
-<script>
-    document.getElementById("menu-toggle").addEventListener("click", function () {
-        const navList = document.querySelector(".nav-list");
-        const menuIcon = document.querySelector(".menu-icon");
-
-        // Toggle hiển thị danh sách
-        navList.classList.toggle("show");
-
-        // Đổi icon giữa list-button và exit-button
-        if (navList.classList.contains("show")) {
-            menuIcon.src = "/img/exit-button.png"; // Đổi sang icon exit
-        } else {
-            menuIcon.src = "/img/list-button.png"; // Đổi về icon list
-        }
-    });
-
-</script>
+<script src="/js/navbar.js"></script>
