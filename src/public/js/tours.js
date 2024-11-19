@@ -5,10 +5,7 @@ function StoreId(button) {
     window.location.href = `/tours/tour_detail/${id}/${idlocation}`; // Chuyển đến tour_detail với ID
 }
 
-let currentPage = 1;
-const itemsPerPage = 6;
-
-
+// Load tìm kiếm trước đó
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInf');
     
@@ -17,31 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedQuery) {
         searchInput.value = savedQuery;  // Điền lại giá trị vào ô input
     }
-});
-document.getElementById('searchInf').addEventListener('input', (event) => {
-    localStorage.setItem('searchQuery', event.target.value); // Lưu giá trị vào localStorage
-});
-
-
-
-// Lưu trạng thái checkbox vào localStorage khi người dùng thay đổi
-const saveCheckboxState = () => {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const state = {};
-    
-    checkboxes.forEach(checkbox => {
-        state[checkbox.name] = state[checkbox.name] || [];
-        if (checkbox.checked) {
-            state[checkbox.name].push(checkbox.value);
-        }
-    });
-
-    // Lưu trạng thái vào localStorage
-    localStorage.setItem('checkboxState', JSON.stringify(state));
-};
-
-// Đọc và áp dụng trạng thái checkbox từ localStorage
-const loadCheckboxState = () => {
     const savedState = localStorage.getItem('checkboxState');
     if (savedState) {
         const state = JSON.parse(savedState);
@@ -56,16 +28,32 @@ const loadCheckboxState = () => {
             }
         });
     }
-};
-
-// Lắng nghe sự thay đổi của checkbox để lưu lại trạng thái
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', saveCheckboxState);
 });
 
-// Khi trang được tải, đọc và áp dụng trạng thái đã lưu
-document.addEventListener('DOMContentLoaded', loadCheckboxState);
+//Lưu tìm kiếm trước đó
+const saveSearch = () => {
+    const searchInput = document.getElementById('searchInf');
+    localStorage.setItem('searchQuery', searchInput.value);
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const state = {};
+    
+    checkboxes.forEach(checkbox => {
+        state[checkbox.name] = state[checkbox.name] || [];
+        if (checkbox.checked) {
+            state[checkbox.name].push(checkbox.value);
+        }
+    });
 
+    // Lưu trạng thái vào localStorage
+    localStorage.setItem('checkboxState', JSON.stringify(state));
+};
+document.getElementById('btnSearch').addEventListener('click', saveSearch);
+
+
+// Tách danh sách tour thành nhiều trang
+
+let currentPage = 1;
+const itemsPerPage = 6;
 
 function showPage(page) {
     const services = document.querySelectorAll('.tour');

@@ -29,7 +29,15 @@
     {{{ scripts }}}
 
 
-
+<script>
+    window.addEventListener('beforeunload', () => {
+    // Kiểm tra xem người dùng đang thoát khỏi trang /tours
+     if (window.location.pathname !== ("/tours")) {
+         localStorage.removeItem('checkboxState'); // Xóa dữ liệu lưu checkbox
+         localStorage.removeItem('searchQuery');
+    }
+    });
+</script>
 </body>
 
 </html>

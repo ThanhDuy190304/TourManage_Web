@@ -4,7 +4,7 @@ const tourPlaces = [
         alt: "Ha Long image",
         title: "Ha Long Bay",
         description: "Ha Long Bay captivates with emerald waters and towering limestone cliffs.",
-        link: "/tours/Ha Long Bay"
+        link: "/tours?query=i&location=Ha Long Bay"
     },
 
     {
@@ -12,14 +12,14 @@ const tourPlaces = [
         alt: "Hue image",
         title: "Hue ancient capital",
         description: "Hue Ancient Capital stands out with its ancient architecture and rich cultural heritage.",
-        link: "/tours/Hue"
+        link: "/tours?query=i&location=Hue"
     },
     {
         img: "/img/Home/TPHCM.jpg",
         alt: "Ho Chi Minh City image",
         title: "Ho Chi Minh City",
         description: "Ho Chi Minh City is vibrant with a dynamic lifestyle and diverse cultural features.",
-        link: "/tours/Ho Chi Minh City"
+        link: "/tours?query=i&location=Ho Chi Minh City"
     }
 ];
 

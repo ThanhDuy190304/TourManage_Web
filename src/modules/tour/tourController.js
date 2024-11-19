@@ -21,17 +21,8 @@ const tourController = {
     },
     getAllTours: async (req, res) => {
         try {
-            const searchQuery = req.query.query ?? 'default'
-            const locationQuery = req.query.location ?? ['default']
-            const rateQuery = req.query.rate ?? [-1]
-            const priceQuery = req.query.price ?? [-1]
-            const voucherQuery = req.query.voucher ?? [-1]
-            const tours = await Tour.getAllTours(searchQuery);
-            const locations = await Tour.getAlllocationTours(locationQuery);
-            const rates = await Tour.getAllrateTours(rateQuery);
-            const prices = await Tour.getAllpriceTours(priceQuery);
-            const vouchers = await Tour.getAllvoucherTours(voucherQuery);
-            const allTours = await Tour.getTours(tours,locations, rates, prices, vouchers);
+            const { query = 'default', location = ['default'], rate = [-1], price = [-1], voucher = [-1] } = req.query;
+            const allTours = await Tour.getTours(query,location, rate, price, voucher);
             res.render('tours', {
                 layout: 'main',
                 location_name: 'Popular',
