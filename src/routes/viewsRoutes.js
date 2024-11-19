@@ -48,4 +48,11 @@ router.get('/register', (req, res) => {
         title: 'Register Page',
     });
 });
+
+router.get('/tips', (req, res) => {
+    res.render('tips', {
+        layout: 'main',
+        title: 'Tips & Article Section',
+    });
+});
 module.exports = router;

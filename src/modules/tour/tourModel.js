@@ -16,7 +16,7 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
-	getTours: async (tour1, tour2,tour3,tour4,tour5) => {
+	getTours: async (tour1, tour2, tour3, tour4, tour5) => {
 		const tourIds1 = tour1.map(item => item.tour_id);
 		const tourIds2 = tour2.map(item => item.tour_id);
 		const tourIds3 = tour3.map(item => item.tour_id);
@@ -24,7 +24,7 @@ const Tour = {
 		const tourIds5 = tour5.map(item => item.tour_id);
 
 		// Tìm các tour_id xuất hiện trong tất cả 5 mảng
-		const commonTourIds = tourIds1.filter(id => 
+		const commonTourIds = tourIds1.filter(id =>
 			tourIds2.includes(id) &&
 			tourIds3.includes(id) &&
 			tourIds4.includes(id) &&
@@ -39,7 +39,7 @@ const Tour = {
 			...tour4.filter(item => commonTourIds.includes(item.tour_id)),
 			...tour5.filter(item => commonTourIds.includes(item.tour_id))
 		];
-		const uniqueTours = mergedTours.filter((value, index, self) => 
+		const uniqueTours = mergedTours.filter((value, index, self) =>
 			index === self.findIndex((t) => t.tour_id === value.tour_id)
 		);
 		return uniqueTours
@@ -52,14 +52,14 @@ const Tour = {
 					WHERE t_i.img_id = 1 AND ($1 = 'default' OR t.title LIKE CONCAT('%', $1, '%')) AND ($1 = 'default' OR t.brief LIKE CONCAT('%', $1, '%'))`;
 		const values = [searchQuery];
 		try {
-			const result = await db.query(query,values); // Remove values here
+			const result = await db.query(query, values); // Remove values here
 			return result.rows;
 		} catch (err) {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
 	getAllpriceTours: async (priceQuery) => {
-		if(!Array.isArray(priceQuery)){priceQuery=[priceQuery]}
+		if (!Array.isArray(priceQuery)) { priceQuery = [priceQuery] }
 		const query = `
         SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
         FROM tours t
@@ -73,7 +73,6 @@ const Tour = {
             `).join('')}
         )
     `;
-	console.log(query)
 		try {
 			const result = await db.query(query); // Remove values here
 			return result.rows;
@@ -82,7 +81,7 @@ const Tour = {
 		}
 	},
 	getAllrateTours: async (rateQuery) => {
-		if(!Array.isArray(rateQuery)){rateQuery=[rateQuery]}
+		if (!Array.isArray(rateQuery)) { rateQuery = [rateQuery] }
 		const query = `
         SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
         FROM tours t
@@ -104,7 +103,7 @@ const Tour = {
 		}
 	},
 	getAllvoucherTours: async (voucherQuery) => {
-		if(!Array.isArray(voucherQuery)){voucherQuery=[voucherQuery]}
+		if (!Array.isArray(voucherQuery)) { voucherQuery = [voucherQuery] }
 		const query = `
         SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
         FROM tours t
@@ -126,7 +125,7 @@ const Tour = {
 		}
 	},
 	getAlllocationTours: async (locationQuery) => {
-		if(!Array.isArray(locationQuery)){locationQuery=[locationQuery]}
+		if (!Array.isArray(locationQuery)) { locationQuery = [locationQuery] }
 		const query = `
         SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
         FROM tours t
@@ -190,9 +189,9 @@ const Tour = {
 		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.rate,t.voucher, t.location_id
 		from tours t inner join locations l on t.location_id = l.location_id
 					inner join tour_images t_i on t.tour_id = t_i.tour_id
-		where t.rate>=4 and t.voucher>=8
+		where t.rate>=4 and t.voucher>=8 and t_i.img_id = 1
 		order by rate DESC
-		limit 10
+		limit 3
 		`;
 		try {
 			const result = await db.query(query);
@@ -207,9 +206,9 @@ const Tour = {
 		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.rate,t.voucher, t.location_id
 		from tours t inner join locations l on t.location_id = l.location_id
 					inner join tour_images t_i on t.tour_id = t_i.tour_id
-		where t.rate>=4 and t.prices<=150.0
+		where t.rate>=4 and t.prices<=150.0 and t_i.img_id = 1
 		order by rate DESC
-		limit 10
+		limit 3
 		`;
 		try {
 			const result = await db.query(query);

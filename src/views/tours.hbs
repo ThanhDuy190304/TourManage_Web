@@ -1,11 +1,120 @@
-<section class="mx-16 px-4 py-18 mt-44" id="listTour">
-    <div class="mb-8 flex justify-around">
+<section class="my-16" id="listTour">
+    <div class="mb-8 mx-16">
         <div class="w-2/3">
             <h2 class="text-6xl font-semibold mb-4">{{location_name}}</h2>
             <p class="text-lg font-medium text-gray-600 mb-8">{{loc_detail}}</p>
         </div>
     </div>
-    <form id="searchService" action="/tours" method="GET">
+    <hr class="w-screen	border-gray-200 my-8 mx-auto">
+
+    <form id="searchService" action="\tours" method="GET" class="mx-16">
+
+        <div id="filter" class="flex gap-8 border-r-2 border-black border-dashed">
+            <!-- Lọc theo location -->
+            <div class="guests opt relative">
+                <select id="location" name="location"
+                    class="block w-72 bg-white border border-gray-300 py-2 px-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" selected disabled>Choose a location</option>
+                    <option value="Ha Long Bay">Ha Long Bay</option>
+                    <option value="Hue">Hue</option>
+                    <option value="Ho Chi Minh City">Ho Chi Minh City</option>
+                    <option value="Ha Noi">Ha Noi</option>
+                    <option value="Da Nang">Da Nang</option>
+                    <option value="Da Lat">Da Lat</option>
+                    <option value="Vung Tau">Vung Tau</option>
+                    <option value="Ninh Binh">Ninh Binh</option>
+                </select>
+            </div>
+
+            <!-- Lọc theo price -->
+            <div class="price opt relative">
+                <select id="price" name="price"
+                    class="block w-72 bg-white border border-gray-300 py-2 px-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" selected disabled>Choose a price range</option>
+                    <option value="1">$001 - $100</option>
+                    <option value="101">$101 - $200</option>
+                    <option value="201">$201 - $300</option>
+                    <option value="301">$301 - $400</option>
+                    <option value="401">$401 - $500</option>
+                    <option value="501">$501 - $600</option>
+                </select>
+            </div>
+
+            <!-- Lọc theo rate -->
+            <div class="rate opt relative">
+                <select id="rate" name="rate"
+                    class="block w-72 bg-white border border-gray-300 py-2 px-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" selected disabled>Choose a rate</option>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Star</option>
+                    <option value="3">3 Star</option>
+                    <option value="4">4 Star</option>
+                    <option value="5">5 Star</option>
+                </select>
+            </div>
+
+            <!-- Lọc theo voucher -->
+            <div class="voucher opt relative">
+                <select id="voucher" name="voucher"
+                    class="block w-72 bg-white border border-gray-300 py-2 px-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" selected disabled>Choose a voucher range</option>
+                    <option value="1">1% - 5%</option>
+                    <option value="6">6% - 10%</option>
+                    <option value="11">11% - 15%</option>
+                    <option value="16">16% - 20%</option>
+                </select>
+            </div>
+        </div>
+        <div id="selected-filters" class="flex flex-wrap gap-4 mt-4 mb-4">
+            <!-- Các lựa chọn sẽ được thêm vào đây -->
+        </div>
+    </form>
+
+    <hr class="w-screen	border-gray-200 my-8 mx-auto">
+
+    <div id="showTours" class="grid grid-cols-1 md:grid-cols-3 gap-4 mx-0 md:mx-8">
+        {{#each allTours}}
+        <a href="/tours/tour_detail/{{this.tour_id}}/{{this.location_id}}">
+            <div
+                class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105">
+                <div>
+                    <!-- Giảm kích thước hình ảnh -->
+                    <img src="{{this.img_url}}" alt="" class="img w-full h-36 object-cover">
+                    <div class="p-4">
+                        <div class="flex justify-between mt-4 h-16">
+                            <h3 class="name text-lg font-semibold">{{this.title}}</h3>
+                            <p class="price text-gray-600">${{this.prices}}</p>
+                        </div>
+                        <p class="text-gray-600 w-full overflow-hidden text-ellipsis line-clamp-2">
+                            {{this.brief}}
+                        </p>
+                    </div>
+                </div>
+                <div class="flex justify-between px-4">
+                    <div class="flex">
+                        <i class="fa-solid fa-star text-yellow-500"></i>
+                        <i class="fa-solid fa-star text-yellow-500"></i>
+                        <i class="fa-solid fa-star text-yellow-500"></i>
+                        <i class="fa-solid fa-star text-yellow-500"></i>
+                        <i class="fa-solid fa-star text-yellow-500"></i>
+                    </div>
+                    <button type="button"
+                        class="self-end mb-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
+                        value="{{this.tour_id}}" data-name="{{this.location_id}}" onclick="StoreId(this)">View
+                        Detail</button>
+                </div>
+            </div>
+        </a>
+        {{/each}}
+    </div>
+    <div class="pagination flex col-start-1 max-h-10 ">
+        <button onclick="prevPage()">Previous</button>
+        <div id="pageNumbers"></div> <!-- Container for page number buttons -->
+        <button onclick="nextPage()">Next</button>
+    </div>
+
+
+    {{!-- <form id="searchService" action="/tours" method="GET">
         <div id="search-zone" class="flex justify-around mx-auto my-10 w-4/5">
             <div class="search1 w-2/3">
                 <label for="searchInf" class="">
@@ -170,75 +279,5 @@
             <button onclick="nextPage()">Next</button>
         </div>
     </div>
-    </div>
-</section>
-
-<section class="relative w-full h-96 bg-cover bg-center mt-44"
-    style="background-image: url('/img/Tour_detail/Decore1.png');">
-</section>
-
-<!-- Tips & Article Section -->
-<section class="mx-16 px-4 py-18 mt-44">
-    <div class="mb-8 flex justify-around">
-        <div class="w-2/3">
-            <h2 class="text-6xl font-semibold mb-4">Tips and attractions</h2>
-            <p class="text-lg font-medium text-gray-600 mb-8">Here is a collection of useful tips and famous tourist
-                destinations that you should not miss. From tips to help you save money, optimize your luggage to
-                how to make the most of famous attractions, we want to provide you with the best luggage for your
-                trip. These famous places not only have natural beauty, unique culture but also bring unique and
-                unforgettable experiences. Let's explore great places and receive interesting travel tips from us!
-            </p>
-        </div>
-        <p class="self-end block py-3.5 px-7 bg-black hover:bg-gray-800 rounded-full"><a
-                class="font-semibold text-2xl text-white" href="#!">View More</a></p>
-    </div>
-
-    <!-- Articles Grid -->
-    <div class="grid gap-6 md:grid-cols-10">
-        <div class="flex gap-10 flex-col md:col-span-4">
-            <!-- Article 1 -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <p class="text-2xl text-gray-500 Tips">Tips | Travel</p>
-                <h2 class="text-4xl font-medium font-semibold mt-2 py-4">How Do I Choose a Tour Package? (Best 8
-                    Tips) <br>-</h2>
-                <p class="text-lg font-light text-gray-600 mt-2">How do I choose a tour package? You can choose the
-                    best tour package by considering significant factors like budget, destination, refund
-                    conditions, etc.</p>
-                <button class="mt-20 px-8 py-3 bg-black text-white rounded-full"><a class="text-2xl font-medium"
-                        target="_blank" rel="noopener noreferrer"
-                        href="https://boundlessadventure.com/blog/how-do-i-choose-a-tour-package/">Read
-                        More</a></button>
-            </div>
-            <!-- Article 3 -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <p class="text-2xl text-gray-500">Tips | Travel</p>
-                <h2 class="text-4xl font-medium font-semibold mt-2 py-4">10 Ways To Really Enjoy a Vacation and Get
-                    the Most of It <br>-</h2>
-                <p class="text-lg font-light text-gray-600 mt-2">To help you make the most out of your trip and
-                    embrace every joy that comes your way with open arms, below are some of the travel tips that you
-                    would love to read till the end before embarking on the road to your destination.</p>
-                <button class="mt-20 px-8 py-3 bg-black text-white rounded-full"><a class="text-2xl font-medium"
-                        target="_blank" rel="noopener noreferrer"
-                        href="https://www.outofyourcomfortzone.net/10-ways-to-really-enjoy-a-vacation-and-get-the-most-of-it/">Read
-                        More</a></button>
-            </div>
-        </div>
-
-        <!-- Article 2 (Larger Card) -->
-        <div class="md:col-span-6 bg-white rounded-lg shadow-lg p-6">
-            <img src="../img/Tour_detail/Attraction.jpg" alt="Family Travel" class="rounded-lg">
-            <div class="py-6">
-                <p class="text-2xl text-gray-500">Attraction | Introduction</p>
-                <h2 class="text-4xl font-medium font-semibold mt-2 py-4">25 Top Tourist Attractions in Vietnam <br>-
-                </h2>
-                <p class="text-lg font-light text-gray-600 mt-2">Most travelers to Vietnam are attracted by the
-                    country’s wonderful natural beauty: From the green rice fields in the north to the fascinating
-                    bustle of the Mekong Delta in the south. Vietnam however is also a country with a long history
-                    and ancient traditions.</p>
-                <button class="mt-20 px-8 py-3 bg-black text-white rounded-full"><a class="text-2xl font-medium"
-                        target="_blank" rel="noopener noreferrer"
-                        href="https://www.touropia.com/tourist-attractions-in-vietnam/">Read More</a></button>
-            </div>
-        </div>
-    </div>
+    </div> --}}
 </section>
