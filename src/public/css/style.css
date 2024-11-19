@@ -115,6 +115,16 @@ body {
     /* Thu nhỏ nút khi hover */
 }
 
+#background-search {
+    background-image: url('../img/Search_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+
 .why_choose {
     background-image: url('../img/Home/why_choose_bg.jpg');
     /* Đường dẫn đến ảnh của bạn */
