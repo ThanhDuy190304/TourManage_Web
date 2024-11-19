@@ -1,22 +1,23 @@
 <section class="my-16" id="listTour">
-    <div class="mb-8 mx-16">
+    <div class="mb-8 mx-4 sm:mx-8 md:mx-16">
         <div class="w-full ">
-            <h2 class="text-6xl font-semibold mb-4">{{location_name}}</h2>
-            <p class="text-lg font-medium text-gray-600 mb-8">{{loc_detail}}</p>
+            <h2 class="text-3xl sm:text-4xl md:text-6xl font-semibold mb-4">{{location_name}}</h2>
+            <p class="text-base sm:text-lg font-medium text-gray-600 mb-8">{{loc_detail}}</p>
         </div>
     </div>
-    <hr class="w-screen	border-gray-200 my-8 mx-auto">
+    <hr class="w-full	border-gray-200 my-8 mx-auto">
     <div id="selected-filters" class="flex flex-wrap gap-4 my-4 mx-4">
         <!-- Các lựa chọn sẽ được thêm vào đây -->
     </div>
 
     <hr class="w-full border-gray-200 my-8 mx-auto">
-    <div class="flex flex-row gap-8">
-        <div class="basis-2/6">
+
+    <div class="flex flex-col sm:flex-row gap-4">
+        <div class="md:basis-2/6">
 
 
-            <form id="searchService" action="\tours" method="GET" class="mx-16">
-                <fieldset id="location" class="grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+            <form id="searchService" action="\tours" method="GET" class="mx-8 md:mx-16">
+                <fieldset id="location" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
                     <legend class="font-medium text-xl my-4">Choose a location</legend>
                     <div class="flex items-center gap-2 cursor-pointer">
                         <input id="ha-long-bay" type="radio" name="location" value="Ha Long Bay"
@@ -86,7 +87,7 @@
 
 
                 <!-- Lọc theo price -->
-                <fieldset id="price" class="grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                <fieldset id="price" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
                     <legend class="font-medium text-xl my-4">Choose a price range</legend>
 
                     <div class="flex items-center gap-2 cursor-pointer">
@@ -141,7 +142,7 @@
 
 
                 <!-- Lọc theo rate -->
-                <fieldset id="rate" class="grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                <fieldset id="rate" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
                     <legend class="font-medium text-xl my-4">Choose a rate</legend>
                     <div class="flex items-center gap-2 cursor-pointer">
                         <input id="rate-1" type="radio" name="rate" value="1"
@@ -187,7 +188,7 @@
 
 
                 <!-- Lọc theo voucher -->
-                <fieldset id="voucher" class="grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                <fieldset id="voucher" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
                     <legend class="font-medium text-xl my-4">Choose a voucher range</legend>
                     <div class="flex items-center gap-2 cursor-pointer">
                         <input id="voucher-1" type="radio" name="voucher" value="1"
@@ -227,11 +228,11 @@
         </div>
 
         <div class="basis-4/6">
-            <div id="showTours" class="grid grid-cols-1 md:grid-cols-2 gap-4 mx-0 md:mx-8">
+            <div id="showTours" class="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-6 mx-0 md:mx-8">
                 {{#each allTours}}
-                <a href="/tours/tour_detail/{{this.tour_id}}/{{this.location_id}}">
+                <a href="/tours/tour_detail/{{this.tour_id}}/{{this.location_id}}" class="w-80 md:w-96 lg:w-80 mx-auto">
                     <div
-                        class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105">
+                        class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 md:w-96 lg:w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105 mx-auto">
                         <div>
                             <!-- Giảm kích thước hình ảnh -->
                             <img src="{{this.img_url}}" alt="" class="img w-full h-36 object-cover">
@@ -262,7 +263,7 @@
                 </a>
                 {{/each}}
             </div>
-            <div class="pagination flex col-start-1 max-h-10 mt-4 px-8">
+            <div class="pagination flex col-start-1 max-h-10 mt-4 px-8 ">
                 <button onclick="prevPage()">Previous</button>
                 <div id="pageNumbers"></div> <!-- Container for page number buttons -->
                 <button onclick="nextPage()">Next</button>
