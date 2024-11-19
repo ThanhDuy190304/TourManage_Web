@@ -1,117 +1,281 @@
 <section class="my-16" id="listTour">
     <div class="mb-8 mx-16">
-        <div class="w-2/3">
+        <div class="w-full ">
             <h2 class="text-6xl font-semibold mb-4">{{location_name}}</h2>
             <p class="text-lg font-medium text-gray-600 mb-8">{{loc_detail}}</p>
         </div>
     </div>
     <hr class="w-screen	border-gray-200 my-8 mx-auto">
+    <div id="selected-filters" class="flex flex-wrap gap-4 my-4 mx-4">
+        <!-- Các lựa chọn sẽ được thêm vào đây -->
+    </div>
 
-    <form id="searchService" action="\tours" method="GET" class="mx-16">
+    <hr class="w-full border-gray-200 my-8 mx-auto">
+    <div class="flex flex-row gap-8">
+        <div class="basis-2/6">
 
-        <div id="filter" class="flex gap-8 border-r-2 border-black border-dashed">
-            <!-- Lọc theo location -->
-            <div class="guests opt relative">
-                <select id="location" name="location"
-                    class="block w-72 bg-white border border-gray-300 py-2 px-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="" selected disabled>Choose a location</option>
-                    <option value="Ha Long Bay">Ha Long Bay</option>
-                    <option value="Hue">Hue</option>
-                    <option value="Ho Chi Minh City">Ho Chi Minh City</option>
-                    <option value="Ha Noi">Ha Noi</option>
-                    <option value="Da Nang">Da Nang</option>
-                    <option value="Da Lat">Da Lat</option>
-                    <option value="Vung Tau">Vung Tau</option>
-                    <option value="Ninh Binh">Ninh Binh</option>
-                </select>
+
+            <form id="searchService" action="\tours" method="GET" class="mx-16">
+                <fieldset id="location" class="grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                    <legend class="font-medium text-xl my-4">Choose a location</legend>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="ha-long-bay" type="radio" name="location" value="Ha Long Bay"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="ha-long-bay"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Ha Long Bay</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="hue" type="radio" name="location" value="Hue"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="hue"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Hue</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="ho-chi-minh" type="radio" name="location" value="Ho Chi Minh City"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="ho-chi-minh"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Ho Chi Minh City</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="ha-noi" type="radio" name="location" value="Ha Noi"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="ha-noi"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Ha Noi</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="da-nang" type="radio" name="location" value="Da Nang"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="da-nang"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Da Nang</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="da-lat" type="radio" name="location" value="Da Lat"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="da-lat"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Da Lat</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="vung-tau" type="radio" name="location" value="Vung Tau"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="vung-tau"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Vung Tau</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="ninh-binh" type="radio" name="location" value="Ninh Binh"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="ninh-binh"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Ninh Binh</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+
+                <!-- Lọc theo price -->
+                <fieldset id="price" class="grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                    <legend class="font-medium text-xl my-4">Choose a price range</legend>
+
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-1" type="radio" name="price" value="1"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-1"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$001 - $100</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-2" type="radio" name="price" value="101"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-2"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$101 - $200</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-3" type="radio" name="price" value="201"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-3"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$201 - $300</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-4" type="radio" name="price" value="301"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-4"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$301 - $400</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-5" type="radio" name="price" value="401"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-5"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$401 - $500</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-6" type="radio" name="price" value="501"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-6"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$501 - $600</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+
+                <!-- Lọc theo rate -->
+                <fieldset id="rate" class="grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                    <legend class="font-medium text-xl my-4">Choose a rate</legend>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-1" type="radio" name="rate" value="1"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-1"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>1 Star</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-2" type="radio" name="rate" value="2"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-2"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>2 Stars</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-3" type="radio" name="rate" value="3"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-3"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>3 Stars</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-4" type="radio" name="rate" value="4"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-4"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>4 Stars</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-5" type="radio" name="rate" value="5"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-5"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>5 Stars</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+
+                <!-- Lọc theo voucher -->
+                <fieldset id="voucher" class="grid grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                    <legend class="font-medium text-xl my-4">Choose a voucher range</legend>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="voucher-1" type="radio" name="voucher" value="1"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="voucher-1"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>1% - 5%</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="voucher-2" type="radio" name="voucher" value="6"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="voucher-2"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>6% - 10%</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="voucher-3" type="radio" name="voucher" value="11"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="voucher-3"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>11% - 15%</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="voucher-4" type="radio" name="voucher" value="16"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="voucher-4"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>16% - 20%</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+            </form>
+        </div>
+
+        <div class="basis-4/6">
+            <div id="showTours" class="grid grid-cols-1 md:grid-cols-2 gap-4 mx-0 md:mx-8">
+                {{#each allTours}}
+                <a href="/tours/tour_detail/{{this.tour_id}}/{{this.location_id}}">
+                    <div
+                        class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105">
+                        <div>
+                            <!-- Giảm kích thước hình ảnh -->
+                            <img src="{{this.img_url}}" alt="" class="img w-full h-36 object-cover">
+                            <div class="p-4">
+                                <div class="flex justify-between mt-4 h-16">
+                                    <h3 class="name text-lg font-semibold">{{this.title}}</h3>
+                                    <p class="price text-gray-600">${{this.prices}}</p>
+                                </div>
+                                <p class="text-gray-600 w-full overflow-hidden text-ellipsis line-clamp-2">
+                                    {{this.brief}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between px-4">
+                            <div class="flex">
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                            </div>
+                            <button type="button"
+                                class="self-end mb-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
+                                value="{{this.tour_id}}" data-name="{{this.location_id}}" onclick="StoreId(this)">View
+                                Detail</button>
+                        </div>
+                    </div>
+                </a>
+                {{/each}}
             </div>
-
-            <!-- Lọc theo price -->
-            <div class="price opt relative">
-                <select id="price" name="price"
-                    class="block w-72 bg-white border border-gray-300 py-2 px-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="" selected disabled>Choose a price range</option>
-                    <option value="1">$001 - $100</option>
-                    <option value="101">$101 - $200</option>
-                    <option value="201">$201 - $300</option>
-                    <option value="301">$301 - $400</option>
-                    <option value="401">$401 - $500</option>
-                    <option value="501">$501 - $600</option>
-                </select>
-            </div>
-
-            <!-- Lọc theo rate -->
-            <div class="rate opt relative">
-                <select id="rate" name="rate"
-                    class="block w-72 bg-white border border-gray-300 py-2 px-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="" selected disabled>Choose a rate</option>
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Star</option>
-                    <option value="3">3 Star</option>
-                    <option value="4">4 Star</option>
-                    <option value="5">5 Star</option>
-                </select>
-            </div>
-
-            <!-- Lọc theo voucher -->
-            <div class="voucher opt relative">
-                <select id="voucher" name="voucher"
-                    class="block w-72 bg-white border border-gray-300 py-2 px-4 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="" selected disabled>Choose a voucher range</option>
-                    <option value="1">1% - 5%</option>
-                    <option value="6">6% - 10%</option>
-                    <option value="11">11% - 15%</option>
-                    <option value="16">16% - 20%</option>
-                </select>
+            <div class="pagination flex col-start-1 max-h-10 mt-4 px-8">
+                <button onclick="prevPage()">Previous</button>
+                <div id="pageNumbers"></div> <!-- Container for page number buttons -->
+                <button onclick="nextPage()">Next</button>
             </div>
         </div>
-        <div id="selected-filters" class="flex flex-wrap gap-4 mt-4 mb-4">
-            <!-- Các lựa chọn sẽ được thêm vào đây -->
-        </div>
-    </form>
+    </div>
+
+
 
     <hr class="w-screen	border-gray-200 my-8 mx-auto">
 
-    <div id="showTours" class="grid grid-cols-1 md:grid-cols-3 gap-4 mx-0 md:mx-8">
-        {{#each allTours}}
-        <a href="/tours/tour_detail/{{this.tour_id}}/{{this.location_id}}">
-            <div
-                class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105">
-                <div>
-                    <!-- Giảm kích thước hình ảnh -->
-                    <img src="{{this.img_url}}" alt="" class="img w-full h-36 object-cover">
-                    <div class="p-4">
-                        <div class="flex justify-between mt-4 h-16">
-                            <h3 class="name text-lg font-semibold">{{this.title}}</h3>
-                            <p class="price text-gray-600">${{this.prices}}</p>
-                        </div>
-                        <p class="text-gray-600 w-full overflow-hidden text-ellipsis line-clamp-2">
-                            {{this.brief}}
-                        </p>
-                    </div>
-                </div>
-                <div class="flex justify-between px-4">
-                    <div class="flex">
-                        <i class="fa-solid fa-star text-yellow-500"></i>
-                        <i class="fa-solid fa-star text-yellow-500"></i>
-                        <i class="fa-solid fa-star text-yellow-500"></i>
-                        <i class="fa-solid fa-star text-yellow-500"></i>
-                        <i class="fa-solid fa-star text-yellow-500"></i>
-                    </div>
-                    <button type="button"
-                        class="self-end mb-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
-                        value="{{this.tour_id}}" data-name="{{this.location_id}}" onclick="StoreId(this)">View
-                        Detail</button>
-                </div>
-            </div>
-        </a>
-        {{/each}}
-    </div>
-    <div class="pagination flex col-start-1 max-h-10 ">
-        <button onclick="prevPage()">Previous</button>
-        <div id="pageNumbers"></div> <!-- Container for page number buttons -->
-        <button onclick="nextPage()">Next</button>
-    </div>
+
+
 
 
     {{!-- <form id="searchService" action="/tours" method="GET">

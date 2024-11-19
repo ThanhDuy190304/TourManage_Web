@@ -7,50 +7,54 @@ function StoreId(button) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Lấy tất cả các select dropdowns
-    const locationSelect = document.getElementById("location");
-    const priceSelect = document.getElementById("price");
-    const rateSelect = document.getElementById("rate");
-    const voucherSelect = document.getElementById("voucher");
+    // Lấy tất cả các radio button
+    const locationRadios = document.querySelectorAll('input[name="location"]');
+    const priceRadios = document.querySelectorAll('input[name="price"]');
+    const rateRadios = document.querySelectorAll('input[name="rate"]');
+    const voucherRadios = document.querySelectorAll('input[name="voucher"]');
 
     // Lấy container để hiển thị các lựa chọn
     const selectedFiltersContainer = document.getElementById("selected-filters");
+
     // Hàm khôi phục trạng thái filter từ URL
     function restoreFiltersFromURL() {
         const params = new URLSearchParams(window.location.search);
 
         // Lặp qua các tham số URL và khôi phục giá trị
         params.forEach((value, key) => {
-            const select = document.querySelector(`select[name="${key}"]`);
-            if (select) {
-                select.value = value; // Đặt lại giá trị cho dropdown
-                const label = select.options[select.selectedIndex]?.text;
+            const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+            if (radio) {
+                radio.checked = true; // Đánh dấu radio button đã chọn
+                const label = radio.nextElementSibling?.textContent;
                 createFilterElement(key, value, label); // Tạo filter trong container
             }
         });
     }
 
     restoreFiltersFromURL();
+
     // Hàm tạo một thẻ cho lựa chọn
     function createFilterElement(name, value, label) {
         const filterElement = document.createElement("div");
-        filterElement.classList.add("bg-gray-200", "px-4", "py-2", "rounded", "flex", "items-center", "gap-2");
+        filterElement.classList.add("bg-emerald-800", "text-white", "px-4", "py-2", "rounded", "flex", "items-center", "gap-2");
         filterElement.textContent = label;
 
         // Thêm thuộc tính `data-name` và `data-value`
-        filterElement.setAttribute("data-name", name); // Để truy vấn theo name
-        filterElement.setAttribute("data-value", value); // Để lưu giá trị đã chọn
+        filterElement.setAttribute("data-name", name);
+        filterElement.setAttribute("data-value", value);
 
         // Thêm dấu "X" để xóa
         const closeButton = document.createElement("span");
         closeButton.textContent = "X";
-        closeButton.classList.add("cursor-pointer", "text-red-600");
+        closeButton.classList.add("cursor-pointer", "text-red-400");
         closeButton.addEventListener("click", () => {
             // Xóa thẻ khi nhấn dấu "X"
             filterElement.remove();
-            // Xóa giá trị đã chọn trong select
-            const select = document.querySelector(`select[name="${name}"]`);
-            select.value = ""; // Reset dropdown về giá trị mặc định
+            // Xóa giá trị đã chọn trong radio
+            const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (radio) {
+                radio.checked = false; // Hủy chọn radio button
+            }
             applyFilters();
         });
 
@@ -61,36 +65,30 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedFiltersContainer.appendChild(filterElement);
     }
 
-
     // Hàm xử lý sự kiện thay đổi lựa chọn
-    function handleSelectionChange(select, name) {
-        const selectedValue = select.value;
-        const selectedLabel = select.options[select.selectedIndex]?.text;
-
+    function handleSelectionChange(name, value, label) {
         // Xóa các lựa chọn cũ trước khi tạo thẻ mới
         clearSelectedFilters(name);
 
-        if (selectedValue) {
+        if (value) {
             // Tạo thẻ mới với giá trị vừa chọn
-            createFilterElement(name, selectedValue, selectedLabel);
+            createFilterElement(name, value, label);
         }
 
         applyFilters();
-
     }
 
     // Hàm xóa các filter đã chọn trước đó
     function clearSelectedFilters(name) {
-        // Lọc và xóa tất cả các thẻ có data-name trùng với name của dropdown
+        // Lọc và xóa tất cả các thẻ có data-name trùng với name của radio
         const filters = selectedFiltersContainer.querySelectorAll(`[data-name="${name}"]`);
         filters.forEach(filter => filter.remove());
     }
 
-
     function applyFilters() {
         const filters = {};
         // Duyệt qua tất cả các thẻ filter trong `selected-filters`
-        const selectedFilters = selectedFiltersContainer.querySelectorAll("[data-name]"); // Lấy tất cả thẻ có `data-name`
+        const selectedFilters = selectedFiltersContainer.querySelectorAll("[data-name]");
         selectedFilters.forEach(filter => {
             const name = filter.getAttribute("data-name");
             const value = filter.getAttribute("data-value");
@@ -106,23 +104,33 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = newUrl;
     }
 
-    // Lắng nghe sự thay đổi của các select
-    locationSelect.addEventListener("change", function () {
-        console.log("Location dropdown changed");
-
-        handleSelectionChange(locationSelect, "location");
+    // Lắng nghe sự thay đổi của các radio buttons
+    locationRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            handleSelectionChange("location", radio.value, selectedLabel);
+        });
     });
 
-    priceSelect.addEventListener("change", function () {
-        handleSelectionChange(priceSelect, "price");
+    priceRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            handleSelectionChange("price", radio.value, selectedLabel);
+        });
     });
 
-    rateSelect.addEventListener("change", function () {
-        handleSelectionChange(rateSelect, "rate");
+    rateRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            handleSelectionChange("rate", radio.value, selectedLabel);
+        });
     });
 
-    voucherSelect.addEventListener("change", function () {
-        handleSelectionChange(voucherSelect, "voucher");
+    voucherRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            handleSelectionChange("voucher", radio.value, selectedLabel);
+        });
     });
 
 
