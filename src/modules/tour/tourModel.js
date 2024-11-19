@@ -195,9 +195,9 @@ const Tour = {
 		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.rate,t.voucher, t.location_id
 		from tours t inner join locations l on t.location_id = l.location_id
 					inner join tour_images t_i on t.tour_id = t_i.tour_id
-		where t.rate>=4 and t.voucher>=8
+		where t.rate>=4 and t.voucher>=8 and t_i.img_id = 1
 		order by rate DESC
-		limit 10
+		limit 3
 		`;
 		try {
 			const result = await db.query(query);
@@ -212,9 +212,9 @@ const Tour = {
 		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.rate,t.voucher, t.location_id
 		from tours t inner join locations l on t.location_id = l.location_id
 					inner join tour_images t_i on t.tour_id = t_i.tour_id
-		where t.rate>=4 and t.prices<=150.0
+		where t.rate>=4 and t.prices<=150.0 and t_i.img_id = 1
 		order by rate DESC
-		limit 10
+		limit 3
 		`;
 		try {
 			const result = await db.query(query);
