@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Tour = require('../modules/tour/tourModel');
+
 //Route connect Home Page
 router.get('/', async (req, res) => {
     try {
@@ -35,19 +36,6 @@ router.get('/contact', (req, res) => {
     });
 });
 
-router.get('/login', (req, res) => {
-    res.render('login', {
-        layout: false,
-        title: 'Login Page',
-    });
-});
-
-router.get('/register', (req, res) => {
-    res.render('register', {
-        layout: false,
-        title: 'Register Page',
-    });
-});
 
 router.get('/tips', (req, res) => {
     res.render('tips', {
@@ -55,4 +43,7 @@ router.get('/tips', (req, res) => {
         title: 'Tips & Article Section',
     });
 });
+
+
+
 module.exports = router;
