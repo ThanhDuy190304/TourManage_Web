@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Tour = require('../modules/tour/tourModel');
+
 //Route connect Home Page
 router.get('/', async (req, res) => {
     try {
@@ -48,4 +49,19 @@ router.get('/register', (req, res) => {
         title: 'Register Page',
     });
 });
+
+router.get('/forgetpassword',(req, res) => {
+    res.render('forgetpassword', {
+        layout: false,
+        title: 'Forget Password Page',
+    })
+});
+
+router.get('/new_register',(req, res) => {
+    res.render('new_register', {
+        layout: false,
+        title: 'New Register Page',
+    })
+})
+
 module.exports = router;

@@ -35,7 +35,7 @@ async function registerUser(req, res) {
             }
         } else {
             console.error(error);
-            res.status(500).json({ message: 'Đã xảy ra lỗi khi đăng ký người dùng mới' });
+            res.status(500).json({ message: 'error in new register', error: error.message });
         }
     }
 }
