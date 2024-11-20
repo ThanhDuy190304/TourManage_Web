@@ -29,11 +29,6 @@
         </div>
 
         <div class="main-agileinfo">
-            {{#if message}}
-            <div style="color: rgb(0, 0, 0, 0.7); text-align: center; padding-top: 50px">
-                {{message}}
-            </div>
-            {{/if}}
             <div class="agileits-top">
                 <form id="registerForm" autocomplete="off" action="/register/postRegister" method="post">
                     <input class="text" type="text" name="user_name" placeholder="Username" required="">
@@ -41,6 +36,11 @@
                     <input class="text" type="password" name="password" placeholder="Password" required="">
                     <input class="text w3lpass" type="password" name="confirmPassword" placeholder="Confirm Password"
                         required="">
+                    {{#if message}}
+                    <div style="color: #f7a126; text-align: center;">
+                        {{message}}
+                    </div>
+                    {{/if}}
                     <input type="submit" value="SIGN UP">
                 </form>
                 <p>Already have an account? <a href="/login">Login now!</a></p>

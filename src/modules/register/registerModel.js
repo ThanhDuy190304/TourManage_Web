@@ -21,8 +21,8 @@ async function registerUser(userName, email, encryptionPassword) {
         await db.query(query, [userName, email, encryptionPassword]);
     }
     catch(error){
-        console.error('Can not insert: ', error);
-        throw new Error('Database error: ' + error.message);
+        console.error(error);
+        throw new Error(error.message);
     }
 
 }
