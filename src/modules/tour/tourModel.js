@@ -16,15 +16,21 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
-	getTours: async (tour1, tour2,tour3,tour4,tour5) => {
-		const tourIds1 = tour1.map(item => item.tour_id);
-		const tourIds2 = tour2.map(item => item.tour_id);
-		const tourIds3 = tour3.map(item => item.tour_id);
-		const tourIds4 = tour4.map(item => item.tour_id);
-		const tourIds5 = tour5.map(item => item.tour_id);
+	getTours: async (search, location, rate, price, voucher) => {
+		const searchs = await Tour.searchTours(search);
+		const locations = await Tour.filterlocationTours(location);
+		const rates = await Tour.filterrateTours(rate);
+		const prices = await Tour.filterpriceTours(price);
+		const vouchers = await Tour.filtervoucherTours(voucher);
+
+		const tourIds1 = searchs.map(item => item.tour_id);
+		const tourIds2 = locations.map(item => item.tour_id);
+		const tourIds3 = rates.map(item => item.tour_id);
+		const tourIds4 = prices.map(item => item.tour_id);
+		const tourIds5 = vouchers.map(item => item.tour_id);
 
 		// Tìm các tour_id xuất hiện trong tất cả 5 mảng
-		const commonTourIds = tourIds1.filter(id => 
+		const commonTourIds = tourIds1.filter(id =>
 			tourIds2.includes(id) &&
 			tourIds3.includes(id) &&
 			tourIds4.includes(id) &&
@@ -33,33 +39,33 @@ const Tour = {
 
 		// Lọc các đối tượng từ các mảng tour ban đầu có tour_id xuất hiện trong commonTourIds
 		const mergedTours = [
-			...tour1.filter(item => commonTourIds.includes(item.tour_id)),
-			...tour2.filter(item => commonTourIds.includes(item.tour_id)),
-			...tour3.filter(item => commonTourIds.includes(item.tour_id)),
-			...tour4.filter(item => commonTourIds.includes(item.tour_id)),
-			...tour5.filter(item => commonTourIds.includes(item.tour_id))
+			...searchs.filter(item => commonTourIds.includes(item.tour_id)),
+			...locations.filter(item => commonTourIds.includes(item.tour_id)),
+			...rates.filter(item => commonTourIds.includes(item.tour_id)),
+			...prices.filter(item => commonTourIds.includes(item.tour_id)),
+			...vouchers.filter(item => commonTourIds.includes(item.tour_id))
 		];
-		const uniqueTours = mergedTours.filter((value, index, self) => 
+		const uniqueTours = mergedTours.filter((value, index, self) =>
 			index === self.findIndex((t) => t.tour_id === value.tour_id)
 		);
 		return uniqueTours
-
 	},
-	getAllTours: async (searchQuery) => {
+
+	searchTours: async (searchQuery) => {
 		const query = `SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
 					FROM tours t 
 					left join tour_images t_i ON t.tour_id = t_i.tour_id 
 					WHERE t_i.img_id = 1 AND ($1 = 'default' OR t.title LIKE CONCAT('%', $1, '%')) AND ($1 = 'default' OR t.brief LIKE CONCAT('%', $1, '%'))`;
 		const values = [searchQuery];
 		try {
-			const result = await db.query(query,values); // Remove values here
+			const result = await db.query(query, values); // Remove values here
 			return result.rows;
 		} catch (err) {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
-	getAllpriceTours: async (priceQuery) => {
-		if(!Array.isArray(priceQuery)){priceQuery=[priceQuery]}
+	filterpriceTours: async (priceQuery) => {
+		if (!Array.isArray(priceQuery)) { priceQuery = [priceQuery] }
 		const query = `
         SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
         FROM tours t
@@ -73,7 +79,6 @@ const Tour = {
             `).join('')}
         )
     `;
-	console.log(query)
 		try {
 			const result = await db.query(query); // Remove values here
 			return result.rows;
@@ -81,8 +86,8 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
-	getAllrateTours: async (rateQuery) => {
-		if(!Array.isArray(rateQuery)){rateQuery=[rateQuery]}
+	filterrateTours: async (rateQuery) => {
+		if (!Array.isArray(rateQuery)) { rateQuery = [rateQuery] }
 		const query = `
         SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
         FROM tours t
@@ -103,8 +108,8 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
-	getAllvoucherTours: async (voucherQuery) => {
-		if(!Array.isArray(voucherQuery)){voucherQuery=[voucherQuery]}
+	filtervoucherTours: async (voucherQuery) => {
+		if (!Array.isArray(voucherQuery)) { voucherQuery = [voucherQuery] }
 		const query = `
         SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
         FROM tours t
@@ -125,8 +130,8 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
-	getAlllocationTours: async (locationQuery) => {
-		if(!Array.isArray(locationQuery)){locationQuery=[locationQuery]}
+	filterlocationTours: async (locationQuery) => {
+		if (!Array.isArray(locationQuery)) { locationQuery = [locationQuery] }
 		const query = `
         SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
         FROM tours t
@@ -190,9 +195,9 @@ const Tour = {
 		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.rate,t.voucher, t.location_id
 		from tours t inner join locations l on t.location_id = l.location_id
 					inner join tour_images t_i on t.tour_id = t_i.tour_id
-		where t.rate>=4 and t.voucher>=8
+		where t.rate>=4 and t.voucher>=8 and t_i.img_id = 1
 		order by rate DESC
-		limit 10
+		limit 3
 		`;
 		try {
 			const result = await db.query(query);
@@ -207,9 +212,9 @@ const Tour = {
 		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.rate,t.voucher, t.location_id
 		from tours t inner join locations l on t.location_id = l.location_id
 					inner join tour_images t_i on t.tour_id = t_i.tour_id
-		where t.rate>=4 and t.prices<=150.0
+		where t.rate>=4 and t.prices<=150.0 and t_i.img_id = 1
 		order by rate DESC
-		limit 10
+		limit 3
 		`;
 		try {
 			const result = await db.query(query);

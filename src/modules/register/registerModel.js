@@ -8,7 +8,12 @@ async function registerUser(userName, email, encryptionPassword) {
         const result = await db.query(checkUser, [userName, email]);
 
         if(result.rowCount > 0){
-            throw new Error('Username or email already exists.');
+            if (result.rows.some(row => row.user_name === userName)) {
+                throw new Error('Username already exists.');
+            }
+            if (result.rows.some(row => row.email === email)) {
+                throw new Error('Email already exists.');
+            }
         }
 
         // Nếu tên người dùng chưa tồn tại, thực hiện chèn người dùng mới
@@ -16,8 +21,8 @@ async function registerUser(userName, email, encryptionPassword) {
         await db.query(query, [userName, email, encryptionPassword]);
     }
     catch(error){
-        console.error('Can not insert: ', error);
-        throw error;
+        console.error(error);
+        throw new Error(error.message);
     }
 
 }

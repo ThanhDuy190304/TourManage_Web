@@ -5,73 +5,146 @@ function StoreId(button) {
     window.location.href = `/tours/tour_detail/${id}/${idlocation}`; // Chuyển đến tour_detail với ID
 }
 
-let currentPage = 1;
-const itemsPerPage = 6;
 
+document.addEventListener("DOMContentLoaded", function () {
+    // Lấy tất cả các radio button
+    const locationRadios = document.querySelectorAll('input[name="location"]');
+    const priceRadios = document.querySelectorAll('input[name="price"]');
+    const rateRadios = document.querySelectorAll('input[name="rate"]');
+    const voucherRadios = document.querySelectorAll('input[name="voucher"]');
 
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('searchInf');
-    
-    // Kiểm tra xem có giá trị tìm kiếm trong localStorage không
-    const savedQuery = localStorage.getItem('searchQuery');
-    if (savedQuery) {
-        searchInput.value = savedQuery;  // Điền lại giá trị vào ô input
-    }
-});
-document.getElementById('searchInf').addEventListener('input', (event) => {
-    localStorage.setItem('searchQuery', event.target.value); // Lưu giá trị vào localStorage
-});
+    // Lấy container để hiển thị các lựa chọn
+    const selectedFiltersContainer = document.getElementById("selected-filters");
 
+    // Hàm khôi phục trạng thái filter từ URL
+    function restoreFiltersFromURL() {
+        const params = new URLSearchParams(window.location.search);
 
-
-// Lưu trạng thái checkbox vào localStorage khi người dùng thay đổi
-const saveCheckboxState = () => {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const state = {};
-    
-    checkboxes.forEach(checkbox => {
-        state[checkbox.name] = state[checkbox.name] || [];
-        if (checkbox.checked) {
-            state[checkbox.name].push(checkbox.value);
-        }
-    });
-
-    // Lưu trạng thái vào localStorage
-    localStorage.setItem('checkboxState', JSON.stringify(state));
-};
-
-// Đọc và áp dụng trạng thái checkbox từ localStorage
-const loadCheckboxState = () => {
-    const savedState = localStorage.getItem('checkboxState');
-    if (savedState) {
-        const state = JSON.parse(savedState);
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-
-        checkboxes.forEach(checkbox => {
-            // Kiểm tra xem giá trị checkbox có trong danh sách đã lưu không
-            if (state[checkbox.name] && state[checkbox.name].includes(checkbox.value)) {
-                checkbox.checked = true;  // Đánh dấu checkbox đã chọn
-            } else {
-                checkbox.checked = false;  // Bỏ đánh dấu checkbox chưa chọn
+        // Lặp qua các tham số URL và khôi phục giá trị
+        params.forEach((value, key) => {
+            const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
+            if (radio) {
+                radio.checked = true; // Đánh dấu radio button đã chọn
+                const label = radio.nextElementSibling?.textContent;
+                createFilterElement(key, value, label); // Tạo filter trong container
             }
         });
     }
-};
 
-// Lắng nghe sự thay đổi của checkbox để lưu lại trạng thái
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', saveCheckboxState);
+    restoreFiltersFromURL();
+
+    // Hàm tạo một thẻ cho lựa chọn
+    function createFilterElement(name, value, label) {
+        const filterElement = document.createElement("div");
+        filterElement.classList.add("bg-emerald-800", "text-white", "px-4", "py-2", "rounded", "flex", "items-center", "gap-2");
+        filterElement.textContent = label;
+
+        // Thêm thuộc tính `data-name` và `data-value`
+        filterElement.setAttribute("data-name", name);
+        filterElement.setAttribute("data-value", value);
+
+        // Thêm dấu "X" để xóa
+        const closeButton = document.createElement("span");
+        closeButton.textContent = "X";
+        closeButton.classList.add("cursor-pointer", "text-red-400");
+        closeButton.addEventListener("click", () => {
+            // Xóa thẻ khi nhấn dấu "X"
+            filterElement.remove();
+            // Xóa giá trị đã chọn trong radio
+            const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (radio) {
+                radio.checked = false; // Hủy chọn radio button
+            }
+            applyFilters();
+        });
+
+        // Gắn closeButton vào `filterElement`
+        filterElement.appendChild(closeButton);
+
+        // Thêm `filterElement` vào container
+        selectedFiltersContainer.appendChild(filterElement);
+    }
+
+    // Hàm xử lý sự kiện thay đổi lựa chọn
+    function handleSelectionChange(name, value, label) {
+        // Xóa các lựa chọn cũ trước khi tạo thẻ mới
+        clearSelectedFilters(name);
+
+        if (value) {
+            // Tạo thẻ mới với giá trị vừa chọn
+            createFilterElement(name, value, label);
+        }
+
+        applyFilters();
+    }
+
+    // Hàm xóa các filter đã chọn trước đó
+    function clearSelectedFilters(name) {
+        // Lọc và xóa tất cả các thẻ có data-name trùng với name của radio
+        const filters = selectedFiltersContainer.querySelectorAll(`[data-name="${name}"]`);
+        filters.forEach(filter => filter.remove());
+    }
+
+    function applyFilters() {
+        const filters = {};
+        // Duyệt qua tất cả các thẻ filter trong `selected-filters`
+        const selectedFilters = selectedFiltersContainer.querySelectorAll("[data-name]");
+        selectedFilters.forEach(filter => {
+            const name = filter.getAttribute("data-name");
+            const value = filter.getAttribute("data-value");
+
+            if (value) {
+                filters[name] = value;
+            }
+        });
+
+        const queryParams = new URLSearchParams(filters).toString();
+
+        const newUrl = `/tours?${queryParams}`;
+        window.location.href = newUrl;
+    }
+
+    // Lắng nghe sự thay đổi của các radio buttons
+    locationRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            handleSelectionChange("location", radio.value, selectedLabel);
+        });
+    });
+
+    priceRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            handleSelectionChange("price", radio.value, selectedLabel);
+        });
+    });
+
+    rateRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            handleSelectionChange("rate", radio.value, selectedLabel);
+        });
+    });
+
+    voucherRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            handleSelectionChange("voucher", radio.value, selectedLabel);
+        });
+    });
+
+
 });
 
-// Khi trang được tải, đọc và áp dụng trạng thái đã lưu
-document.addEventListener('DOMContentLoaded', loadCheckboxState);
-
+let currentPage = 1;
+const itemsPerPage = 6;
 
 function showPage(page) {
     const services = document.querySelectorAll('.tour');
     const totalPages = Math.ceil(services.length / itemsPerPage);
-    if(totalPages==0) {document.querySelector('.pagination > button:first-child').disabled = true;
-    document.querySelector('.pagination > button:last-child').disabled =true;
+    if (totalPages == 0) {
+        document.querySelector('.pagination > button:first-child').disabled = true;
+        document.querySelector('.pagination > button:last-child').disabled = true;
     }
     // Ensure the current page is within valid range
     if (page < 1) page = 1;

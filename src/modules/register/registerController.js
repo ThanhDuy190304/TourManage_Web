@@ -21,22 +21,37 @@ async function registerUser(req, res) {
 
     } catch (error) {
         // Xử lý lỗi khi trùng lặp tên người dùng hoặc email
-        if (error.code === '23505') {
-            if (error.detail.includes('Key (user_name)')) {
-                return res.render('register', {
-                    message: 'Username already exists, please choose another name.', layout: false,
-                    title: 'Register Page',
-                });
-            } else if (error.detail.includes('Key (email)')) {
-                return res.render('register', {
-                    message: 'Email already exists, please choose another email.', layout: false,
-                    title: 'Register Page',
-                });
-            }
-        } else {
-            console.error(error);
-            res.status(500).json({ message: 'Đã xảy ra lỗi khi đăng ký người dùng mới' });
+        // if (error.code === '23505') {
+        //     if (error.detail.includes('Key (user_name)')) {
+        //         return res.render('register', {
+        //             message: 'Username already exists, please choose another name.', layout: false,
+        //             title: 'Register Page',
+        //         });
+        //     } else if (error.detail.includes('Key (email)')) {
+        //         return res.render('register', {
+        //             message: 'Email already exists, please choose another email.', layout: false,
+        //             title: 'Register Page',
+        //         });
+        //     }
+        // }
+        if (error.message === 'Username already exists.') {
+            return res.render('register', {
+                message: 'Username already exists, please choose another name.',
+                layout: false,
+                title: 'Register Page',
+            });
         }
+
+        if (error.message === 'Email already exists.') {
+            return res.render('register', {
+                message: 'Email already exists, please choose another email.',
+                layout: false,
+                title: 'Register Page',
+            });
+        }
+        console.error(error);
+        res.status(500).json({ message: 'error in new register', error: error.message });
+
     }
 }
 module.exports = {

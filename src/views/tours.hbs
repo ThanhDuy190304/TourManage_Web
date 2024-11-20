@@ -1,11 +1,285 @@
-<section class="mx-16 px-4 py-18 mt-44" id="listTour">
-    <div class="mb-8 flex justify-around">
-        <div class="w-2/3">
-            <h2 class="text-6xl font-semibold mb-4">{{location_name}}</h2>
-            <p class="text-lg font-medium text-gray-600 mb-8">{{loc_detail}}</p>
+<section class="my-16" id="listTour">
+    <div class="mb-8 mx-4 sm:mx-8 md:mx-16">
+        <div class="w-full ">
+            <h2 class="text-3xl sm:text-4xl md:text-6xl font-semibold mb-4">{{location_name}}</h2>
+            <p class="text-base sm:text-lg font-medium text-gray-600 mb-8">{{loc_detail}}</p>
         </div>
     </div>
-<form id="searchService" action="/tours" method="GET">
+    <hr class="w-full	border-gray-200 my-8 mx-auto">
+    <div id="selected-filters" class="flex flex-wrap gap-4 my-4 mx-4">
+        <!-- Các lựa chọn sẽ được thêm vào đây -->
+    </div>
+
+    <hr class="w-full border-gray-200 my-8 mx-auto">
+
+    <div class="flex flex-col sm:flex-row gap-4">
+        <div class="md:basis-2/6">
+
+
+            <form id="searchService" action="\tours" method="GET" class="mx-8 md:mx-16">
+                <fieldset id="location" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                    <legend class="font-medium text-xl my-4">Choose a location</legend>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="ha-long-bay" type="radio" name="location" value="Ha Long Bay"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="ha-long-bay"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Ha Long Bay</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="hue" type="radio" name="location" value="Hue"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="hue"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Hue</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="ho-chi-minh" type="radio" name="location" value="Ho Chi Minh City"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="ho-chi-minh"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Ho Chi Minh City</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="ha-noi" type="radio" name="location" value="Ha Noi"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="ha-noi"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Ha Noi</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="da-nang" type="radio" name="location" value="Da Nang"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="da-nang"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Da Nang</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="da-lat" type="radio" name="location" value="Da Lat"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="da-lat"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Da Lat</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="vung-tau" type="radio" name="location" value="Vung Tau"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="vung-tau"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Vung Tau</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="ninh-binh" type="radio" name="location" value="Ninh Binh"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="ninh-binh"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>Ninh Binh</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+
+                <!-- Lọc theo price -->
+                <fieldset id="price" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                    <legend class="font-medium text-xl my-4">Choose a price range</legend>
+
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-1" type="radio" name="price" value="1"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-1"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$001 - $100</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-2" type="radio" name="price" value="101"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-2"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$101 - $200</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-3" type="radio" name="price" value="201"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-3"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$201 - $300</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-4" type="radio" name="price" value="301"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-4"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$301 - $400</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-5" type="radio" name="price" value="401"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-5"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$401 - $500</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="price-6" type="radio" name="price" value="501"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="price-6"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>$501 - $600</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+
+                <!-- Lọc theo rate -->
+                <fieldset id="rate" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                    <legend class="font-medium text-xl my-4">Choose a rate</legend>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-1" type="radio" name="rate" value="1"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-1"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>1 Star</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-2" type="radio" name="rate" value="2"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-2"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>2 Stars</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-3" type="radio" name="rate" value="3"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-3"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>3 Stars</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-4" type="radio" name="rate" value="4"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-4"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>4 Stars</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="rate-5" type="radio" name="rate" value="5"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="rate-5"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>5 Stars</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+
+                <!-- Lọc theo voucher -->
+                <fieldset id="voucher" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+                    <legend class="font-medium text-xl my-4">Choose a voucher range</legend>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="voucher-1" type="radio" name="voucher" value="1"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="voucher-1"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>1% - 5%</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="voucher-2" type="radio" name="voucher" value="6"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="voucher-2"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>6% - 10%</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="voucher-3" type="radio" name="voucher" value="11"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="voucher-3"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>11% - 15%</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <input id="voucher-4" type="radio" name="voucher" value="16"
+                            class="peer accent-emerald-900 cursor-pointer" />
+                        <label for="voucher-4"
+                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
+                            <span>16% - 20%</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+            </form>
+        </div>
+
+        <div class="basis-4/6">
+            <div id="showTours" class="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-6 mx-0 md:mx-8">
+                {{#each allTours}}
+                <a href="/tours/tour_detail/{{this.tour_id}}/{{this.location_id}}" class="w-80 md:w-96 lg:w-80 mx-auto">
+                    <div
+                        class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 md:w-96 lg:w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105 mx-auto">
+                        <div>
+                            <!-- Giảm kích thước hình ảnh -->
+                            <img src="{{this.img_url}}" alt="" class="img w-full h-36 object-cover">
+                            <div class="p-4">
+                                <div class="flex justify-between mt-4 h-16">
+                                    <h3 class="name text-lg font-semibold">{{this.title}}</h3>
+                                    <p class="price text-gray-600">${{this.prices}}</p>
+                                </div>
+                                <p class="text-gray-600 w-full overflow-hidden text-ellipsis line-clamp-2">
+                                    {{this.brief}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between px-4">
+                            <div class="flex">
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                            </div>
+                            <button type="button"
+                                class="self-end mb-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
+                                value="{{this.tour_id}}" data-name="{{this.location_id}}" onclick="StoreId(this)">View
+                                Detail</button>
+                        </div>
+                    </div>
+                </a>
+                {{/each}}
+            </div>
+            <div class="pagination flex col-start-1 max-h-10 mt-4 px-8 ">
+                <button onclick="prevPage()">Previous</button>
+                <div id="pageNumbers"></div> <!-- Container for page number buttons -->
+                <button onclick="nextPage()">Next</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <hr class="w-screen	border-gray-200 my-8 mx-auto">
+
+
+
+
+
+    {{!-- <form id="searchService" action="/tours" method="GET">
         <div id="search-zone" class="flex justify-around mx-auto my-10 w-4/5">
             <div class="search1 w-2/3">
                 <label for="searchInf" class="">
@@ -13,229 +287,162 @@
                 </label>
                 <div class="searchContainer relative flex items-center border-2 border-black rounded-md w-2/3">
                     <i class="fa-solid fa-taxi absolute text-gray-700 text-lg left-2"></i>
-                    <input id="searchInf" name="query" type="text" class="border-none outline-none text-base w-full py-4 pl-8" placeholder="Search...">
+                    <input id="searchInf" name="query" type="text"
+                        class="border-none outline-none text-base w-full py-4 pl-8" placeholder="Search...">
                 </div>
             </div>
-            <button type="submit" id="btnSearch" class="px-4 py-2 border-2 border-black rounded-md bg-[#011f4b] text-white flex items-center justify-center">
+            <button type="submit" id="btnSearch"
+                class="px-4 py-2 border-2 border-black rounded-md bg-[#011f4b] text-white flex items-center justify-center">
                 Search
             </button>
         </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div id="filter" class="flex flex-col gap-8 border-r-2 border-black border-dashed">
-            <div class="guests opt leading-7">
-                <h3 class="text-2xl">Location of tour</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                    <label>
-                        <input type="checkbox" name="location" value="Ha Long Bay">
-                        Ha Long Bay
-                    </label>
-                    <label>
-                        <input type="checkbox" name="location" value="Hue">
-                        Hue
-                    </label>
-                    <label>
-                        <input type="checkbox" name="location" value="Ho Chi Minh City">
-                        Ho Chi Minh
-                    </label>
-                    <label>
-                        <input type="checkbox" name="location" value="Ha Noi">
-                        Ha Noi
-                    </label>
-                    <label>
-                        <input type="checkbox" name="location" value="Da Nang">
-                        Da Nang
-                    </label>
-                    <label>
-                        <input type="checkbox" name="location" value="Da Lat">
-                        Da Lat
-                    </label>
-                    <label>
-                        <input type="checkbox" name="location" value="Vung Tau">
-                        Vung Tau
-                    </label>
-                    <label>
-                        <input type="checkbox" name="location" value="Ninh Binh">
-                        Ninh Binh
-                    </label>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div id="filter" class="flex flex-col gap-8 border-r-2 border-black border-dashed">
+                <div class="guests opt leading-7">
+                    <h3 class="text-2xl">Location of tour</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <label>
+                            <input type="checkbox" name="location" value="Ha Long Bay">
+                            Ha Long Bay
+                        </label>
+                        <label>
+                            <input type="checkbox" name="location" value="Hue">
+                            Hue
+                        </label>
+                        <label>
+                            <input type="checkbox" name="location" value="Ho Chi Minh City">
+                            Ho Chi Minh
+                        </label>
+                        <label>
+                            <input type="checkbox" name="location" value="Ha Noi">
+                            Ha Noi
+                        </label>
+                        <label>
+                            <input type="checkbox" name="location" value="Da Nang">
+                            Da Nang
+                        </label>
+                        <label>
+                            <input type="checkbox" name="location" value="Da Lat">
+                            Da Lat
+                        </label>
+                        <label>
+                            <input type="checkbox" name="location" value="Vung Tau">
+                            Vung Tau
+                        </label>
+                        <label>
+                            <input type="checkbox" name="location" value="Ninh Binh">
+                            Ninh Binh
+                        </label>
+                    </div>
+                </div>
+                <div class="price opt">
+                    <h3 class="text-2xl">Price of tour</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <label>
+                            <input type="checkbox" name="price" value="1">
+                            $001 - $100
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="101">
+                            $101 - $200
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="201">
+                            $201 - $300
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="301">
+                            $301 - $400
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="401">
+                            $401 - $500
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="501">
+                            $501 - $600
+                        </label>
+                    </div>
+                </div>
+                <div class="rate opt">
+                    <h3 class="text-2xl">Rate of tour</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <label>
+                            <input type="checkbox" name="rate" value="1">
+                            1 Star
+                        </label>
+                        <label>
+                            <input type="checkbox" name="rate" value="2">
+                            2 Star
+                        </label>
+                        <label>
+                            <input type="checkbox" name="rate" value="3">
+                            3 Star
+                        </label>
+                        <label>
+                            <input type="checkbox" name="rate" value="4">
+                            4 Star
+                        </label>
+                        <label>
+                            <input type="checkbox" name="rate" value="5">
+                            5 Star
+                        </label>
+                    </div>
+                </div>
+                <div class="voucher opt">
+                    <h3 class="text-2xl">Voucher of tour</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2">
+                        <label>
+                            <input type="checkbox" name="voucher" value="1">
+                            1% - 5%
+                        </label>
+                        <label>
+                            <input type="checkbox" name="voucher" value="6">
+                            6% - 10%
+                        </label>
+                        <label>
+                            <input type="checkbox" name="voucher" value="11">
+                            11% - 15%
+                        </label>
+                        <label>
+                            <input type="checkbox" name="voucher" value="16">
+                            16% -20%
+                        </label>
+                    </div>
                 </div>
             </div>
-            <div class="price opt">
-                <h3 class="text-2xl">Price of tour</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                    <label>
-                        <input type="checkbox" name="price" value="1">
-                        $001 - $100
-                    </label>
-                    <label>
-                        <input type="checkbox" name="price" value="101">
-                        $101 - $200
-                    </label>
-                    <label>
-                        <input type="checkbox" name="price" value="201">
-                        $201 - $300
-                    </label>
-                    <label>
-                        <input type="checkbox" name="price" value="301">
-                        $301 - $400
-                    </label>
-                    <label>
-                        <input type="checkbox" name="price" value="401">
-                        $401 - $500
-                    </label>
-                    <label>
-                        <input type="checkbox" name="price" value="501">
-                        $501 - $600
-                    </label>
-                </div>
-            </div>
-            <div class="rate opt">
-                <h3 class="text-2xl">Rate of tour</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                    <label>
-                        <input type="checkbox" name="rate" value="1">
-                        1 Star
-                    </label>
-                    <label>
-                        <input type="checkbox" name="rate" value="2">
-                        2 Star
-                    </label>
-                    <label>
-                        <input type="checkbox" name="rate" value="3">
-                        3 Star
-                    </label>
-                    <label>
-                        <input type="checkbox" name="rate" value="4">
-                        4 Star
-                    </label>
-                    <label>
-                        <input type="checkbox" name="rate" value="5">
-                        5 Star
-                    </label>
-                </div>
-            </div>
-            <div class="voucher opt">
-                <h3 class="text-2xl">Voucher of tour</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                    <label>
-                        <input type="checkbox" name="voucher" value="1">
-                        1% - 5%
-                    </label>
-                    <label>
-                        <input type="checkbox" name="voucher" value="6">
-                        6% - 10%
-                    </label>
-                    <label>
-                        <input type="checkbox" name="voucher" value="11">
-                        11% - 15%
-                    </label>
-                    <label>
-                        <input type="checkbox" name="voucher" value="16">
-                        16% -20%
-                    </label>
-                </div>
-            </div>
-        </div>
     </form>
-        <div class="md:col-span-2 grid grid-cols-1 mt-8 md:grid-cols-2 gap-8 mb-32">
-            {{#each allTours}}
+    <div class="md:col-span-2 grid grid-cols-1 mt-8 md:grid-cols-2 gap-8 mb-32">
+        {{#each allTours}}
 
-            <div class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden h-auto tour">
-                <div>
-                    <img src="{{this.img_url}}" alt="" class="img w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between">
-                            <h3 class="name text-xl font-semibold">{{this.title}}</h3>
-                            <p class="price text-gray-600">${{this.prices}}</p>
-                        </div>
-                        <p class="desc mt-4 text-gray-500">{{this.brief}}</p>
+        <div class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden h-auto tour">
+            <div>
+                <img src="{{this.img_url}}" alt="" class="img w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex justify-between">
+                        <h3 class="name text-xl font-semibold">{{this.title}}</h3>
+                        <p class="price text-gray-600">${{this.prices}}</p>
                     </div>
-                </div>
-                <div class="flex justify-between px-6">
-                    <div class="flex">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i>
-                    </div>
-                    <button class="self-end mb-8 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
-                        value="{{this.tour_id}}" data-name="{{this.location_id}}" onclick="StoreId(this)">View Detail</button>
+                    <p class="desc mt-4 text-gray-500">{{this.brief}}</p>
                 </div>
             </div>
-            {{/each}}
-            <div class="pagination flex col-start-1 max-h-10">
-                <button onclick="prevPage()">Previous</button>
-                <div id="pageNumbers"></div> <!-- Container for page number buttons -->
-                <button onclick="nextPage()">Next</button>
+            <div class="flex justify-between px-6">
+                <div class="flex">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <button type="button"
+                    class="self-end mb-8 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
+                    value="{{this.tour_id}}" data-name="{{this.location_id}}" onclick="StoreId(this)">View
+                    Detail</button>
             </div>
+        </div>
+        {{/each}}
+        <div class="pagination flex col-start-1 max-h-10">
+            <button onclick="prevPage()">Previous</button>
+            <div id="pageNumbers"></div> <!-- Container for page number buttons -->
+            <button onclick="nextPage()">Next</button>
         </div>
     </div>
-</section>
-
-<section class="relative w-full h-96 bg-cover bg-center mt-44"
-    style="background-image: url('/img/Tour_detail/Decore1.png');">
-</section>
-
-<!-- Tips & Article Section -->
-<section class="mx-16 px-4 py-18 mt-44">
-    <div class="mb-8 flex justify-around">
-        <div class="w-2/3">
-            <h2 class="text-6xl font-semibold mb-4">Tips and attractions</h2>
-            <p class="text-lg font-medium text-gray-600 mb-8">Here is a collection of useful tips and famous tourist
-                destinations that you should not miss. From tips to help you save money, optimize your luggage to
-                how to make the most of famous attractions, we want to provide you with the best luggage for your
-                trip. These famous places not only have natural beauty, unique culture but also bring unique and
-                unforgettable experiences. Let's explore great places and receive interesting travel tips from us!
-            </p>
-        </div>
-        <p class="self-end block py-3.5 px-7 bg-black hover:bg-gray-800 rounded-full"><a
-                class="font-semibold text-2xl text-white" href="#!">View More</a></p>
-    </div>
-
-    <!-- Articles Grid -->
-    <div class="grid gap-6 md:grid-cols-10">
-        <div class="flex gap-10 flex-col md:col-span-4">
-            <!-- Article 1 -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <p class="text-2xl text-gray-500 Tips">Tips | Travel</p>
-                <h2 class="text-4xl font-medium font-semibold mt-2 py-4">How Do I Choose a Tour Package? (Best 8
-                    Tips) <br>-</h2>
-                <p class="text-lg font-light text-gray-600 mt-2">How do I choose a tour package? You can choose the
-                    best tour package by considering significant factors like budget, destination, refund
-                    conditions, etc.</p>
-                <button class="mt-20 px-8 py-3 bg-black text-white rounded-full"><a class="text-2xl font-medium"
-                        target="_blank" rel="noopener noreferrer"
-                        href="https://boundlessadventure.com/blog/how-do-i-choose-a-tour-package/">Read
-                        More</a></button>
-            </div>
-            <!-- Article 3 -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <p class="text-2xl text-gray-500">Tips | Travel</p>
-                <h2 class="text-4xl font-medium font-semibold mt-2 py-4">10 Ways To Really Enjoy a Vacation and Get
-                    the Most of It <br>-</h2>
-                <p class="text-lg font-light text-gray-600 mt-2">To help you make the most out of your trip and
-                    embrace every joy that comes your way with open arms, below are some of the travel tips that you
-                    would love to read till the end before embarking on the road to your destination.</p>
-                <button class="mt-20 px-8 py-3 bg-black text-white rounded-full"><a class="text-2xl font-medium"
-                        target="_blank" rel="noopener noreferrer"
-                        href="https://www.outofyourcomfortzone.net/10-ways-to-really-enjoy-a-vacation-and-get-the-most-of-it/">Read
-                        More</a></button>
-            </div>
-        </div>
-
-        <!-- Article 2 (Larger Card) -->
-        <div class="md:col-span-6 bg-white rounded-lg shadow-lg p-6">
-            <img src="../img/Tour_detail/Attraction.jpg" alt="Family Travel" class="rounded-lg">
-            <div class="py-6">
-                <p class="text-2xl text-gray-500">Attraction | Introduction</p>
-                <h2 class="text-4xl font-medium font-semibold mt-2 py-4">25 Top Tourist Attractions in Vietnam <br>-
-                </h2>
-                <p class="text-lg font-light text-gray-600 mt-2">Most travelers to Vietnam are attracted by the
-                    country’s wonderful natural beauty: From the green rice fields in the north to the fascinating
-                    bustle of the Mekong Delta in the south. Vietnam however is also a country with a long history
-                    and ancient traditions.</p>
-                <button class="mt-20 px-8 py-3 bg-black text-white rounded-full"><a class="text-2xl font-medium"
-                        target="_blank" rel="noopener noreferrer"
-                        href="https://www.touropia.com/tourist-attractions-in-vietnam/">Read More</a></button>
-            </div>
-        </div>
-    </div>
+    </div> --}}
 </section>
