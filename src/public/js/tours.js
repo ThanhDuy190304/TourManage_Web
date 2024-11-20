@@ -20,6 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function restoreFiltersFromURL() {
         const params = new URLSearchParams(window.location.search);
 
+        const searchParam = params.get("query");
+        if (searchParam) {
+            const searchInput = document.getElementById("searchInput");
+            if (searchInput) {
+                searchInput.value = searchParam;  // Đặt giá trị tìm kiếm vào ô input
+            }
+        }
         // Lặp qua các tham số URL và khôi phục giá trị
         params.forEach((value, key) => {
             const radio = document.querySelector(`input[name="${key}"][value="${value}"]`);
@@ -97,6 +104,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 filters[name] = value;
             }
         });
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput && searchInput.value) {
+            filters["query"] = searchInput.value;  // Thêm giá trị tìm kiếm vào filters
+        }
+
 
         const queryParams = new URLSearchParams(filters).toString();
 
