@@ -1,13 +1,13 @@
 <header class="sticky top-0 z-10">
-    <nav id="navbar" class="flex items-center h-128 px-8 py-4 backdrop-blur-md">
+    <nav id="navbar" class="flex items-center h-128 px-8 py-4 backdrop-blur-md select-none">
 
-        <div class="logo-container w-24 md:w-36 mr-0 block">
+        <div class="logo-container w-36 mr-0 hidden lg:block">
             <a href="/" class="w-full h-auto">
                 <img src="/img/logo.png" class="w-full h-auto" alt="logoTADTravels">
             </a>
         </div>
 
-        <button id="menu-toggle" class="menu-button block md:hidden z-20 relative p-0" aria-label="Toggle Menu">
+        <button id="menu-toggle" class="menu-button block lg:hidden z-20 relative p-0" aria-label="Toggle Menu">
             <img src="/img/list-button.png" alt="Menu" class="menu-icon w-6 h-6 transition-transform">
         </button>
 
@@ -33,16 +33,46 @@
             <li>
                 <div class="search__container">
                     <input class="search__input" autocomplete="off" id="searchInput" type="text" placeholder="Search">
-                    <button class="search__button" id="searchButton"></button> <!-- Nút tìm kiếm -->
+                    <button class="search__button" id="searchButton"></button>
                 </div>
-
             </li>
+
+            {{#if user}}
+            <!-- User button and dropdown -->
+            <li class="relative">
+                <button id="registeredUser_btn" class="text-white text-base flex items-center focus:outline-none">
+                    <span class="hidden lg:block">{{user.user_name}}</span>
+                    <img src="/img/user-icon.png" class="ml-2 w-8 h-8 rounded-full border-none">
+                    <svg class="ml-2 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <ul id="registeredUser_menu"
+                    class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10 hidden">
+                    {{!-- <li>
+                        <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Information</a>
+                    </li> --}}
+                    <li>
+                        <a href="/logout" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                    </li>
+                </ul>
+            </li>
+
+            {{else}}
+            <!-- If no user is logged in, show the Login button -->
             <li>
                 <a href="/login" class="button bg-user-icon flex items-center justify-center">
                     <span class="sr-only">User</span>
                 </a>
             </li>
+            {{/if}}
+
         </ul>
+
+
+
 
     </nav>
 </header>

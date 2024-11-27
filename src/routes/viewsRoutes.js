@@ -12,7 +12,8 @@ router.get('/', async (req, res) => {
             bestdealTours,
             bestrateTours,
             title: 'Home Page',
-            scripts: '<script src="/js/home.js"></script>'
+            scripts: '<script src="/js/home.js"></script>',
+            user: req.user
         });
     } catch (err) {
         res.status(500).json({ error: err.message });

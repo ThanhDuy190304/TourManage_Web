@@ -2,33 +2,16 @@ const Tour = require('./tourModel');
 const Location = require('../location/locationModel')
 const tourController = {
 
-    // getToursByLocation: async (req, res) => {
-    //     const { location_name } = req.params
-
-    //     try {
-    //         const tours = await Tour.getToursByLocation(location_name);
-    //         const location = await Location.getLocationByName(location_name);
-
-    //         res.render('tours', {
-    //             layout: 'main',
-    //             location_name, loc_detail: location[0].details, tours,
-    //             title: location[0].location_name,
-    //             scripts: '<script src="/js/tours.js"></script>'
-    //         });
-    //     } catch (err) {
-    //         res.status(500).json({ error: err.message });
-    //     }
-    // },
     getAllToursAPI: async (req, res) => {
         try {
-            const {page, query = 'default', location = ['default'], rate = [-1], price = [-1], voucher = [-1] } = req.query;
+            const { page, query = 'default', location = ['default'], rate = [-1], price = [-1], voucher = [-1] } = req.query;
             const allTours = await Tour.getTours(query, location, rate, price, voucher);
             let html = '';
             const totalTours = allTours.length;
             const totalPages = Math.ceil(totalTours / 6);
             const startIndex = (page - 1) * 6;
             const paginatedTours = allTours.slice(startIndex, startIndex + 6);
-            if (paginatedTours.length === 0||page>totalPages) {
+            if (paginatedTours.length === 0 || page > totalPages) {
                 html = '<p>No tours available</p>';
             }
             paginatedTours.forEach(tour => {
@@ -66,8 +49,8 @@ const tourController = {
                 </a>
                 `;
             });
-            
-            res.json({html,totalPages});  // Trả về HTML
+
+            res.json({ html, totalPages });  // Trả về HTML
         } catch (err) {
             res.status(500).json({ success: false, error: err.message });
         }
@@ -90,7 +73,7 @@ const tourController = {
     },
 
     getTourByID: async (req, res) => {
-        const { tour_id} = req.params
+        const { tour_id } = req.params
         try {
             const tour_detail = await Tour.getTourByID(tour_id);
             const related = await Tour.getToursByIDLocation(tour_id);

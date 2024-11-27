@@ -1,5 +1,7 @@
 const loginModel = require('./loginModel');
 const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
+
 
 async function loginUser(req, res) {
     const { Username_Email, password } = req.body;// Lấy thông tin từ form đăng nhập
@@ -33,16 +35,18 @@ async function loginUser(req, res) {
 
         console.log('successful');
 
-        req.session.user = {
-            user_id: user.user_id,
-            user_name: user.user_name,
-            email: user.email,
-        }
+        const token = jwt.sign(
+            {
+                user_id: user.user_id,
+                user_name: user.user_name,
+                email: user.email,
+            },
+            process.env.JWT_SECRET, // Khóa bí mật cho JWT
+            { expiresIn: '1h' } // Token hết hạn sau 1 giờ
+        );
 
-        //chuyển hướng
+        res.cookie('auth_token', token, { httpOnly: true }); // Lưu token vào cook
         res.redirect('/');
-
-        
 
     }
     catch (error) {

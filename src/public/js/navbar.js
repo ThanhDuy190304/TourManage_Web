@@ -1,5 +1,12 @@
 // nav.js
 
+const registeredUserButton = document.getElementById('registeredUser_btn');
+const registeredUserDropdownMenu = document.getElementById('registeredUser_menu');
+
+// Xử lý sự kiện click cho nút tìm kiếm
+const searchButton = document.getElementById('searchButton');
+const searchInput = document.getElementById('searchInput');
+
 // Xử lý sự kiện click cho nút menu toggle
 document.getElementById("menu-toggle").addEventListener("click", function () {
     const navList = document.querySelector(".nav-list");
@@ -16,9 +23,7 @@ document.getElementById("menu-toggle").addEventListener("click", function () {
     }
 });
 
-// Xử lý sự kiện click cho nút tìm kiếm
-const searchButton = document.getElementById('searchButton');
-const searchInput = document.getElementById('searchInput');
+
 
 // Hàm xử lý tìm kiếm
 function handleSearch() {
@@ -42,6 +47,27 @@ if (searchButton) {
 searchInput.addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         handleSearch(); // Gọi hàm xử lý tìm kiếm nếu nhấn Enter
+    }
+});
+
+
+function closeMenu() {
+    registeredUserDropdownMenu.classList.add('hidden');
+}
+
+registeredUserButton.addEventListener('click', (event) => {
+    // Ngừng sự kiện click tiếp tục để tránh nó lan ra ngoài
+    event.stopPropagation();
+
+    // Nếu menu đang ẩn thì hiển thị, nếu đang hiển thị thì ẩn
+    registeredUserDropdownMenu.classList.toggle('hidden');
+});
+
+// Đóng menu khi nhấn ra ngoài dropdown
+document.addEventListener('click', (event) => {
+    // Nếu click vào bên ngoài dropdown và button, đóng menu
+    if (!userButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        closeMenu();
     }
 });
 

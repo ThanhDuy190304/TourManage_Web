@@ -1,34 +1,32 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
-const session = require('express-session');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+const authenticateToken = require('./src/middleware/authMiddleware');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const Handlebars = require('handlebars');
 
 // Đăng ký helper limit
-Handlebars.registerHelper('limit', function(array, limit) {
+Handlebars.registerHelper('limit', function (array, limit) {
     return array.slice(0, limit);
 });
 
-// Cấu hình session
-app.use(session({
-    secret: 'your_secret_key',  // Chìa khóa bí mật để mã hóa session
-    resave: false,              // Không lưu lại session nếu không có thay đổi
-    saveUninitialized: true,    // Lưu session mới ngay cả khi chưa có giá trị
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 24, // Thời gian sống của cookie (1 ngày)
-    }
-}));
 
 const viewsRoutes = require('./src/routes/viewsRoutes'); // Điều hướng view
 const tourRoutes = require('./src/routes/tourRoutes');  // Điều hướng tour
 const registerRoutes = require('./src/routes/registerRoutes'); // Điều hướng đến user
 const loginRoutes = require('./src/routes/loginRoutes');
+const logoutRoute = require('./src/routes/logoutRoutes');
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(cookieParser());
+app.use(authenticateToken);
 
 //Handlebars
 app.engine('hbs', exphbs.engine({
@@ -46,7 +44,9 @@ app.use('/tours', tourRoutes);
 
 app.use('/register', registerRoutes);
 
-app.use('/login',loginRoutes);
+app.use('/login', loginRoutes);
+
+app.use('/logout', logoutRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
