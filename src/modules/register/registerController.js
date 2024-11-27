@@ -4,7 +4,6 @@ const argon2 = require('argon2');
 async function registerUser(req, res) {
     const { user_name, email, password, confirmPassword } = req.body;
 
-
     if (password !== confirmPassword) {
         return res.render('register', {
             message: 'Confirmation password does not match', layout: false,
@@ -17,7 +16,13 @@ async function registerUser(req, res) {
         const encryptionPassword = await argon2.hash(password); // mã hóa mật khẩu
 
         await registerModel.registerUser(user_name, email, encryptionPassword); // thay đổi mật khẩu cũ thành mật khẩu đã mã hóa
-        res.redirect('/login?message=Registered successfully, please login!');
+        res.render('register', {
+            message: 'Registration successful, please check your email for verifying',
+            layout: false,
+            title: 'Email verification',
+        })
+        
+        //res.redirect('/login?message=Registered successfully, please login!');
 
     } catch (error) {
         // Xử lý lỗi khi trùng lặp tên người dùng hoặc email
@@ -50,7 +55,7 @@ async function registerUser(req, res) {
             });
         }
         console.error(error);
-        res.status(500).json({ message: 'error in new register', error: error.message });
+        res.status(500).json({ message: 'error in register', error: error.message });
 
     }
 }

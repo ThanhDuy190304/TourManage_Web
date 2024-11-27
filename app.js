@@ -26,6 +26,7 @@ const viewsRoutes = require('./src/routes/viewsRoutes'); // Điều hướng vie
 const tourRoutes = require('./src/routes/tourRoutes');  // Điều hướng tour
 const registerRoutes = require('./src/routes/registerRoutes'); // Điều hướng đến user
 const loginRoutes = require('./src/routes/loginRoutes');
+const verifyRoutes = require('./src/routes/verifyRoutes');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -47,6 +48,8 @@ app.use('/tours', tourRoutes);
 app.use('/register', registerRoutes);
 
 app.use('/login',loginRoutes);
+
+app.use('/verify', verifyRoutes); // Đây là nơi xử lý các yêu cầu đến /verify
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
