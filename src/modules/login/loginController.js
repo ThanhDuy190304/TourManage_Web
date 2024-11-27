@@ -1,61 +1,76 @@
-const loginModel = require('./loginModel');
-const argon2 = require('argon2');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
+const loginModel = require('./loginModel');
+const userModel = require('../shared/userModel');
+const { hashPassword } = require('../../utils/passwordUtils');
 
-async function loginUser(req, res) {
-    const { Username_Email, password } = req.body;// Lấy thông tin từ form đăng nhập
+passport.use(
+    new LocalStrategy(
+        {
+            usernameField: 'Username_Email', // Tên trường gửi từ client
+            passwordField: 'password',      // Trường mật khẩu gửi từ client
+        },
+        async (username_email, password, done) => {
+            try {
+                const pendingUsers = await userModel.checkUserExistsInPendingUsers(username_email, username_email);
+                if (pendingUsers.length > 0) {
+                    return done(null, false, {
+                        message: 'This username or email is already registered and awaiting email verification.\
+                                Please check your email to verify your account.' });
+                }
+                const user = await userModel.checkUserExistsInUsers(username_email, username_email);
+                if (user.length == 0) {
+                    return done(null, false, { message: 'Invalid username or email.' });
+                }
 
-    try {
+                const hashedPassword = hashPassword(password, user.salt);
+                if (hashedPassword !== user.user_password) {
+                    return done(null, false, { message: 'Invalid password.' });
+                }
 
-        // lấy người dùng dựa trên csdl
-        const user = await loginModel.loginUser(Username_Email);
-
-        if (!user) {
-            return res.render(
-                'login', {
-                message: 'Invalid username/email or password.',
-                layout: false,
-                title: 'Login Page',
+                return done(null, user); // Xác thực thành công
+            } catch (error) {
+                return done(error);
             }
-            );
         }
+    )
+);
 
-        const passwordMatch = await argon2.verify(user.user_password, password);//coi database nha
+// Hàm xử lý đăng nhập và tạo token
+function loginUser(req, res) {
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err) {
+            console.error("Passport Authentication Error:", err); // Log chi tiết lỗi
 
-        if (!passwordMatch) {
+            return res.status(500).json({ message: 'Authentication failed.', error: err.message });
+        }
+        if (!user) {
             return res.render('login',
                 {
-                    message: 'Invalid username/email or password.',
+                    message: info.message,
                     layout: false,
-                    title: 'Login Page',
-                }
-            )
+                    title: 'Login Page'
+                });
         }
 
-        console.log('successful');
-
+        // Tạo JWT khi xác thực thành công
         const token = jwt.sign(
             {
                 user_id: user.user_id,
                 user_name: user.user_name,
-                email: user.email,
             },
             process.env.JWT_SECRET, // Khóa bí mật cho JWT
             { expiresIn: '1h' } // Token hết hạn sau 1 giờ
         );
 
-        res.cookie('auth_token', token, { httpOnly: true }); // Lưu token vào cook
+        res.cookie('auth_token', token, { httpOnly: true });
         res.redirect('/');
-
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Login Unsuccessfully' });
-    }
-
+    })(req, res);
 }
 
 module.exports = {
-    loginUser,
-}
+    loginUser
+};

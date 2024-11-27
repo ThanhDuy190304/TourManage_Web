@@ -203,12 +203,12 @@ img {
 
 /*-- end reset --*/
 body {
-    background: #76b852;
+    background: #4c4c4c;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #76b852, #8DC26F);
-    background: -moz-linear-gradient(to top, #76b852, #8DC26F);
-    background: -o-linear-gradient(to top, #76b852, #8DC26F);
-    background: linear-gradient(to top, #76b852, #8DC26F);
+    background: -webkit-linear-gradient(to top, #4c4c4c, #002600);
+    background: -moz-linear-gradient(to top, #4c4c4c, #002600);
+    background: -o-linear-gradient(to top, #4c4c4c, #002600);
+    background: linear-gradient(to top, #4c4c4c, #002600);
     background-size: cover;
     background-attachment: fixed;
     font-family: 'Roboto', sans-serif;
@@ -325,7 +325,7 @@ input[type="submit"]:hover {
     -o-transition: .5s all;
     -ms-transition: .5s all;
     transition: .5s all;
-    background: #8DC26F;
+    background: #002600;
 }
 
 .agileits-top p {
@@ -345,7 +345,7 @@ input[type="submit"]:hover {
 }
 
 .agileits-top p a:hover {
-    color: #76b852;
+    color: #4c4c4c;
 }
 
 /*-- //main --*/
@@ -359,7 +359,7 @@ input[type="submit"]:hover {
 }
 
 input.checkbox {
-    background: #8DC26F;
+    background: #002600;
     cursor: pointer;
     width: 1.2em;
     height: 1.2em;

@@ -1,4 +1,4 @@
-const forgetPasswordModel = require('./forgetPasswordModel');
+const forgetPasswordModel = require('./forgetpasswordModel');
 const nodemailer = require('nodemailer'); // Để gửi email
 
 // Gửi email với token reset mật khẩu

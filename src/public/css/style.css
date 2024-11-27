@@ -8,6 +8,11 @@ body {
     position: relative;
 }
 
+img {
+    user-select: none;
+    /* Ngăn không cho chọn hình ảnh */
+}
+
 .header-bg {
     background-image: url('../img/Slider.jpg');
     width: 100%;

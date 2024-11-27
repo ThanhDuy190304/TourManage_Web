@@ -16,12 +16,14 @@ const Tour = {
 	// 		throw new Error('Error fetching tours by location: ' + err.message);
 	// 	}
 	// },
-	getTours: async (page,search, location, rate, price, voucher) => {
-		const searchs = await Tour.searchTours(search);
-		const locations = await Tour.filterlocationTours(location);
-		const rates = await Tour.filterrateTours(rate);
-		const prices = await Tour.filterpriceTours(price);
-		const vouchers = await Tour.filtervoucherTours(voucher);
+	getTours: async (page, search, location, rate, price, voucher) => {
+		const [searchs, locations, rates, prices, vouchers] = await Promise.all([
+			Tour.searchTours(search),
+			Tour.filterlocationTours(location),
+			Tour.filterrateTours(rate),
+			Tour.filterpriceTours(price),
+			Tour.filtervoucherTours(voucher)
+		]);
 
 		const tourIds1 = searchs.map(item => item.tour_id);
 		const tourIds2 = locations.map(item => item.tour_id);
@@ -48,11 +50,11 @@ const Tour = {
 		const uniqueTours = mergedTours.filter((value, index, self) =>
 			index === self.findIndex((t) => t.tour_id === value.tour_id)
 		);
-            const totalTours = uniqueTours.length;
-            const totalPages = Math.ceil(totalTours / 6);
-            const startIndex = (page - 1) * 6;
-            const paginatedTours = uniqueTours.slice(startIndex, startIndex + 6);
-		return {paginatedTours,totalPages}
+		const totalTours = uniqueTours.length;
+		const totalPages = Math.ceil(totalTours / 6);
+		const startIndex = (page - 1) * 6;
+		const paginatedTours = uniqueTours.slice(startIndex, startIndex + 6);
+		return { paginatedTours, totalPages }
 
 	},
 
@@ -69,6 +71,7 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
+
 	filterpriceTours: async (priceQuery) => {
 		if (!Array.isArray(priceQuery)) { priceQuery = [priceQuery] }
 		const query = `
@@ -91,6 +94,7 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
+
 	filterrateTours: async (rateQuery) => {
 		if (!Array.isArray(rateQuery)) { rateQuery = [rateQuery] }
 		const query = `
@@ -113,6 +117,7 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
+
 	filtervoucherTours: async (voucherQuery) => {
 		if (!Array.isArray(voucherQuery)) { voucherQuery = [voucherQuery] }
 		const query = `
@@ -135,6 +140,7 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
+
 	filterlocationTours: async (locationQuery) => {
 		if (!Array.isArray(locationQuery)) { locationQuery = [locationQuery] }
 		const query = `

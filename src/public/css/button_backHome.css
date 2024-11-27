@@ -25,13 +25,13 @@
     line-height: 50px;
     font-weight: bold;
     text-decoration: none;
-    background: #234d20;
+    background: #3b6126;
     /* Màu xanh đậm */
     text-align: center;
     color: #fff;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border: 3px solid #234d20;
+    border: 3px solid #3b6126;
     /* Màu xanh đậm */
     transition: all .35s;
     border-radius: 5px;
@@ -46,7 +46,6 @@
     border: 3px solid #234d20;
     /* Màu xanh đậm hơn */
     background: transparent;
-    color: #234d20;
     /* Màu xanh đậm hơn */
 }
 

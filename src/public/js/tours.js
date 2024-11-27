@@ -1,57 +1,18 @@
 function StoreId(button) {
     const id = button.value;
-    const idlocation = button.dataset.name;
     window.location.href = `/tours/${id}`; // Chuyển đến tour_detail với ID
 }
 
 let currentPage = 1;
 let totalpage;
+
 function scrollToProductList() {
     const productList = document.getElementById('divide'); // Phần tử danh sách sản phẩm
     if (productList) {
         productList.scrollIntoView({ behavior: 'smooth' }); // Cuộn mượt mà đến phần tử
     }
 }
-document.addEventListener("DOMContentLoaded", function () {
-    const locationRadios = document.querySelectorAll('input[name="location"]');
-    const priceRadios = document.querySelectorAll('input[name="price"]');
-    const rateRadios = document.querySelectorAll('input[name="rate"]');
-    const voucherRadios = document.querySelectorAll('input[name="voucher"]');
-    // Lắng nghe sự thay đổi của các radio buttons
-    locationRadios.forEach(radio => {
-        radio.addEventListener("change", function () {
-            const selectedLabel = radio.nextElementSibling?.textContent;
-            currentPage=1;
-            handleSelectionChange("location", radio.value, selectedLabel);
-        });
-    });
 
-    priceRadios.forEach(radio => {
-        radio.addEventListener("change", function () {
-            const selectedLabel = radio.nextElementSibling?.textContent;
-            currentPage=1;
-            handleSelectionChange("price", radio.value, selectedLabel);
-        });
-    });
-
-    rateRadios.forEach(radio => {
-        radio.addEventListener("change", function () {
-            const selectedLabel = radio.nextElementSibling?.textContent;
-            currentPage=1;
-            handleSelectionChange("rate", radio.value, selectedLabel);
-        });
-    });
-
-    voucherRadios.forEach(radio => {
-        radio.addEventListener("change", function () {
-            const selectedLabel = radio.nextElementSibling?.textContent;
-            currentPage=1;
-            handleSelectionChange("voucher", radio.value, selectedLabel);
-        });
-    });
-    restoreFiltersFromURL();
-    applyFilters();
-});
 
 // Lấy container để hiển thị các lựa chọn
 const selectedFiltersContainer = document.getElementById("selected-filters");
@@ -75,7 +36,7 @@ function restoreFiltersFromURL() {
             createFilterElement(key, value, label); // Tạo filter trong container
         }
     });
-    currentPage = params.get("page")||1;
+    currentPage = params.get("page") || 1;
 }
 
 // Hàm tạo một thẻ cho lựa chọn
@@ -95,7 +56,7 @@ function createFilterElement(name, value, label) {
     closeButton.addEventListener("click", () => {
         // Xóa thẻ khi nhấn dấu "X"
         filterElement.remove();
-        currentPage=1;
+        currentPage = 1;
         // Xóa giá trị đã chọn trong radio
         const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
         if (radio) {
@@ -120,7 +81,6 @@ function handleSelectionChange(name, value, label) {
         // Tạo thẻ mới với giá trị vừa chọn
         createFilterElement(name, value, label);
     }
-
     applyFilters();
 }
 
@@ -132,7 +92,7 @@ function clearSelectedFilters(name) {
 }
 
 // Áp dụng filter và lấy nội dung để render ra
-async function applyFilters () {
+function applyFilters() {
     const filters = {};
     // Duyệt qua tất cả các thẻ filter trong `selected-filters`
     const selectedFilters = selectedFiltersContainer.querySelectorAll("[data-name]");
@@ -149,7 +109,7 @@ async function applyFilters () {
         filters["query"] = searchInput.value;  // Thêm giá trị tìm kiếm vào filters
     }
     filters["page"] = currentPage;
-    
+
     // Tạo query parameters từ bộ lọc (filters)
     const queryParams = new URLSearchParams(filters).toString();
     fetch(`/tours/api?${queryParams}`) // Yêu cầu bất đồng bộ
@@ -165,14 +125,14 @@ async function applyFilters () {
 
             // Hiển thị các nút phân trang
             renderPageButtons(data.totalPages);
-            totalpage=data.totalPages;
+            totalpage = data.totalPages;
             // Cập nhật URL trên trình duyệt mà không tải lại trang
             updateURL(queryParams);
         })
         .catch(error => {
             console.error('Lỗi:', error);
         });
-        scrollToProductList()
+    scrollToProductList()
 }
 
 // Render ra List những tour
@@ -197,7 +157,7 @@ function renderPageButtons(totalPages) {
         const pageButton = document.createElement('button');
         pageButton.innerText = i;
         pageButton.onclick = () => {
-            currentPage=i;
+            currentPage = i;
             applyFilters(); // Gọi AJAX khi nhấn vào số trang
         }
 
@@ -227,3 +187,45 @@ function prevPage() {
         applyFilters();
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const locationRadios = document.querySelectorAll('input[name="location"]');
+    const priceRadios = document.querySelectorAll('input[name="price"]');
+    const rateRadios = document.querySelectorAll('input[name="rate"]');
+    const voucherRadios = document.querySelectorAll('input[name="voucher"]');
+    // Lắng nghe sự thay đổi của các radio buttons
+    locationRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            currentPage = 1;
+            handleSelectionChange("location", radio.value, selectedLabel);
+        });
+    });
+
+    priceRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            currentPage = 1;
+            handleSelectionChange("price", radio.value, selectedLabel);
+        });
+    });
+
+    rateRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            currentPage = 1;
+            handleSelectionChange("rate", radio.value, selectedLabel);
+        });
+    });
+
+    voucherRadios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            const selectedLabel = radio.nextElementSibling?.textContent;
+            currentPage = 1;
+            handleSelectionChange("voucher", radio.value, selectedLabel);
+        });
+    });
+    restoreFiltersFromURL();
+    applyFilters();
+});
+

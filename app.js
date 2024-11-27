@@ -17,10 +17,10 @@ Handlebars.registerHelper('limit', function (array, limit) {
 
 const viewsRoutes = require('./src/routes/viewsRoutes'); // Điều hướng view
 const tourRoutes = require('./src/routes/tourRoutes');  // Điều hướng tour
-const registerRoutes = require('./src/routes/registerRoutes'); // Điều hướng đến user
-const loginRoutes = require('./src/routes/loginRoutes');
-const logoutRoute = require('./src/routes/logoutRoutes');
-const verifyRoutes = require('./src/routes/verifyRoutes');
+const registerRoutes = require('./src/routes/registerRoutes'); // Điều hướng đến đăng ký
+const loginRoutes = require('./src/routes/loginRoutes'); // Điều hướng đến đăng nhập
+const logoutRoute = require('./src/routes/logoutRoutes'); // Điều hướng đăng xuất
+const verifyRoutes = require('./src/routes/verifyRoutes'); // Điều hướng xác nhận email
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -48,7 +48,7 @@ app.use('/login', loginRoutes);
 
 app.use('/logout', logoutRoute);
 
-app.use('/verify', verifyRoutes); // Đây là nơi xử lý các yêu cầu đến /verify
+app.use('/verify', verifyRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

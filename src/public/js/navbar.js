@@ -23,8 +23,6 @@ document.getElementById("menu-toggle").addEventListener("click", function () {
     }
 });
 
-
-
 // Hàm xử lý tìm kiếm
 function handleSearch() {
     const query = searchInput.value.trim(); // Lấy giá trị từ input và loại bỏ khoảng trắng dư thừa
@@ -63,11 +61,7 @@ registeredUserButton.addEventListener('click', (event) => {
     registeredUserDropdownMenu.classList.toggle('hidden');
 });
 
-// Đóng menu khi nhấn ra ngoài dropdown
 document.addEventListener('click', (event) => {
-    // Nếu click vào bên ngoài dropdown và button, đóng menu
-    if (!userButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-        closeMenu();
-    }
+    closeMenu();
 });
 

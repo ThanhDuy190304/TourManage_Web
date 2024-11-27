@@ -1,5 +1,7 @@
 const registerModel = require('./registerModel');
-const argon2 = require('argon2');
+const { generateSalt, hashPassword } = require('../../utils/passwordUtils');
+const crypto = require('crypto');
+
 
 async function registerUser(req, res) {
     const { user_name, email, password, confirmPassword } = req.body;
@@ -12,53 +14,28 @@ async function registerUser(req, res) {
     }
 
     try {
-        // Tạo người dùng mới
-        const encryptionPassword = await argon2.hash(password); // mã hóa mật khẩu
 
-        await registerModel.registerUser(user_name, email, encryptionPassword); // thay đổi mật khẩu cũ thành mật khẩu đã mã hóa
+        const salt = generateSalt();
+
+        const encryptedPassword = hashPassword(password, salt);
+
+        await registerModel.registerUser(user_name, email, encryptedPassword, salt);
+
         res.render('register', {
             message: 'Registration successful, please check your email for verifying',
             layout: false,
-            title: 'Email verification',
-        })
-        
-        //res.redirect('/login?message=Registered successfully, please login!');
+            title: 'Register Page',
+        });
 
     } catch (error) {
-        // Xử lý lỗi khi trùng lặp tên người dùng hoặc email
-        // if (error.code === '23505') {
-        //     if (error.detail.includes('Key (user_name)')) {
-        //         return res.render('register', {
-        //             message: 'Username already exists, please choose another name.', layout: false,
-        //             title: 'Register Page',
-        //         });
-        //     } else if (error.detail.includes('Key (email)')) {
-        //         return res.render('register', {
-        //             message: 'Email already exists, please choose another email.', layout: false,
-        //             title: 'Register Page',
-        //         });
-        //     }
-        // }
-        if (error.message === 'Username already exists.') {
-            return res.render('register', {
-                message: 'Username already exists, please choose another name.',
-                layout: false,
-                title: 'Register Page',
-            });
-        }
-
-        if (error.message === 'Email already exists.') {
-            return res.render('register', {
-                message: 'Email already exists, please choose another email.',
-                layout: false,
-                title: 'Register Page',
-            });
-        }
-        console.error(error);
-        res.status(500).json({ message: 'error in register', error: error.message });
-
+        return res.render('register', {
+            message: error.message || 'An unexpected error occurred. Please try again later.',
+            layout: false,
+            title: 'Register Page',
+        });
     }
 }
+
 module.exports = {
     registerUser,
 };

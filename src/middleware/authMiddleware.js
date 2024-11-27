@@ -1,20 +1,21 @@
 const jwt = require('jsonwebtoken');
 
 function authenticateToken(req, res, next) {
+
     const token = req.cookies.auth_token; // Lấy token từ cookie
     if (!token) {
-        req.user = null; // Không có người dùng
+        res.locals.user = null; // Không có token, gán user là null
         return next();
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET); // Giải mã token
-        req.user = decoded; // Gắn thông tin người dùng vào req.user
-        next();
+        res.locals.user = decoded; // Gắn thông tin người dùng vào `res.locals`
     } catch (err) {
-        req.user = null; // Token không hợp lệ
-        next();
+        res.locals.user = null; // Token không hợp lệ
     }
+
+    next();
 }
 
 module.exports = authenticateToken;
