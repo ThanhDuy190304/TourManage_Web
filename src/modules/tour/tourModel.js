@@ -16,7 +16,7 @@ const Tour = {
 	// 		throw new Error('Error fetching tours by location: ' + err.message);
 	// 	}
 	// },
-	getTours: async (search, location, rate, price, voucher) => {
+	getTours: async (page,search, location, rate, price, voucher) => {
 		const searchs = await Tour.searchTours(search);
 		const locations = await Tour.filterlocationTours(location);
 		const rates = await Tour.filterrateTours(rate);
@@ -48,7 +48,12 @@ const Tour = {
 		const uniqueTours = mergedTours.filter((value, index, self) =>
 			index === self.findIndex((t) => t.tour_id === value.tour_id)
 		);
-		return uniqueTours
+            const totalTours = uniqueTours.length;
+            const totalPages = Math.ceil(totalTours / 6);
+            const startIndex = (page - 1) * 6;
+            const paginatedTours = uniqueTours.slice(startIndex, startIndex + 6);
+		return {paginatedTours,totalPages}
+
 	},
 
 	searchTours: async (searchQuery) => {

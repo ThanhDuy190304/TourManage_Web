@@ -6,7 +6,12 @@ function StoreId(button) {
 
 let currentPage = 1;
 let totalpage;
-
+function scrollToProductList() {
+    const productList = document.getElementById('divide'); // Phần tử danh sách sản phẩm
+    if (productList) {
+        productList.scrollIntoView({ behavior: 'smooth' }); // Cuộn mượt mà đến phần tử
+    }
+}
 document.addEventListener("DOMContentLoaded", function () {
     const locationRadios = document.querySelectorAll('input[name="location"]');
     const priceRadios = document.querySelectorAll('input[name="price"]');
@@ -16,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     locationRadios.forEach(radio => {
         radio.addEventListener("change", function () {
             const selectedLabel = radio.nextElementSibling?.textContent;
+            currentPage=1;
             handleSelectionChange("location", radio.value, selectedLabel);
         });
     });
@@ -23,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     priceRadios.forEach(radio => {
         radio.addEventListener("change", function () {
             const selectedLabel = radio.nextElementSibling?.textContent;
+            currentPage=1;
             handleSelectionChange("price", radio.value, selectedLabel);
         });
     });
@@ -30,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
     rateRadios.forEach(radio => {
         radio.addEventListener("change", function () {
             const selectedLabel = radio.nextElementSibling?.textContent;
+            currentPage=1;
             handleSelectionChange("rate", radio.value, selectedLabel);
         });
     });
@@ -37,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     voucherRadios.forEach(radio => {
         radio.addEventListener("change", function () {
             const selectedLabel = radio.nextElementSibling?.textContent;
+            currentPage=1;
             handleSelectionChange("voucher", radio.value, selectedLabel);
         });
     });
@@ -66,7 +75,7 @@ function restoreFiltersFromURL() {
             createFilterElement(key, value, label); // Tạo filter trong container
         }
     });
-    currentPage=params.get("page")||1;
+    currentPage = params.get("page")||1;
 }
 
 // Hàm tạo một thẻ cho lựa chọn
@@ -86,6 +95,7 @@ function createFilterElement(name, value, label) {
     closeButton.addEventListener("click", () => {
         // Xóa thẻ khi nhấn dấu "X"
         filterElement.remove();
+        currentPage=1;
         // Xóa giá trị đã chọn trong radio
         const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
         if (radio) {
@@ -162,6 +172,7 @@ async function applyFilters () {
         .catch(error => {
             console.error('Lỗi:', error);
         });
+        scrollToProductList()
 }
 
 // Render ra List những tour
@@ -198,7 +209,7 @@ function renderPageButtons(totalPages) {
     }
     // Cập nhật trạng thái nút Previous và Next
     document.getElementById('prev-page').disabled = currentPage === 1;
-    document.getElementById('next-page').disabled = currentPage === totalpage;
+    document.getElementById('next-page').disabled = currentPage === totalPages;
 }
 
 

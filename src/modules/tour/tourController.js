@@ -22,16 +22,16 @@ const tourController = {
     getAllToursAPI: async (req, res) => {
         try {
             const {page, query = 'default', location = ['default'], rate = [-1], price = [-1], voucher = [-1] } = req.query;
-            const allTours = await Tour.getTours(query, location, rate, price, voucher);
+            const allTours = await Tour.getTours(page,query, location, rate, price, voucher);
             let html = '';
-            const totalTours = allTours.length;
-            const totalPages = Math.ceil(totalTours / 6);
-            const startIndex = (page - 1) * 6;
-            const paginatedTours = allTours.slice(startIndex, startIndex + 6);
-            if (paginatedTours.length === 0||page>totalPages) {
+            // const totalTours = allTours.length;
+            // const totalPages = Math.ceil(totalTours / 6);
+            // const startIndex = (page - 1) * 6;
+            // const paginatedTours = allTours.slice(startIndex, startIndex + 6);
+            if (allTours.paginatedTours.length === 0||page>allTours.totalPages) {
                 html = '<p>No tours available</p>';
             }
-            paginatedTours.forEach(tour => {
+            allTours.paginatedTours.forEach(tour => {
                 html += `
                 <a href="/tours/${tour.tour_id}" class="w-80 md:w-96 lg:w-80 mx-auto">
                     <div
@@ -67,20 +67,20 @@ const tourController = {
                 `;
             });
             
-            res.json({html,totalPages});  // Trả về HTML
+            res.json({html,totalPages:allTours.totalPages});  // Trả về HTML
         } catch (err) {
             res.status(500).json({ success: false, error: err.message });
         }
     },
     getAllTours: async (req, res) => {
         try {
-            const { query = 'default', location = ['default'], rate = [-1], price = [-1], voucher = [-1] } = req.query;
-            const allTours = await Tour.getTours(query, location, rate, price, voucher);
+            // const { query = 'default', location = ['default'], rate = [-1], price = [-1], voucher = [-1] } = req.query;
+            // const allTours = await Tour.getTours(query, location, rate, price, voucher);
             res.render('tours', {
                 layout: 'main',
                 location_name: 'Popular',
                 loc_detail: `Here is a list of our top tours that we have carefully selected to bring you the best experiences. From journeys to explore pristine nature to cultural excursions rich in local identity, each tour is designed to meet the diverse interests and needs of visitors. With a team of professional guides and dedicated services, we are committed to bringing you a memorable and inspiring journey. Let's explore the most wonderful destinations through our attractive tours!`,
-                allTours,
+                // allTours,
                 title: 'Tours Page',
                 scripts: '<script src="/js/tours.js"></script>'
             });
