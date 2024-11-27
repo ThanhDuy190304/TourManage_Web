@@ -23,12 +23,12 @@ passport.use(
                 }
                 const user = await userModel.checkUserExistsInUsers(username_email, username_email);
                 if (user.length == 0) {
-                    return done(null, false, { message: 'Invalid username or email.' });
+                    return done(null, false, { message: 'Invalid username/email or password.' });
                 }
 
                 const hashedPassword = hashPassword(password, user.salt);
                 if (hashedPassword !== user.user_password) {
-                    return done(null, false, { message: 'Invalid password.' });
+                    return done(null, false, { message: 'Invalid username/email or password.' });
                 }
 
                 return done(null, user); // Xác thực thành công
