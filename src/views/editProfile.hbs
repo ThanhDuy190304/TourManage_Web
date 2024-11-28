@@ -1,0 +1,59 @@
+<main id="checkProfile" class="pt-10 px-8">
+
+    <section id="personInfo">
+        <h4 class="text-lg mb-0">Personal Information</h4>
+        <div class="content">
+            <div class="field-label mb-4 mt-4">
+                <label for="name" class="block text-[#1C2B38] mb-2">Name:</label>
+                <input type="text" id="name" class="w-full bg-[#F4F4F5] p-4 pl-3 border-none rounded-md text-[#495560]"
+                    value="{{name}}" />
+            </div>
+            <div class="field-label mb-4 mt-4">
+                <label for="dob" class="block text-[#1C2B38] mb-2">Date of Birth:</label>
+                <input type="text" id="dob" class="w-full bg-[#F4F4F5] p-4 pl-3 border-none rounded-md text-[#495560]"
+                    value="{{dob}}" />
+            </div>
+            <div class="field-label mb-4 mt-4">
+                <label for="phone" class="block text-[#1C2B38] mb-2">Phone Number:</label>
+                <input type="text" id="phone" class="w-full bg-[#F4F4F5] p-4 pl-3 border-none rounded-md text-[#495560]"
+                    value="{{phone}}" />
+            </div>
+            <div class="field-label mb-4 mt-4">
+                <label for="address" class="block text-[#1C2B38] mb-2">Address:</label>
+                <input type="text" id="address"
+                    class="w-full bg-[#F4F4F5] p-4 pl-3 border-none rounded-md text-[#495560]" value="{{address}}" />
+            </div>
+        </div>
+        <div class="save-container mt-5 mb-5 flex justify-start">
+            <button id="savePersonButton"
+                class="w-[280px] py-2.5 px-5 bg-[#234d20] text-white text-lg rounded-md cursor-pointer transition-colors duration-300 ease-in-out hover:bg-green-400;">Save</button>
+        </div>
+    </section>
+
+    <section id="security">
+        <h4 class="text-lg mb-0">Security</h4>
+        <div class="content">
+            <div class="field-label mb-4 mt-4">
+                <label for="email" class="block text-[#1C2B38] mb-2">Email:</label>
+                <input type="text" id="email" class="w-full bg-[#F4F4F5] p-4 pl-3 border-none rounded-md text-[#495560]"
+                    value="{{email}}" />
+            </div>
+            <div class="field-label mb-4 mt-4">
+                <label for="password" class="block text-[#1C2B38] mb-2">Password:</label>
+                <input type="password" id="password"
+                    class="w-full bg-[#F4F4F5] p-4 pl-3 border-none rounded-md text-[#495560]" value="{{password}}" />
+            </div>
+            <div class="field-label mb-4 mt-4">
+                <label for="confirmPassword" class="block text-[#1C2B38] mb-2">Confirm Password:</label>
+                <input type="password" id="confirmPassword"
+                    class="w-full bg-[#F4F4F5] p-4 pl-3 border-none rounded-md text-[#495560]"
+                    value="{{confirmPassword}}" />
+            </div>
+        </div>
+        <div class="save-container mt-5 mb-5 flex justify-start">
+            <button id="saveSecurityButton"
+                class="w-[280px] py-2.5 px-5 bg-[#234d20] text-white text-lg rounded-md cursor-pointer transition-colors duration-300 ease-in-out hover:bg-green-400;">Save</button>
+        </div>
+
+    </section>
+</main>

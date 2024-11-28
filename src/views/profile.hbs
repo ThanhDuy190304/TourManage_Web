@@ -1,0 +1,45 @@
+{{!-- Sử dụng layout "main" --}}
+
+<main id="MyProfile" class="divide-y">
+    <section id="titleProfile" class="mx-8 my-4 bg-white">
+        <h3 class="mb-2">My profile</h3>
+        <p class="mt-0 mb-2 text-sm">
+            <a href="#" class="text-[#778088] no-underline text-sm">Home</a> /
+            <a href="/profile" class="text-[#778088] no-underline text-sm">My profile</a>
+        </p>
+    </section>
+
+    <section id="viewProfile" class="relative bg-white-300 w-full h-full flex flex-row px-12 py-8 flex-col md:flex-row">
+        <div id="selectProfile"
+            class="flex-[3] bg-white border border-green-900 relative flex flex-col pt-10 pr-2 items-center">
+            <div class="relative w-full h-full flex flex-col items-center">
+                <div class="relative w-[120px] h-[120px] flex justify-center items-center mb-6">
+                    <img src="/img/img_profile/PTD.jpg" alt="Profile Picture"
+                        class="w-full h-full rounded-full shadow-lg object-cover">
+                    <img src="/img/img_profile/pencil.png" alt="Edit Icon" class="absolute bottom-1 right-1 w-10 h-10">
+                </div>
+                <p class="text-2xl text-[#1C2B38] whitespace-nowrap overflow-hidden text-ellipsis">
+                    TADTravels </p>
+                <div class="flex mt-3">
+                    <img src="/img/img_profile/Vector.jpg" alt="Location Icon" class="object-contain">
+                    <p class="text-sm ml-1">Ho Chi Minh</p>
+                    <p class="mx-1">|</p>
+                    <img src="/img/img_profile/fe_birthday-cake.jpg" alt="Birthday Icon" class="object-contain">
+                    <p class="text-sm ml-1">January 1</p>
+                </div>
+            </div>
+
+            <div class="flex-1 p-2 m-2 mt-0 w-full flex flex-col">
+                <div tabindex="0" onclick="showContent('profile')"
+                    class="p-5 mb-4 text-lg cursor-default top-0 select-none focus:bg-[#36802d] focus:text-white">
+                    Edit Information </div>
+                {{!-- <div tabindex="0" onclick="showContent('booking')"
+                    class="p-5 mb-4 text-lg cursor-default select-none focus:bg-[#36802d] focus:text-white">
+                    Order History </div> --}}
+            </div>
+
+        </div>
+        <div id="contentProfile" class="flex-[7] bg-white border border-green-900 "></div>
+
+    </section>
+</main>
