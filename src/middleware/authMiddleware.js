@@ -18,4 +18,16 @@ function authenticateToken(req, res, next) {
     next();
 }
 
-module.exports = authenticateToken;
+function requireAuth(req, res, next) {
+    if (!res.locals.user) {
+        return res.redirect('/login');
+    }
+    next();
+}
+
+module.exports = {
+    authenticateToken,
+    requireAuth,
+};
+
+
