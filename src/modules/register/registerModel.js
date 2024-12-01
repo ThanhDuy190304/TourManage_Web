@@ -37,7 +37,7 @@ async function registerUser(userName, email, encryptionPassword, salt) {
         await db.query(query, [userName, email, encryptionPassword, verificationToken, salt]);
 
         // Gửi email xác thực
-        sendVerificationEmail(email, verificationToken);
+        await sendVerificationEmail(email, verificationToken);
 
 
     } catch (error) {
