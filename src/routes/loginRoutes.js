@@ -3,6 +3,9 @@ const router = express.Router();
 const LoginController = require('../modules/login/loginController');
 
 router.get('/', (req, res) => {
+    if (res.locals.user) {
+        return res.redirect('/');
+    }
     res.render('login', {
         layout: false,
         title: 'Login Page',
