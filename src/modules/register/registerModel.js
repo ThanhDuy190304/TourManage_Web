@@ -36,8 +36,6 @@ class registerModel {
             await db.query(query, [userName, email, encryptionPassword, verificationToken, salt]);
 
             // Gửi email xác thực
-            sendVerificationEmail(email, verificationToken);
-            // Gửi email xác thực
             await sendVerificationEmail(email, verificationToken);
 
         } catch (error) {
