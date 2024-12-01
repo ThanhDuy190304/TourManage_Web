@@ -1,23 +1,31 @@
 const jwt = require('jsonwebtoken');
+const { refreshAccessToken } = require('../modules/auth/authController');
 
-function authenticateToken(req, res, next) {
+require('dotenv').config();
 
-    const token = req.cookies.auth_token; // Lấy token từ cookie
-    if (!token) {
-        res.locals.user = null; // Không có token, gán user là null
+/**
+ * Middleware để xác thực token từ cookie.
+ */
+async function authenticateToken(req, res, next) {
+    const accessToken = req.cookies[process.env.ACCESS_TOKEN_NAME];
+    if (!accessToken) {
+        res.locals.user = null;
         return next();
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Giải mã token
-        res.locals.user = decoded; // Gắn thông tin người dùng vào `res.locals`
+        const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+        res.locals.user = decoded;
+        return next();
     } catch (err) {
-        res.locals.user = null; // Token không hợp lệ
+        await refreshAccessToken(req, res, next);
     }
-
     next();
 }
 
+/**
+ * Middleware yêu cầu người dùng phải đăng nhập.
+ */
 function requireAuth(req, res, next) {
     if (!res.locals.user) {
         return res.redirect('/login');
@@ -25,9 +33,15 @@ function requireAuth(req, res, next) {
     next();
 }
 
+function checkout(req, res, next) {
+    if (res.locals.user) {
+        return res.redirect('/');
+    }
+    next();
+}
+
 module.exports = {
     authenticateToken,
     requireAuth,
+    checkout,
 };
-
-
