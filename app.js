@@ -2,7 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const { authenticateToken, requireAuth } = require('./src/middleware/authMiddleware');
+const { authenticateToken, requireAuth, checkout } = require('./src/middleware/authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -43,13 +43,13 @@ app.use('/', viewsRoutes);
 
 app.use('/tours', tourRoutes);
 
-app.use('/register', registerRoutes);
+app.use('/register', checkout, registerRoutes);
 
-app.use('/login', loginRoutes);
+app.use('/login', checkout, loginRoutes);
 
-app.use('/logout', logoutRoute);
+app.use('/logout', requireAuth, logoutRoute);
 
-app.use('/verify', verifyRoutes);
+app.use('/verify', checkout, verifyRoutes);
 
 app.use('/profile', requireAuth, profileRoutes);
 
