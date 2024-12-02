@@ -24,7 +24,7 @@ exports.up = async function (knex) {
 
     // Tạo Trigger
     await knex.raw(`
-        CREATE TRIGGER after_insert_user
+        CREATE TRIGGER insert_profile_after_insert_user
         AFTER INSERT ON users
         FOR EACH ROW
         EXECUTE FUNCTION insert_profile_user_after_user();
