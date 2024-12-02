@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const { authenticateToken, requireAuth, checkout } = require('./src/middleware/authMiddleware');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 const Handlebars = require('handlebars');
 

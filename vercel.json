@@ -8,6 +8,10 @@
     ],
     "rewrites": [
         {
+            "source": "/admin",
+            "destination": "https://admin-manage-tour-web.vercel.app"
+        },
+        {
             "source": "/(.*)",
             "destination": "/app.js"
         }

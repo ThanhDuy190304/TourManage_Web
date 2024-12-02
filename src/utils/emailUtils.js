@@ -12,7 +12,7 @@ async function sendVerificationEmail(email, token) {
         }
     })
 
-    const ENV_URL = process.env.NODE_ENV === 'production'
+    const ENV_URL = process.env.NODE_ENV === 'development'
         ? process.env.PRODUCTION_URL // URL production
         : 'http://localhost:3000'; // URL local development
 

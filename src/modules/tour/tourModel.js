@@ -1,21 +1,7 @@
 const db = require('../../config/db'); // Giả sử bạn có một tệp db.js để kết nối với cơ sở dữ liệu
 
 const Tour = {
-	// getToursByLocation: async (location_name) => {
-	// 	const query = `
-	// 	select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
-	// 	from tours t inner join locations l on t.location_id = l.location_id
-	// 				inner join tour_images t_i on t.tour_id = t_i.tour_id
-	// 			where l.location_name = $1 and t_i.img_id = 1
-	// 	`;
-	// 	const values = [location_name];
-	// 	try {
-	// 		const result = await db.query(query, values);
-	// 		return result.rows;
-	// 	} catch (err) {
-	// 		throw new Error('Error fetching tours by location: ' + err.message);
-	// 	}
-	// },
+
 	getTours: async (page, search, location, rate, price, voucher) => {
 		const [searchs, locations, rates, prices, vouchers] = await Promise.all([
 			Tour.searchTours(search),

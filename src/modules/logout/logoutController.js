@@ -5,7 +5,6 @@ exports.logoutUser = async (req, res) => {
 
     // Nếu có thông tin người dùng, xóa refresh token khỏi database
     if (user_id && device_id) {
-        console.log("1");
         try {
             await deleteRefreshToken(user_id, device_id);
         } catch (error) {
