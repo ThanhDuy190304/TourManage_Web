@@ -1,5 +1,5 @@
 const db = require('../../config/db'); // Giả sử bạn có một tệp db.js để kết nối với cơ sở dữ liệu
-
+const Ctour = require('./Ctour');
 const Tour = {
 
 	getTours: async (page, search, location, rate, price, voucher) => {
@@ -152,23 +152,60 @@ const Tour = {
 	},
 
 	getTourByID: async (tour_id) => {
-		const query = ` SELECT t.*, t_i.img_url
-        FROM tours t
-        LEFT JOIN (
-            SELECT tour_id, img_url
-            FROM tour_images
-            WHERE tour_id = $1
-            LIMIT 3
-        ) t_i ON t.tour_id = t_i.tour_id
-        WHERE t.tour_id = $1`;
-		const values = [tour_id];
+		const query = ` 
+		SELECT t.tour_id, t.title, t.brief, t.details, t.prices, t.rate, t.voucher,
+		img_urls.img_array,  -- Mảng hình ảnh của tour (gộp riêng trước)
+		ARRAY_AGG(
+			JSON_BUILD_OBJECT(  -- Gom các chi tiết tour thành một mảng JSON
+				'scheduel_id', dt.detail_tour_id,
+				'status', dt.status,
+				'available_quantity',
+					CASE
+						WHEN (dt.max_quantity - dt.booked_quantity) > 0 THEN (dt.max_quantity - dt.booked_quantity)
+						ELSE 0
+					END,
+				'tour_date', dt.tour_date
+			)
+		) AS schedules_tour
+		FROM tours t
+		-- Gom trước các ảnh trong subquery
+		LEFT JOIN (
+		SELECT tour_id, ARRAY_AGG(img_url) AS img_array
+		FROM tour_images
+		GROUP BY tour_id
+		) img_urls ON t.tour_id = img_urls.tour_id
+		-- Join với detail_tours
+		LEFT JOIN detail_tours dt ON t.tour_id = dt.tour_id
+		WHERE t.tour_id = $1
+		GROUP BY t.tour_id, img_urls.img_array
+		LIMIT 1;
+		`;
 		try {
-			const result = await db.query(query, values);
-			return result.rows;
-		} catch (err) {
-			throw new Error('Error fetching tours by location: ' + err.message);
-		}
+			const result = await db.query(query, [tour_id]);
 
+			// Kiểm tra nếu có kết quả trả về
+			if (result.rows.length > 0) {
+				const tourData = result.rows[0];  // Lấy tour đầu tiên trong kết quả trả về
+				// Trả về đối tượng Tour
+				return new Ctour(
+					tourData.tour_id,
+					tourData.title,
+					tourData.brief,
+					tourData.details,
+					tourData.location_id,
+					tourData.prices,
+					tourData.rate,
+					tourData.voucher,
+					tourData.img_array || [],
+					tourData.schedules_tour || []
+				);
+			} else {
+				throw new Error('Tour not found');
+			}
+		} catch (error) {
+			console.error(error.message);
+			throw error;
+		}
 	},
 
 	getToursByIDLocation: async (tour_id) => {
