@@ -157,7 +157,7 @@ const Tour = {
 		img_urls.img_array,  -- Mảng hình ảnh của tour (gộp riêng trước)
 		ARRAY_AGG(
 			JSON_BUILD_OBJECT(  -- Gom các chi tiết tour thành một mảng JSON
-				'scheduel_id', dt.detail_tour_id,
+				'schedule_id', dt.detail_tour_id,
 				'status', dt.status,
 				'available_quantity',
 					CASE
