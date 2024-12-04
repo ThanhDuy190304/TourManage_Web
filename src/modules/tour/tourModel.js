@@ -210,10 +210,10 @@ const Tour = {
 
 	getToursByIDLocation: async (tour_id) => {
 		const query = `
-		select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
-		from tours t inner join tour_images t_i on t.tour_id = t_i.tour_id
-				inner join tours c on c.tour_id = $1 and c.location_id = t.location_id
-				where  t_i.img_id = 1 and t.tour_id != $1
+			select t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id
+			from tours t inner join tour_images t_i on t.tour_id = t_i.tour_id
+					inner join tours c on c.tour_id = $1 and c.location_id = t.location_id
+					where  t_i.img_id = 1 and t.tour_id != $1
 		`;
 		const values = [tour_id];
 		try {
