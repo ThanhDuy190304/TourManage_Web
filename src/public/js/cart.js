@@ -102,29 +102,7 @@ const getCartItems = async () => {
   async function fetchSelectedTours() {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     const selectedTours = [];
-  
-    for (const checkbox of checkboxes) {
-      if (checkbox.checked) {
-        const itemTour = checkbox.closest('.item_tour'); // Lấy sản phẩm từ DOM
-        const tourId = itemTour.getAttribute('data-id');
-        const quantityElement = itemTour.querySelector('.quantity');
-        const quantity = parseInt(quantityElement.innerText) || 1; // Lấy số lượng
-        const nameTour = itemTour.querySelector('h2').innerText; // Lấy tên tour
-        const priceTour = itemTour.querySelector('.price').innerText;
-        // Fetch tour date từ cơ sở dữ liệu nếu cần
-        const selectElement = itemTour.querySelector('select'); // Lấy thẻ <select>
-        const detailTourId = selectElement.value;
-        const tourDate = selectElement.options[selectElement.selectedIndex+1].textContent;
-        console.log(selectElement.selectedIndex)
-        selectedTours.push({
-          tour_id: tourId,
-          name_tour: nameTour,
-          tour_date: tourDate,
-          quantity: quantity,
-          detail_tour_id: detailTourId,
-          price: priceTour
-        });
-        let response
+    let response
         let nextRID, nextRDID
         try {
           response = await fetch(`/cart/getNextRID`); // Đường dẫn API để lấy sản phẩm
@@ -136,6 +114,49 @@ const getCartItems = async () => {
         }
 
         try {
+          response = await fetch('/cart/addReservation', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  reservationID: nextRID[0].next_reservationid,
+                  userID: user.user_id,
+              }),
+          });
+          if (response.ok) {
+              console.log('Order submitted successfully!');
+              // Xử lý phản hồi từ server nếu cần
+          } else {
+              console.error('Error submitting order');
+          }
+      } catch (error) {
+          console.error('Error:', error);
+      }
+
+    for (const checkbox of checkboxes) {
+      if (checkbox.checked) {
+        const itemTour = checkbox.closest('.item_tour'); // Lấy sản phẩm từ DOM
+        const tourId = itemTour.getAttribute('data-id');
+        const quantityElement = itemTour.querySelector('.quantity');
+        const quantity = parseInt(quantityElement.innerText) || 1; // Lấy số lượng
+        const nameTour = itemTour.querySelector('h2').innerText; // Lấy tên tour
+        const priceTour = itemTour.querySelector('.price').innerText;
+        // Fetch tour date từ cơ sở dữ liệu nếu cần
+        const selectElement = itemTour.querySelector('select'); // Lấy thẻ <select>
+        const detailTourId = selectElement.value;
+        const tourDate = selectElement.options.textContent;
+        console.log(selectElement.selectedIndex)
+        selectedTours.push({
+          tour_id: tourId,
+          name_tour: nameTour,
+          tour_date: tourDate,
+          quantity: quantity,
+          detail_tour_id: detailTourId,
+          price: priceTour
+        });
+        
+        try {
           response = await fetch(`/cart/getNextRDID`); // Đường dẫn API để lấy sản phẩm
           if (!response.ok) throw new Error("Failed to fetch product data");
           nextRDID = await response.json(); // Trả về dữ liệu sản phẩm
@@ -143,7 +164,7 @@ const getCartItems = async () => {
           console.error(`Khong lay dc next CI ID`, error);
           return null;
         }
-        console.log(nextRDID)
+
         try {
             response = await fetch('/cart/addReservationDetail', {
                 method: 'POST',
@@ -151,12 +172,13 @@ const getCartItems = async () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    reservationID: nextRID[0].next_reservationID,  // Mã chi nhánh
-                    detailReservationID: nextRDID[0].next_reservation_detail_ID,
+                    reservationID: nextRID[0].next_reservationid,  // Mã chi nhánh
+                    detailReservationID: nextRDID[0].next_reservation_detail_id,
                     userID: user.user_id,
                     tourID: tourId,
                     quantity: quantity,
                     price: priceTour,
+                    detailTourId,
                 }),
             });
             if (response.ok) {
@@ -170,9 +192,10 @@ const getCartItems = async () => {
         }
       }
     }
-    
     sessionStorage.setItem('reservationData', JSON.stringify(selectedTours));
     window.location.href = '#!';
+    await renderCartItems();
+    await updateTotalPrice();
   }
 
   // Hàm lấy thông tin sản phẩm từ cơ sở dữ liệu (qua API)

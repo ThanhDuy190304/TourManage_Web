@@ -95,8 +95,24 @@ const cartModel = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
+	addReservation: async (reservationID,userID) => {
+		const query = `
+		INSERT INTO reservations (reservation_id, tourist_id, reservation_date, status)
+		VALUES ('${reservationID}', (SELECT t.tourist_id
+			FROM users u
+			join tourists t on u.user_id = t.user_id
+			WHERE u.user_id = '${userID}'
+			), NOW(), 'waiting');
+		`;
+		console.log(query)
+		try {
+			await db.query(query);
+		} catch (err) {
+			throw new Error('Error fetching tours by location: ' + err.message);
+		}
+	},
 
-	addReservationDetail: async (reservationID, detailReservationID,userID,tourID,quantity, price) => {
+	addReservationDetail: async (reservationID, detailReservationID,userID,tourID,quantity, price,detailTourId) => {
 		const query = `
 		DELETE FROM cart_items
 		WHERE cart_id = (SELECT c.cart_id
@@ -104,17 +120,10 @@ const cartModel = {
 		join tourists t on c.tourist_id=t.tourist_id
 		join users u on u.user_id = t.user_id
 		WHERE u.user_id = '${userID}'
-		) AND tour_id ='${tourID}'
+		) AND tour_id ='${tourID}';
 
-		INSERT INTO reservations (reservation_id, tourist_id, reservation_date, quantity, status)
-		VALUES ('${reservationID}', (SELECT c.cart_id
-			FROM users u
-			join tourists t on u.user_id = t.user_id
-			WHERE u.user_id = '${userID}'
-			), getdate(),${quantity}, 'Chua thanh toan')
-
-		INSERT INTO detail_reservations (detail_reservation_id, reservation_id, tour_id, quantity, price)
-		VALUES ('${detailReservationID}', '${reservationID}', '${tourID}',${quantity}, ${price})
+		INSERT INTO detail_reservations (detail_reservation_id, reservation_id, tour_id, quantity, price, id_detail)
+		VALUES ('${detailReservationID}', '${reservationID}', '${tourID}',${quantity}, ${price},'${detailTourId}');
 		`;
 		console.log(query)
 		try {

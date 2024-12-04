@@ -103,14 +103,26 @@ const cartController = {
             res.status(500).json({ error: err.message });
         }
     },
-
-    addReservationDetail: async (req, res) => {
+    addReservation: async (req, res) => {
         try {
-            const { reservationID, detailReservationID,userID,tourID,quantity, price} = req.body;
+            const { reservationID, userID} = req.body;
             // const branchDish = await Reserve.submitReserveDish(idBranch);
             // res.json(branchDish);
             // Xử lý dữ liệu đơn hàng (lưu vào cơ sở dữ liệu, tính toán, v.v.)
-            await cartModel.addReservationDetail( reservationID, detailReservationID,userID,tourID,quantity, price);
+            await cartModel.addReservation( reservationID,userID);
+            // Gửi phản hồi cho client
+            res.status(200).send({ message: 'Order submitted successfully' });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    },
+    addReservationDetail: async (req, res) => {
+        try {
+            const { reservationID, detailReservationID,userID,tourID,quantity, price,detailTourId} = req.body;
+            // const branchDish = await Reserve.submitReserveDish(idBranch);
+            // res.json(branchDish);
+            // Xử lý dữ liệu đơn hàng (lưu vào cơ sở dữ liệu, tính toán, v.v.)
+            await cartModel.addReservationDetail( reservationID, detailReservationID,userID,tourID,quantity, price,detailTourId);
             // Gửi phản hồi cho client
             res.status(200).send({ message: 'Order submitted successfully' });
         } catch (err) {

@@ -25,6 +25,8 @@ router.get('/getNextCIID',cartController.getNextCartItem);
 
 router.post('/addReservationDetail',cartController.addReservationDetail);
 
+router.post('/addReservation',cartController.addReservation);
+
 router.get('/getNextRID',cartController.getNextRID);
 
 router.get('/getNextRDID',cartController.getNextRDID);
