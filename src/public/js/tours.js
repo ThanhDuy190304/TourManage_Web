@@ -228,4 +228,3 @@ document.addEventListener("DOMContentLoaded", function () {
     restoreFiltersFromURL();
     applyFilters();
 });
-

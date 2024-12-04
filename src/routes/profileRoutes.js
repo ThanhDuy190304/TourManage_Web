@@ -5,8 +5,6 @@ router.get('/', (req, res) => {
     res.render('profile', {
         layout: 'main',
         title: 'Profile page',
-        scripts: '<script src="/js/profile.js"></script>',
-
     });
 });
 

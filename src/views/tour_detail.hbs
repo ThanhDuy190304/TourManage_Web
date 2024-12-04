@@ -1,22 +1,25 @@
 <!-- Main Content -->
 <section class="px-2 py-8">
     <div id="user-info" data-user="{{user}}"></div>
+    <div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-60 z-40"></div>
     <div class="grid grid-cols-8 gap-8">
         <div class="col-span-5 space-y-8">
             <!-- Post 1 -->
             <div class="bg-white rounded-lg shadow p-6">
-                <img src="{{tour_detail.[0].img_url}}" alt="{{tour_detail.[0].title}}" class="w-full rounded-lg mb-4">
+                <img src="{{tour.img_array.[0]}}" alt="{{tour.title}}" class="w-full rounded-lg mb-4">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-semibold mb-2">{{tour_detail.[0].title}}</h2>
-                    <button class="px-4 py-2 bg-gray-500 text-white rounded-full hover:bg-yellow-600 btn">Booking
+                    <h2 class="text-2xl font-semibold mb-2">{{tour.title}}</h2>
+                    <button id="openBookingDialog"
+                        class="px-4 py-2 bg-gray-500 text-white rounded-full hover:bg-yellow-600 btn">Booking
                         tour</button>
-                    <button value={{tour_detail.[0].tour_id}} class="addCart px-4 py-2 bg-gray-500 text-white rounded-full hover:bg-yellow-600 btn">Add to
+                    <button value={{tour.tour_id}}
+                        class="addCart px-4 py-2 bg-gray-500 text-white rounded-full hover:bg-yellow-600 btn">Add to
                         Cart</button>
-                    <p class="text-2xl font-bold text-gray-600 mb-4">${{tour_detail.[0].prices}}</p>
+                    <p class="text-2xl font-bold text-gray-600 mb-4">${{tour.prices}}</p>
                 </div>
-                <p class="text-gray-600 mb-4">{{tour_detail.[0].brief}}</p>
+                <p class="text-gray-600 mb-4">{{tour.brief}}</p>
                 <h2 class="text-2xl font-semibold mb-2">Detail of Tour</h2>
-                <p class="text-gray-600 mb-4">{{tour_detail.[0].details}}</p>
+                <p class="text-gray-600 mb-4">{{tour.details}}</p>
 
                 <div class="flex items-center justify-between mt-4">
                     <div class="text-gray-600">
@@ -43,7 +46,8 @@
                     <li class="flex gap-8 items-center">
                         <img src="{{this.img_url}}" alt="Traveler" class="w-6/12 rounded-lg mb-4">
                         <div>
-                            <a href="/tours/{{this.tour_id}}" class="text-blue-500 text-lg font-medium hover:underline">{{this.title}}</a>
+                            <a href="/tours/{{this.tour_id}}"
+                                class="text-blue-500 text-lg font-medium hover:underline">{{this.title}}</a>
                             <p class="text-sm text-gray-500 mt-4">${{this.prices}}</p>
                         </div>
                     </li>
@@ -80,6 +84,7 @@
             </div>
         </div>
     </div>
+
 </section>
 
 
@@ -133,3 +138,72 @@
         </div>
     </form>
 </section>
+
+<!-- Dialog Box -->
+<section id="bookingDialog"
+    class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-5 shadow-lg w-96 z-50">
+    <button id="closeBookingDialog" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+        <i class="fas fa-times"></i>
+    </button>
+
+    <div class="divide-y-2 divide-gray-200">
+        <div class="flex space-x-8 place-items-end mb-4">
+            <img src="{{tour.img_array.[0]}}" alt="Tour Image" class="w-24 h-24 object-cover rounded-lg select-none">
+            <div class="flex-grow">
+                <h3 class="text-lg font-semibold">{{tour.title}}</h3>
+                <p class="text-sm">Price: {{tour.prices}}</p>
+                <p class="text-xs text-gray-500" id="remaining-tickets">Remaining tickets: </p>
+            </div>
+        </div>
+
+        <!-- Dates Section -->
+        <div class="relative py-2 mb-4">
+            <h4 class="font-medium">Select Tour Dates</h4>
+            <div class="grid grid-cols-3 gap-5 mt-2">
+                {{#each tour.schedules_tour}}
+                <div>
+                    <input type="radio" name="tourDate" id="date{{@index}}" value="{{this.tour_date}}"
+                        class="hidden peer" schedule_id="{{this.schedule_id}}"
+                        available-quantity="{{this.available_quantity}}" {{#if (eq this.status "not_available"
+                        )}}disabled{{/if}}>
+
+                    <label for="date{{@index}}" {{#if (eq this.status "not_available" )}}
+                        class="block text-center opacity-50 border cursor-default bg-neutral-300" {{else}}
+                        class="block text-center cursor-pointer border bg-neutral-300 hover:border-green-700 cursor-pointer peer-checked:text-white peer-checked:bg-green-700"
+                        {{/if}}>
+                        {{this.tour_date}}
+                    </label>
+
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <!-- Quantity Section -->
+        <div class="flex justify-between items-center py-4 select-none ">
+            <h4 class="font-medium">Choose Quantity</h4>
+            <div class="flex items-center border border-gray-300 rounded-md divide-x-2">
+                <button id="decrease" class="text-base text-gray-500 mx-2">-</button>
+                <span id="quantityDisplay" class="text-base font-semibold px-2 text-green-700">1</span>
+                <button id="increase" class="text-base text-gray-500 px-2">+</button>
+            </div>
+        </div>
+
+        <!-- Book Button -->
+        <div class="flex justify-center py-4">
+            <button id="bookTour" class="px-6 py-3 bg-neutral-300 cursor-default text-white">Book
+                Tour</button>
+        </div>
+    </div>
+</section>
+
+<script>
+    const tour = {
+        tour_id: "{{tour.tour_id}}",
+        title: "{{tour.title}}",
+        prices: "{{tour.prices}}"
+    };
+</script>
+
+<script src="/js/detail_tour.js"></script>
+<script src="/js/detailedTour.js"></script>

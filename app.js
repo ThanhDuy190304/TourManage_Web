@@ -1,6 +1,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
+const hbs = require('hbs');
+
 const cookieParser = require('cookie-parser');
 const { authenticateToken, requireAuth, checkout } = require('./src/middleware/authMiddleware');
 
@@ -12,6 +14,9 @@ const Handlebars = require('handlebars');
 // Đăng ký helper limit
 Handlebars.registerHelper('limit', function (array, limit) {
     return array.slice(0, limit);
+});
+Handlebars.registerHelper('eq', function (a, b) {
+    return a === b;
 });
 
 
@@ -37,6 +42,9 @@ app.engine('hbs', exphbs.engine({
 }));
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'src', 'views'))
+hbs.registerHelper('eq', function (a, b) {
+    return a === b;
+});
 
 app.use(express.static(path.join(__dirname, 'src', 'public')));
 
