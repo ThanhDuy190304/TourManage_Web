@@ -2,8 +2,8 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function (knex) {
-    return knex.schema.createTable('pending_users', (table) => {
+exports.up = async function (knex) {
+    return await knex.schema.createTable('pending_users', (table) => {
         table.string('user_name', 50).notNullable().unique();
         table.string('email', 100).primary();
         table.specificType('user_password', 'text').notNullable();
@@ -15,6 +15,6 @@ exports.up = function (knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function (knex) {
-    return knex.schema.dropTableIfExists('pending_users');
+exports.down = async function (knex) {
+    return await knex.schema.dropTableIfExists('pending_users');
 };
