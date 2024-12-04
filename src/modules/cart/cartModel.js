@@ -33,7 +33,7 @@ const cartModel = {
 	getNextRDID: async () => {
 		const query = `
 		SELECT 
-            'dr' || LPAD(CAST(COALESCE(MAX(CAST(SUBSTRING(reservation_id FROM 2) AS INT)), 0) + 1 AS VARCHAR), 2, '0') AS next_reservation_detail_ID
+            'h' || LPAD(CAST(COALESCE(MAX(CAST(SUBSTRING(reservation_id FROM 3) AS INT)), 0) + 1 AS VARCHAR), 3, '0') AS next_reservation_detail_ID
         FROM detail_reservations;
 		`;
 		try {

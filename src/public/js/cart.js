@@ -102,6 +102,37 @@ const fetchTourDates = async (tourId) => {
 async function fetchSelectedTours() {
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   const selectedTours = [];
+  let response
+      let nextRID, nextRDID
+      try {
+        response = await fetch(`/cart/getNextRID`); // Đường dẫn API để lấy sản phẩm
+        if (!response.ok) throw new Error("Failed to fetch product data");
+        nextRID = await response.json(); // Trả về dữ liệu sản phẩm
+      } catch (error) {
+        console.error(`Khong lay dc next CI ID`, error);
+        return null;
+      }
+
+      try {
+        response = await fetch('/cart/addReservation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                reservationID: nextRID[0].next_reservationid,
+                userID: user.user_id,
+            }),
+        });
+        if (response.ok) {
+            console.log('Order submitted successfully!');
+            // Xử lý phản hồi từ server nếu cần
+        } else {
+            console.error('Error submitting order');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 
   for (const checkbox of checkboxes) {
     if (checkbox.checked) {
@@ -114,8 +145,7 @@ async function fetchSelectedTours() {
       // Fetch tour date từ cơ sở dữ liệu nếu cần
       const selectElement = itemTour.querySelector('select'); // Lấy thẻ <select>
       const detailTourId = selectElement.value;
-      const tourDate = selectElement.options[selectElement.selectedIndex + 1].textContent;
-      console.log(selectElement.selectedIndex)
+      const tourDate = selectElement.options.textContent;
       selectedTours.push({
         tour_id: tourId,
         name_tour: nameTour,
@@ -124,17 +154,7 @@ async function fetchSelectedTours() {
         detail_tour_id: detailTourId,
         price: priceTour
       });
-      let response
-      let nextRID, nextRDID
-      try {
-        response = await fetch(`/cart/getNextRID`); // Đường dẫn API để lấy sản phẩm
-        if (!response.ok) throw new Error("Failed to fetch product data");
-        nextRID = await response.json(); // Trả về dữ liệu sản phẩm
-      } catch (error) {
-        console.error(`Khong lay dc next CI ID`, error);
-        return null;
-      }
-
+      
       try {
         response = await fetch(`/cart/getNextRDID`); // Đường dẫn API để lấy sản phẩm
         if (!response.ok) throw new Error("Failed to fetch product data");
@@ -143,36 +163,38 @@ async function fetchSelectedTours() {
         console.error(`Khong lay dc next CI ID`, error);
         return null;
       }
-      console.log(nextRDID)
+
       try {
-        response = await fetch('/cart/addReservationDetail', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            reservationID: nextRID[0].next_reservationID,  // Mã chi nhánh
-            detailReservationID: nextRDID[0].next_reservation_detail_ID,
-            userID: user.user_id,
-            tourID: tourId,
-            quantity: quantity,
-            price: priceTour,
-          }),
-        });
-        if (response.ok) {
-          console.log('Order submitted successfully!');
-          // Xử lý phản hồi từ server nếu cần
-        } else {
-          console.error('Error submitting order');
-        }
+          response = await fetch('/cart/addReservationDetail', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  reservationID: nextRID[0].next_reservationid,  // Mã chi nhánh
+                  detailReservationID: nextRDID[0].next_reservation_detail_id,
+                  userID: user.user_id,
+                  tourID: tourId,
+                  quantity: quantity,
+                  price: priceTour,
+                  detailTourId,
+              }),
+          });
+          if (response.ok) {
+              console.log('Order submitted successfully!');
+              // Xử lý phản hồi từ server nếu cần
+          } else {
+              console.error('Error submitting order');
+          }
       } catch (error) {
-        console.error('Error:', error);
+          console.error('Error:', error);
       }
     }
   }
-
   sessionStorage.setItem('reservationData', JSON.stringify(selectedTours));
   window.location.href = '#!';
+  await renderCartItems();
+  await updateTotalPrice();
 }
 
 // Hàm lấy thông tin sản phẩm từ cơ sở dữ liệu (qua API)
