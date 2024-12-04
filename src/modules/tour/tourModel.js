@@ -150,6 +150,21 @@ const Tour = {
 			throw new Error('Error fetching tours by location: ' + err.message);
 		}
 	},
+	getAvailableDates: async (tour_id) => {
+		const query = ` SELECT dt.tour_id, dt.detail_tour_id, dt.tour_date
+        FROM detail_tours dt
+        LEFT JOIN tours t ON t.tour_id = dt.tour_id
+        WHERE t.tour_id = '${tour_id}' and dt.status like '%available%'
+		`;
+		console.log(query)
+		try {
+			const result = await db.query(query);
+			return result.rows;
+		} catch (err) {
+			throw new Error('Error fetching tours by location: ' + err.message);
+		}
+
+	},
 
 	getTourByID: async (tour_id) => {
 		const query = ` SELECT t.*, t_i.img_url
@@ -158,7 +173,7 @@ const Tour = {
             SELECT tour_id, img_url
             FROM tour_images
             WHERE tour_id = $1
-            LIMIT 3
+            LIMIT 1
         ) t_i ON t.tour_id = t_i.tour_id
         WHERE t.tour_id = $1`;
 		const values = [tour_id];

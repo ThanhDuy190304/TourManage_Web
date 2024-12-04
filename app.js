@@ -22,6 +22,7 @@ const loginRoutes = require('./src/routes/loginRoutes'); // Điều hướng đ�
 const logoutRoute = require('./src/routes/logoutRoutes'); // Điều hướng đăng xuất
 const verifyRoutes = require('./src/routes/verifyRoutes'); // Điều hướng xác nhận email
 const profileRoutes = require('./src/routes/profileRoutes'); // Điều hướng đén thông tin cá nhân
+const cartRoutes = require('./src/routes/cartRoutes'); // Điều hướng đén trang giỏ hàng
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -52,6 +53,8 @@ app.use('/logout', requireAuth, logoutRoute);
 app.use('/verify', checkout, verifyRoutes);
 
 app.use('/profile', requireAuth, profileRoutes);
+
+app.use('/cart', cartRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

@@ -66,7 +66,7 @@ const tourController = {
         }
     },
 
-    getTourByID: async (req, res) => {
+    renderTourByID: async (req, res) => {
         const { tour_id } = req.params
         try {
             const tour_detail = await Tour.getTourByID(tour_id);
@@ -75,8 +75,30 @@ const tourController = {
                 layout: 'main',
                 tour_detail,
                 related,
-                title: tour_detail[0].title
+                title: tour_detail[0].title,
+                user: JSON.stringify(res.locals.user),
+                scripts: '<script src="/js/detailedTour.js"></script>'
             });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    },
+    getAvailableDates: async (req, res) => {
+        const { tour_id } = req.params
+        try {
+            const tour_detail = await Tour.getAvailableDates(tour_id);
+            res.json(tour_detail);
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    },
+    getTourByID: async (req, res) => {
+        const { tour_id } = req.params
+        try {
+            const tour_detail = await Tour.getTourByID(tour_id);
+            res.json(tour_detail);
 
         } catch (err) {
             res.status(500).json({ error: err.message });
