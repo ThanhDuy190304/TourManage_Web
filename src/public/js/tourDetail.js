@@ -124,7 +124,6 @@ function handleBooking(tourId, title, prices, tourDate, quantity, scheduleId, vo
             voucher: voucher,
         }
     ];
-
     const jsonReservationDataArray = JSON.stringify(reservationDataArray);
     sessionStorage.setItem("reservationDataArray", jsonReservationDataArray);
 
@@ -146,6 +145,7 @@ function handleBooking(tourId, title, prices, tourDate, quantity, scheduleId, vo
 
 
 async function handleAddToCart(tourId, scheduleId, quantity) {
+
     try {
         const response = await fetch('/cart/api/addToCart', {
             method: 'POST',
@@ -160,12 +160,11 @@ async function handleAddToCart(tourId, scheduleId, quantity) {
         if (response.status === 200 && data.success) {
             document.getElementById('cartCount').innerText = data.count.toString();
         } else if (response.status === 401) {
-
             let cartDataArray = JSON.parse(localStorage.getItem('cartDataArray')) || [];
+            console.log(1);
             const existingItem = cartDataArray.find(item => item.tourId === tourId && item.scheduleId === scheduleId);
 
             if (existingItem) {
-
                 existingItem.quantity = (
                     parseInt(existingItem.quantity, 10) + parseInt(quantity, 10)
                 ).toString();
@@ -179,7 +178,6 @@ async function handleAddToCart(tourId, scheduleId, quantity) {
             localStorage.setItem('cartDataArray', JSON.stringify(cartDataArray));
             document.getElementById('cartCount').innerText = cartDataArray.length;
         } else {
-
             alert(data.message);
         }
     } catch (error) {

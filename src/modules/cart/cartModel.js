@@ -70,29 +70,36 @@ class cartModel {
     static async getCartItems(cartId) {
         try {
             const query = `
-            select 
-                c_i.tour_id, 
-                c_i.detail_tour_id, 
-                c_i.quantity, 
-                c_i.updated_at, 
-                dt.status, 
-                dt.tour_date, 
+            select
+                c_i.tour_id,
+                c_i.detail_tour_id,
+                c_i.quantity,
+                c_i.updated_at,
+                dt.status,
+                dt.tour_date,
                 greatest(dt.max_quantity - dt.booked_quantity, 0) as available_quantity,
-                t.title, 
-                t.prices, 
-                t.rate, 
+                t.title,
+                t.prices,
+                t.rate,
                 ti.img_url as first_image
-            from 
+            from
                 cart_items c_i
-            join 
+            join
                 detail_tours dt on dt.tour_id = c_i.tour_id and dt.detail_tour_id = c_i.detail_tour_id
-            join 
+            join
                 tours t on t.tour_id = c_i.tour_id
-            left join 
-                tour_images ti on ti.tour_id = t.tour_id
-            where 
-                c_i.cart_id = $1
-            order by ti.img_id limit 1;
+            left join
+                (
+                    select tour_id, img_url
+                    from (
+                        select tour_id, img_url, row_number() over (partition by tour_id order by img_url) as rn
+                        from tour_images
+                    ) subquery
+                    where rn = 1
+                ) ti
+                on ti.tour_id = t.tour_id
+            where
+                c_i.cart_id = $1;
             `;
             const result = await db.query(query, [cartId]);
             if (result.rows.length > 0) {

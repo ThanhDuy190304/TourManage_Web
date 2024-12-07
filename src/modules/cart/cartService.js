@@ -59,6 +59,16 @@ class CartService {
             let touristId = await userModel.getTouristId(userId);
             let cartId = await cartModel.getCartId(touristId);
             let cartItems = await cartModel.getCartItems(cartId);
+            cartItems = cartItems.map(item => {
+                if (item.tourDate) {
+                    item.tourDate = new Date(item.tourDate).toLocaleDateString('vi-VN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                    });
+                }
+                return item;
+            });
             return cartItems;
         }
         catch (error) {
@@ -79,7 +89,6 @@ class CartService {
                 month: '2-digit',
                 day: '2-digit',
             }) : null;
-            console.log(formattedTourDate);
             return {
                 ...item, // Thêm các thuộc tính từ cartDataArray vào kết quả
                 ...tourDetail,// Thêm các chi tiết tour từ phương thức getTourScheduleDetail
