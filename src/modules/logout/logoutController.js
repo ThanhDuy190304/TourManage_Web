@@ -1,20 +1,27 @@
-const { deleteRefreshToken } = require('./logoutModel');
+const logoutService = require('./logoutService');
 
-exports.logoutUser = async (req, res) => {
-    const { user_id, device_id } = res.locals.user || {}; // Lấy thông tin user từ middleware
+class logoutController {
+    static async logoutUser(req, res) {
+        const user = res.locals.user;
 
-    // Nếu có thông tin người dùng, xóa refresh token khỏi database
-    if (user_id && device_id) {
+        if (!user) {
+            console.error("Error: Missing userId or deviceId in the request");
+            return res.status(400).json({ message: 'An error occurred, please try again later.' });
+        }
+
+
         try {
-            await deleteRefreshToken(user_id, device_id);
+            await logoutService.deleteRefreshToken(user.userId, user.deviceId);
+
+            res.clearCookie(process.env.ACCESS_TOKEN_NAME, { httpOnly: true, path: '/' });
+            res.clearCookie(process.env.REFRESH_TOKEN_NAME, { httpOnly: true, path: '/' });
+
+            res.redirect('/');
         } catch (error) {
-            return res.status(500).json({ message: 'Error during logout' });
+            console.error('Logout error:', error); // Ghi lại lỗi cho mục đích debug
+            return res.status(500).json({ message: 'There was an issue processing your logout request. Please try again later!' });
         }
     }
+}
 
-    // Xóa cookie lưu token
-    res.clearCookie(process.env.ACCESS_TOKEN_NAME, { httpOnly: true, path: '/' });
-    res.clearCookie(process.env.REFRESH_TOKEN_NAME, { httpOnly: true, path: '/' });
-
-    res.redirect('/'); // Đổi đường dẫn nếu cần
-};
+module.exports = logoutController;

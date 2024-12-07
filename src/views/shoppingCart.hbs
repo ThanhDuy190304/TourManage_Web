@@ -1,0 +1,53 @@
+<div class="container mx-auto p-6">
+    <!-- Breadcrumb -->
+    <div class="mb-4 text-sm text-gray-600">
+        <a href="#" class="hover:underline">Trang chủ</a> / <span>Giỏ hàng</span>
+    </div>
+    <!-- Cart -->
+    <div id="cart-items">
+        {{#each cartItems}}
+        <div class="bg-white p-6 rounded-lg shadow-md item_tour" data-id="{{tourId}}" data-price="{{prices}}">
+            <div class="flex items-start">
+                <!-- Product Image -->
+                <input onchange="updateTotalPrice()" type="checkbox" class="mr-4">
+                <img src="{{firstImage}}" alt="Product" class="w-20 h-20 object-cover rounded">
+
+                <!-- Product Info -->
+                <div class="ml-4 flex-1">
+                    <h2 class="font-semibold text-lg">{{title}}</h2>
+                    <p class="text-sm text-gray-500">Rate: {{rate}} <i class="fa-solid fa-star"></i></p>
+                </div>
+
+                <div class="tour-date mt-2">
+                    <p class="text-sm text-gray-500">Tour Date: {{tourDate}}</p>
+                </div>
+
+                <!-- Price and Quantity -->
+                <div class="ml-auto text-right">
+                    <div class="text-red-500 font-semibold text-xl price">{{prices}}</div>
+                    <div class="flex items-center mt-4">
+                        <div class="flex items-start mr-4">
+                            <button class="delete px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Xóa</button>
+                        </div>
+                        <button class="decrease px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                        <span class="quantity mx-2 w-12 text-center border rounded">{{quantity}}</span>
+                        <button class="increase px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+
+    <!-- Summary -->
+    <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+        <h3 class="font-semibold text-lg">Thông tin đơn hàng</h3>
+        <div class="flex justify-between mt-4">
+            <span>Tổng tiền</span>
+            <span id="totalPrice" class="font-semibold">0 $</span>
+        </div>
+        <button class="w-full mt-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600" id="reserve">Xác nhận
+            đơn</button>
+    </div>
+</div>

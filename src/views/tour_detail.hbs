@@ -5,14 +5,15 @@
         <div class="col-span-5 space-y-8">
             <!-- Post 1 -->
             <div class="bg-white rounded-lg shadow p-6">
-                <img src="{{tour.img_array.[0]}}" alt="{{tour.title}}" class="w-full rounded-lg mb-4">
+                <img src="{{tour.imgArray.[0]}}" alt="{{tour.title}}" class="w-full rounded-lg mb-4">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-semibold mb-2">{{tour.title}}</h2>
-                    <button id="openBookingDialog"
+                    <button id="bookTour"
                         class="px-4 py-2 bg-gray-500 text-white rounded-full hover:bg-yellow-600 btn">Booking
                         tour</button>
-                    <button class="px-4 py-2 bg-gray-500 text-white rounded-full hover:bg-yellow-600 btn">Add to
-                        Cart</button>
+                    <button id="addToCart"
+                        class="px-4 py-2 bg-gray-500 text-white rounded-full hover:bg-yellow-600 btn">Add to
+                        cart</button>
                     <p class="text-2xl font-bold text-gray-600 mb-4">${{tour.prices}}</p>
                 </div>
                 <p class="text-gray-600 mb-4">{{tour.brief}}</p>
@@ -138,15 +139,15 @@
 </section>
 
 <!-- Dialog Box -->
-<section id="bookingDialog"
+<section id="Dialog"
     class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-5 shadow-lg w-96 z-50">
-    <button id="closeBookingDialog" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+    <button id="closeDialog" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
         <i class="fas fa-times"></i>
     </button>
 
     <div class="divide-y-2 divide-gray-200">
         <div class="flex space-x-8 place-items-end mb-4">
-            <img src="{{tour.img_array.[0]}}" alt="Tour Image" class="w-24 h-24 object-cover rounded-lg select-none">
+            <img src="{{tour.imgArray.[0]}}" alt="Tour Image" class="w-24 h-24 object-cover rounded-lg select-none">
             <div class="flex-grow">
                 <h3 class="text-lg font-semibold">{{tour.title}}</h3>
                 <p class="text-sm">Price: {{tour.prices}}</p>
@@ -158,7 +159,7 @@
         <div class="relative py-2 mb-4">
             <h4 class="font-medium">Select Tour Dates</h4>
             <div class="grid grid-cols-3 gap-5 mt-2">
-                {{#each tour.schedules_tour}}
+                {{#each tour.schedulesTour}}
                 <div>
                     <input type="radio" name="tourDate" id="date{{@index}}" value="{{this.tour_date}}"
                         class="hidden peer" schedule_id="{{this.schedule_id}}"
@@ -187,20 +188,27 @@
             </div>
         </div>
 
-        <!-- Book Button -->
-        <div class="flex justify-center py-4">
-            <button id="bookTour" class="px-6 py-3 bg-neutral-300 cursor-default text-white">Book
-                Tour</button>
+        <div id="reservationContainer" class="flex justify-center items-center">
+            <button type="button" id="addToCartButton"
+                class="px-6 py-3 mx-4 bg-neutral-300 cursor-default text-white hidden">
+                Add to Cart
+            </button>
+            <button type="button" id="bookTourButton"
+                class="px-6 py-3 mx-4 bg-neutral-300 cursor-default text-white hidden">
+                Book Tour
+            </button>
         </div>
+
     </div>
 </section>
 
 <script>
     const tour = {
-        tour_id: "{{tour.tour_id}}",
+        tourId: "{{tour.tourId}}",
         title: "{{tour.title}}",
-        prices: "{{tour.prices}}"
+        prices: "{{tour.prices}}",
+        voucher: "{{tour.voucher}}",
     };
 </script>
 
-<script src="/js/detail_tour.js"></script>
+<script src="/js/tourDetail.js"></script>

@@ -14,13 +14,13 @@ async function authenticateToken(req, res, next) {
         try {
             const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             res.locals.user = decoded;
-            if (res.locals.user.user_role === 1) {
+            if (res.locals.user.userRole === 1) {
                 return res.redirect('/admin');
             }
 
             return next();
         } catch (err) {
-            console.log("Error access", err.message);
+            console.log(err.message);
             res.clearCookie(process.env.ACCESS_TOKEN_NAME, { httpOnly: true, path: '/' });
         }
     }

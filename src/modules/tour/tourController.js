@@ -75,9 +75,9 @@ const tourController = {
             ]);
             res.render('tour_detail', {
                 layout: 'main',
-                tour: tour.toJSON(),
+                tour: tour,
                 related,
-                title: tour.getBrief(),
+                title: tour.brief,
             });
 
         } catch (err) {

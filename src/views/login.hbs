@@ -39,16 +39,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
         <div class="main-agileinfo">
             <div class="agileits-top">
-                <form autocomplete="off" action="/login/postLogin" method="post">
+                <div id="loginForm">
                     <input class="text" type="text" name="Username_Email" placeholder="Username/Email" required="">
                     <input class="text" type="password" name="password" placeholder="Password" required="">
-                    {{#if message}}
-                    <div style="color: #b20000; text-align: center">
-                        {{message}}
-                    </div>
-                    {{/if}}
+                    <div id="errorMessage" style="color: #b20000; text-align: center"></div>
                     <input type="submit" value="LOGIN">
-                </form>
+                    <input type="hidden" id="cartData" name="cartDataArray">
+                </div>
                 <p>
                     <a href="/login/forgetpassword">Forgot Password</a>
                     <span class="divider">|</span>
@@ -79,3 +76,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </body>
 
 </html>
+
+
+<script src="/js/login.js"></script>

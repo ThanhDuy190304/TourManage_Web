@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
     const searchInput = document.getElementById('searchInput');
 
+
     // Xử lý sự kiện click cho nút menu toggle
     document.getElementById("menu-toggle").addEventListener("click", function () {
         const navList = document.querySelector(".nav-list");
@@ -67,4 +68,35 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (event) => {
         closeMenu();
     });
+
+    const cartDataArray = JSON.parse(localStorage.getItem("cartDataArray")) || [];
+    let itemCount = cartDataArray.length;
+
+    if (itemCount === 0) {
+        itemCount = parseInt(localStorage.getItem('countCartItem'), 10) || 0;
+    }
+    const cartCountElement = document.getElementById('cartCount');
+    cartCountElement.innerText = itemCount;
+
+
+    document.getElementById("cartForm").addEventListener('submit', function (event) {
+        event.preventDefault();
+        const cartDataArray = JSON.parse(localStorage.getItem('cartDataArray')) || [];
+        document.getElementById('cartDataArrayInput').value = JSON.stringify(cartDataArray);
+        this.submit();
+    });
+
+    if (document.getElementById('logoutForm')) {
+        document.getElementById('logoutForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Xóa cart data khi logout
+            localStorage.removeItem('cartDataArray');
+            localStorage.removeItem('countCartItem');
+
+            this.submit();
+        });
+    }
+
+
 });
