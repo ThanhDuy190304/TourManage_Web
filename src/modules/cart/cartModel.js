@@ -53,6 +53,19 @@ class cartModel {
         }
     }
 
+    static async deleteCartItems(cartId, tourId, detailTourId) {
+        try {
+            const query = `
+            DELETE FROM cart_items
+            WHERE cart_id = $1 AND tour_id = $2 AND detail_tour_id = $3
+        `;
+            await db.query(query, [cartId, tourId, detailTourId]);
+        } catch (error) {
+            console.error("Error Delete cart item in cartModel:", error);
+            throw new Error("Error Delete cart item quantity in cartModel.");
+        }
+    }
+
     static async getItemCounts(cartId) {
         try {
             const query = `select items_count from carts where cart_id = $1`;
@@ -81,6 +94,7 @@ class cartModel {
                 t.title,
                 t.prices,
                 t.rate,
+                t.voucher,
                 ti.img_url as first_image
             from
                 cart_items c_i
@@ -107,6 +121,7 @@ class cartModel {
                     tourId: row.tour_id,
                     scheduleId: row.detail_tour_id,
                     quantity: row.quantity,
+                    voucher: row.voucher,
                     updatedAt: row.updated_at,
                     status: row.status,
                     tourDate: row.tour_date,
