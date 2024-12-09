@@ -1,3 +1,4 @@
+// Ấn vào để đến trang chi tiết của tour
 function StoreId(button) {
     const id = button.value;
     window.location.href = `/tours/${id}`; // Chuyển đến tour_detail với ID
@@ -6,6 +7,7 @@ function StoreId(button) {
 let currentPage = 1;
 let totalpage;
 
+// Mỗi lần ấn filter, chuyển trang di chuyển lên đầu
 function scrollToProductList() {
     const productList = document.getElementById('divide'); // Phần tử danh sách sản phẩm
     if (productList) {
@@ -121,7 +123,7 @@ function applyFilters() {
         })
         .then(data => {
             // Hiển thị nội dung HTML trả về từ server
-            renderHTML(data.html);
+            renderHTML(data.paginatedTours);
 
             // Hiển thị các nút phân trang
             renderPageButtons(data.totalPages);
@@ -136,8 +138,47 @@ function applyFilters() {
 }
 
 // Render ra List những tour
-function renderHTML(html) {
+function renderHTML(paginatedTours) {
     const tourList = document.getElementById('showTours');
+    let html = '';
+            if (paginatedTours.length === 0) {
+                html = '<p>No tours available</p>';
+            }
+            paginatedTours.forEach(tour => {
+                html += `
+                <a href="/tours/${tour.tour_id}" class="w-80 md:w-96 lg:w-80 mx-auto">
+                    <div
+                        class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 md:w-96 lg:w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105 mx-auto">
+                        <div>
+                            <!-- Giảm kích thước hình ảnh -->
+                            <img src="${tour.img_url}" alt="" class="img w-full h-36 object-cover">
+                            <div class="p-4">
+                                <div class="flex justify-between mt-4 h-16">
+                                    <h3 class="name text-lg font-semibold">${tour.title}</h3>
+                                    <p class="price text-gray-600">$${tour.prices}</p>
+                                </div>
+                                <p class="text-gray-600 w-full overflow-hidden text-ellipsis line-clamp-2">
+                                ${tour.brief}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between px-4">
+                            <div class="flex">
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                            </div>
+                            <button type="button"
+                                class="self-end mb-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
+                                value="${tour.tour_id}" onclick="StoreId(this)">View
+                                Detail</button>
+                        </div>
+                    </div>
+                </a>
+                `;
+            });
     tourList.innerHTML = html;  // Thay thế nội dung hiện tại bằng HTML mới
 }
 
@@ -225,6 +266,10 @@ document.addEventListener("DOMContentLoaded", function () {
             handleSelectionChange("voucher", radio.value, selectedLabel);
         });
     });
+
+
     restoreFiltersFromURL();
-    applyFilters();
+    const totalPages = parseInt(document.querySelector('.pagination').getAttribute('value')) || 1;
+    totalpage=totalPages
+    renderPageButtons(totalPages)
 });

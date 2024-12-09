@@ -17,7 +17,13 @@ Handlebars.registerHelper('limit', function (array, limit) {
 Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
 });
-
+Handlebars.registerHelper('times', function(n, block) {
+    let result = '';
+    for (let i = 1; i <= n; i++) {
+        result += block.fn(i);
+    }
+    return result;
+});
 
 const viewsRoutes = require('./src/routes/viewsRoutes'); // Điều hướng view
 const tourRoutes = require('./src/routes/tourRoutes');  // Điều hướng tour
