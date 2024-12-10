@@ -47,8 +47,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     localStorage.removeItem('cartDataArray');
 
                     localStorage.setItem('countCartItem', countItem);
+                    const returnTo = sessionStorage.getItem('returnTo');
 
-                    window.location.href = '/';
+                    if (returnTo) {
+                        window.location.href = returnTo;
+                        sessionStorage.removeItem('returnTo');
+                    } else {
+                        window.location.href = '/';
+                    }
+
                 } else {
                     const error = await response.json();
                     errorMessageElement.textContent = error.message || 'Login failed. Please try again.';

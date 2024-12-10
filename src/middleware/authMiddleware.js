@@ -26,6 +26,7 @@ async function authenticateToken(req, res, next) {
     }
 
     if (refreshToken) {
+        res.locals.user = null;
         await refreshAccessToken(req, res, next);
 
     } else {
@@ -42,7 +43,7 @@ function requireAuth(req, res, next) {
     if (!res.locals.user) {
         return res.redirect('/login');
     }
-    return next();
+    next();
 }
 
 function checkout(req, res, next) {

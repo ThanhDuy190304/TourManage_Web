@@ -128,7 +128,7 @@ function handleBooking(tourId, title, prices, tourDate, quantity, scheduleId, vo
     sessionStorage.setItem("reservationDataArray", jsonReservationDataArray);
 
     const form = document.createElement('form');
-    form.method = 'POST';
+    form.method = 'GET';
     form.action = '/reservation/save-reservation';
     // Tạo input ẩn để gửi dữ liệu
     const input = document.createElement('input');

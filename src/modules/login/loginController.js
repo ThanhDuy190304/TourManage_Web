@@ -43,7 +43,7 @@ class loginController {
                 });
 
                 return res.status(200).json({
-                    countItem: countItem
+                    countItem: countItem,
                 });
 
 

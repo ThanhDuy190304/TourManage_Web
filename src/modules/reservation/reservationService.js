@@ -1,4 +1,7 @@
 const userModel = require('../user/userModel');
+const reservationModel = require('./reservationModel');
+const db = require("../../config/db");
+
 class reservationService {
     static calculateInvoice(reservationDataArray) {
         let subtotal = 0;
@@ -20,6 +23,37 @@ class reservationService {
         });
 
         return { invoiceItems, subtotal };
+    }
+
+    static async confirmReservation(userId, reservationDataArray) {
+        const client = await db.connect();
+        try {
+            await client.query('BEGIN');
+            let touristId = await userModel.getTouristId(userId);
+            let reservationId = await reservationModel.createReservation(touristId);
+            for (let data of reservationDataArray) {
+                const { tourId, scheduleId, quantity, prices, title, tourDate, voucher } = data;
+
+                const total_price = prices * (voucher / 100) * quantity;
+                await reservationModel.insertReservationDetail(
+                    reservationId,
+                    tourId,
+                    scheduleId,
+                    quantity,
+                    total_price,
+                    title,
+                    tourDate
+                );
+            }
+            await client.query('COMMIT');
+        } catch (error) {
+            await client.query('ROLLBACK');
+            console.error("Error in confirmReservation in reservationService:", error);
+            throw new Error(`Failed confirm the reservation`);
+        } finally {
+            client.release();  // Giải phóng kết nối sau khi xong
+        }
+
     }
 }
 
