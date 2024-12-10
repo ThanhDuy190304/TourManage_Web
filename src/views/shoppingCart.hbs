@@ -11,15 +11,15 @@
                 <!-- Product Image -->
                 <input onchange="updateTotalPrice()" type="checkbox" class="mr-4">
                 <img src="{{firstImage}}" alt="Product" class="w-20 h-20 object-cover rounded">
-
                 <!-- Product Info -->
                 <div class="ml-4 flex-1">
                     <h2 class="font-semibold text-lg">{{title}}</h2>
                     <p class="text-sm text-gray-500">Rate: {{rate}} <i class="fa-solid fa-star"></i></p>
+                    <p class="voucher text-sm text-gray-500">Voucher: {{voucher}} %</p>
                 </div>
 
                 <div class="tour-date mt-2">
-                    <p class="text-sm text-gray-500">Tour Date: {{tourDate}}</p>
+                    <p class="date text-sm text-gray-500" data-schedual={{scheduleId}}>Tour Date: {{tourDate}}</p>
                 </div>
 
                 <!-- Price and Quantity -->
@@ -51,3 +51,5 @@
             đơn</button>
     </div>
 </div>
+
+<script src="/js/cart.js"></script>

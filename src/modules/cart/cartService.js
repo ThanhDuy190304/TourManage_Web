@@ -59,6 +59,9 @@ class CartService {
             let touristId = await userModel.getTouristId(userId);
             let cartId = await cartModel.getCartId(touristId);
             let cartItems = await cartModel.getCartItems(cartId);
+
+            if(cartItems==null) return [];
+
             cartItems = cartItems.map(item => {
                 if (item.tourDate) {
                     item.tourDate = new Date(item.tourDate).toLocaleDateString('vi-VN', {
@@ -79,7 +82,7 @@ class CartService {
 
     static async getCartItems(cartDataArray) {
         if (!Array.isArray(cartDataArray) || cartDataArray.length === 0) {
-            return null;
+            return [];
         }
         const cartPromises = cartDataArray.map(async (item) => {
             const { tourId, scheduleId } = item;
@@ -100,6 +103,39 @@ class CartService {
         return cartItemsWithDetails;
     }
 
+    static async changeQuantityCartItems(userId, tourId, scheduleId, quantity) {
+        try {
+            let touristId = await userModel.getTouristId(userId);
+            let cartId = await cartModel.getCartId(touristId);
+
+            let checkExistsCartItem = await cartModel.checkExistsCartItem(cartId, tourId, scheduleId);
+
+            if (checkExistsCartItem) {
+                await cartModel.increaseCartItemQuantity(cartId, tourId, scheduleId, quantity);
+            }
+
+        } catch (error) {
+            console.log(`Error changeQuantityCartItems in cartService: `, error.message);
+            throw new Error(`Failed changeQuantityCartItems the cart with the database`);
+        }
+    }
+
+    static async deleteCartItems(userId, tourId, scheduleId) {
+        try {
+            let touristId = await userModel.getTouristId(userId);
+            let cartId = await cartModel.getCartId(touristId);
+
+            let checkExistsCartItem = await cartModel.checkExistsCartItem(cartId, tourId, scheduleId);
+
+            if (checkExistsCartItem) {
+                await cartModel.deleteCartItems(cartId, tourId, scheduleId);
+            }
+
+        } catch (error) {
+            console.log(`Error delete cart item in cartService: `, error.message);
+            throw new Error(`Failed delete cart item the cart with the database`);
+        }
+    }
 
 }
 
