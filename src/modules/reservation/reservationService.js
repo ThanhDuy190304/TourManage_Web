@@ -39,6 +39,7 @@ class reservationService {
                 const { tourId, scheduleId, quantity, prices, title, tourDate, voucher } = data;
 
                 const total_price = prices * (voucher / 100) * quantity;
+                const formattedTourDate = format(parse(tourDate, 'dd-MM-yyyy', new Date()), 'yyyy-MM-dd');
 
                 await reservationModel.insertReservationDetail(
                     reservationId,
@@ -47,7 +48,7 @@ class reservationService {
                     quantity,
                     total_price,
                     title,
-                    tourDate
+                    formattedTourDate
                 );
             }
             await client.query('COMMIT');
