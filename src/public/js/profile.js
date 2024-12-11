@@ -140,18 +140,20 @@ function displayBookingHistory(bookings) {
         // Hiển thị thông tin chính: reservationId và reservationDate
         const bookingHeader = `
             <div class="flex justify-between">
-                <h3 class="text-xl font-semibold">Reservation #${booking.reservationId}</h3>
+                <h3 class="text-xl font-medium">#${booking.reservationId}</h3>
                 <p class="text-gray-600">${booking.reservationDate}</p>
             </div>
         `;
         const bookingDetails = booking.details.map(detail => {
             return `
-                <div class="details-item mt-2 p-2 border-t">
-                    <p class="text-lg font-semibold">Tour: ${detail.title}</p>
+            <div class="details-item mt-2 p-2 border-t hover:bg-gray-100 cursor-pointer">
+                <a href="/tours/${detail.tourId}" class="block">
+                    <p class="text-lg font-normal">Tour: ${detail.title}</p>
                     <p class="text-gray-600">Tour Date: ${detail.tourDate}</p>
                     <p class="text-gray-500">Quantity: ${detail.quantity}</p>
-                    <p class="text-green-500 font-bold">Total Price: $${detail.totalPrice}</p>
-                </div>
+                    <p class="text-green-700 font-normal">Total Price: $${detail.totalPrice}</p>
+                </a>
+            </div>
             `;
         }).join('');
 
@@ -162,11 +164,32 @@ function displayBookingHistory(bookings) {
 
 
 function showContent(contentType) {
-    // Chọn đường dẫn dựa trên contentType
+    // Remove highlight from all tabs
+    document.querySelectorAll('.flex-1 .p-5').forEach(tab => {
+        tab.style.backgroundColor = '';  // Remove background color
+        tab.style.color = '';  // Remove text color
+    });
+
+    // Highlight the clicked tab
+    const activeTab = document.getElementById(contentType + 'Tab');
+    activeTab.style.backgroundColor = '#36802d';
+    activeTab.style.color = 'white';
+
+    // Handle content display based on the selected tab
     if (contentType === 'profile') {
         fetchUserProfile();
+    } else if (contentType === 'account') {
+        fetchUserAccount();
     } else if (contentType === 'bookingHistory') {
         fetchUserBookingHistory();
     }
-
 }
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    // Set initial active tab to profile
+    const profileTab = document.getElementById('profileTab');
+    profileTab.style.backgroundColor = '#36802d';
+    profileTab.style.color = 'white';
+
+    showContent('profile');  // Show profile content by default
+});

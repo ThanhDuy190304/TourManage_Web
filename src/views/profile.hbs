@@ -28,16 +28,21 @@
             </div>
 
             <div class="flex-1 p-2 m-2 mt-0 w-full flex flex-col">
-                <div tabindex="0" onclick="showContent('profile')"
-                    class="p-5 mb-4 text-lg cursor-default top-0 select-none focus:bg-[#36802d] focus:text-white">
-                    Public profile </div>
-                <div tabindex="0" onclick="showContent('account')"
-                    class="p-5 mb-4 text-lg cursor-default select-none focus:bg-[#36802d] focus:text-white">
-                    Account </div>
-                <div tabindex="0" onclick="showContent('bookingHistory')"
-                    class="p-5 mb-4 text-lg cursor-default select-none focus:bg-[#36802d] focus:text-white">
-                    History Booking </div>
+                <div tabindex="0" id="profileTab" onclick="showContent('profile')"
+                    class="p-5 mb-4 text-lg cursor-default top-0 select-none">
+                    <i class="fa fa-user mr-2"></i> Public profile
+                </div>
+                <div tabindex="0" id="accountTab" onclick="showContent('account')"
+                    class="p-5 mb-4 text-lg cursor-default select-none">
+                    <i class="fa fa-cogs mr-2"></i> Account
+                </div>
+                <div tabindex="0" id="bookingHistoryTab" onclick="showContent('bookingHistory')"
+                    class="p-5 mb-4 text-lg cursor-default select-none">
+                    <i class="fa fa-history mr-2"></i> History Booking
+                </div>
             </div>
+
+
         </div>
 
         <!-- Giữ nguyên kích thước và tránh bị đẩy xuống -->

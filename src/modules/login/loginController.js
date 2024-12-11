@@ -1,6 +1,7 @@
 const passport = require("../../config/passportConfig");
 const loginService = require("./loginService");
 const cartService = require("../cart/cartService");
+const userService = require("../user/userService");
 require('dotenv').config();
 const { getDeviceId } = require("../../utils/deviceID")
 
@@ -25,11 +26,12 @@ class loginController {
             try {
                 let countItem = 0;
                 if (user.roleId === 2) {
+                    const touristId = await userService.getTouristId(user.userId);
                     const cartDataArray = req.body.cartDataArray;
                     if (cartDataArray.length > 0) {
-                        await cartService.syncCartWithDB(user.userId, cartDataArray);
+                        await cartService.syncCartWithDB(touristId, cartDataArray);
                     }
-                    countItem = await cartService.getItemCountsOfUserCart(user.userId);
+                    countItem = await cartService.getItemCountsOfUserCart(touristId);
                 }
                 else {
 

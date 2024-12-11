@@ -59,17 +59,21 @@
                 </button>
 
                 <ul id="registeredUser_menu"
-                    class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 shadow-lg z-10 hidden">
+                    class="absolute right-0 mt-2 w-56 bg-white border border-gray-300 shadow-lg z-10 hidden text-left flex flex-col">
                     <li>
-                        <a href="/user" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Your Information</a>
+                        <a href="/user" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                            <i class="fa fa-user mr-2"></i> Your Information
+                        </a>
                     </li>
                     <li>
                         <form id="logoutForm" action="/logout" method="POST" style="display: inline;">
-                            <button type="submit"
-                                class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</button>
+                            <button type="submit" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-left">
+                                <i class="fa fa-sign-out-alt mr-2"></i> Logout
+                            </button>
                         </form>
                     </li>
                 </ul>
+
             </li>
 
             {{else}}

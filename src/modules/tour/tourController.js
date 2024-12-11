@@ -1,21 +1,21 @@
-const Tour = require('./tourModel');
-const tourController = {
+// tourController.js
+const tourService = require('./tourService');
 
-    getAllToursAPI: async (req, res) => {
+class tourController {
+    static async getAllToursAPI(req, res) {
         try {
             const { page, query = 'default', location = ['default'], rate = [-1], price = [-1], voucher = [-1] } = req.query;
-            const allTours = await Tour.getTours(page, query, location, rate, price, voucher);
-
-            res.json(allTours);  // Trả về HTML
+            const allTours = await tourService.getTours(page, query, location, rate, price, voucher);
+            res.json(allTours); // Trả về HTML
         } catch (err) {
             res.status(500).json({ success: false, error: err.message });
         }
-    },
+    }
 
-    getAllTours: async (req, res) => {
+    static async getAllTours(req, res) {
         try {
             const { page, query = 'default', location = ['default'], rate = [-1], price = [-1], voucher = [-1] } = req.query;
-            const allTours = await Tour.getTours(page, query, location, rate, price, voucher);
+            const allTours = await tourService.getTours(page, query, location, rate, price, voucher);
             res.render('tours', {
                 layout: 'main',
                 location_name: 'Popular',
@@ -27,14 +27,14 @@ const tourController = {
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
-    },
+    }
 
-    renderTourByID: async (req, res) => {
-        const { tour_id } = req.params
+    static async renderTourByID(req, res) {
+        const { tour_id } = req.params;
         try {
             const [tour, related] = await Promise.all([
-                Tour.getTourByID(tour_id),
-                Tour.getToursByIDLocation(tour_id)
+                tourService.getTourByID(tour_id),
+                tourService.getToursByIDLocation(tour_id)
             ]);
             res.render('tour_detail', {
                 layout: 'main',
@@ -42,13 +42,10 @@ const tourController = {
                 related,
                 title: tour.brief,
             });
-
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
     }
-
-
-};
+}
 
 module.exports = tourController;

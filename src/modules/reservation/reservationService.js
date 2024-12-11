@@ -5,19 +5,6 @@ const { format, parse } = require('date-fns');
 const { vi } = require('date-fns/locale');
 
 
-function handleDateFormat(tourDate) {
-    // Kiểm tra xem tourDate có phải là định dạng yyyy-MM-dd không
-    const isValidISODate = /^\d{4}-\d{2}-\d{2}$/.test(tourDate);
-
-    if (isValidISODate) {
-        // Nếu là yyyy-MM-dd, chỉ cần tạo đối tượng Date trực tiếp
-        return new Date(tourDate);
-    } else {
-        // Nếu là dd-MM-yyyy, phải chuyển đổi sang yyyy-MM-dd trước
-        const parsedDate = parse(tourDate, 'dd-MM-yyyy', new Date());
-        return parsedDate;
-    }
-}
 
 class reservationService {
     static calculateInvoice(reservationDataArray) {
@@ -52,7 +39,6 @@ class reservationService {
                 const { tourId, scheduleId, quantity, prices, title, tourDate, voucher } = data;
 
                 const total_price = prices * (voucher / 100) * quantity;
-                const parsedDate = handleDateFormat(tourDate);
 
                 await reservationModel.insertReservationDetail(
                     reservationId,
@@ -61,7 +47,7 @@ class reservationService {
                     quantity,
                     total_price,
                     title,
-                    parsedDate
+                    tourDate
                 );
             }
             await client.query('COMMIT');
