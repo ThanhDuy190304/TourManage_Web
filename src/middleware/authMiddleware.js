@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const { refreshAccessToken } = require('../modules/auth/authController');
-
 require('dotenv').config();
 
 /**
@@ -15,25 +14,42 @@ async function authenticateToken(req, res, next) {
             const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             res.locals.user = decoded;
             if (res.locals.user.userRole === 1) {
-                return res.redirect('/admin');
+                return res.redirect('/admin'); // Kết thúc ở đây nếu redirect
             }
-
             return next();
         } catch (err) {
-            console.log(err.message);
-            res.clearCookie(process.env.ACCESS_TOKEN_NAME, { httpOnly: true, path: '/' });
+            console.log('Access token expired, trying to refresh:', err.message);
+            if (refreshToken) {
+                try {
+                    await refreshAccessToken(req, res, next);
+                    return;
+                } catch (refreshErr) {
+                    console.log("Error refreshing token:", refreshErr.message);
+                }
+            }
+            res.locals.user = null;
+            res.clearCookie(process.env.ACCESS_TOKEN_NAME, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Strict',
+            });
         }
     }
 
-    if (refreshToken) {
-        res.locals.user = null;
-        await refreshAccessToken(req, res, next);
-
-    } else {
-        res.locals.user = null;
-        return next();
+    if (!res.locals.user && refreshToken) {
+        try {
+            await refreshAccessToken(req, res, next);
+            return;
+        } catch (refreshErr) {
+            console.log("Error refreshing token:", refreshErr.message);
+        }
     }
+
+    // Nếu không có accessToken hoặc refreshToken hoặc tất cả đều thất bại
+    res.locals.user = null;
+    return next();
 }
+
 
 
 /**
@@ -41,7 +57,7 @@ async function authenticateToken(req, res, next) {
  */
 function requireAuth(req, res, next) {
     if (!res.locals.user) {
-        return res.redirect('/login');
+        return next(new AppError('Unauthorized access', 401));
     }
     next();
 }

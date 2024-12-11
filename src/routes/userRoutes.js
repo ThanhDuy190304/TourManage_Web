@@ -1,4 +1,6 @@
 const express = require('express');
+const userController = require('../modules/user/userController');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -9,9 +11,6 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/editProfile', (req, res) => {
-    res.render('editProfile', {
-        layout: false,
-    });
-});
+router.get('/api/getProfile', userController.getUserProfile);
+router.get('/api/getBookingHistory', userController.getUserBookingHistory);
 module.exports = router;

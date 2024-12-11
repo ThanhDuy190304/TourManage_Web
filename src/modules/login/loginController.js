@@ -23,12 +23,17 @@ class loginController {
                 });
             }
             try {
-
-                const cartDataArray = req.body.cartDataArray;
-                if (cartDataArray.length > 0) {
-                    await cartService.syncCartWithDB(user.userId, cartDataArray);
+                let countItem = 0;
+                if (user.roleId === 2) {
+                    const cartDataArray = req.body.cartDataArray;
+                    if (cartDataArray.length > 0) {
+                        await cartService.syncCartWithDB(user.userId, cartDataArray);
+                    }
+                    countItem = await cartService.getItemCountsOfUserCart(user.userId);
                 }
-                let countItem = await cartService.getItemCountsOfUserCart(user.userId);
+                else {
+
+                }
 
                 const userAgent = req.headers['user-agent']; // Lấy thông tin user-agent từ headers
                 const deviceId = getDeviceId(userAgent);
@@ -36,10 +41,10 @@ class loginController {
                 const { accessToken, refreshToken } = await loginService.authenticateUser(user.userId, user.userName, user.roleId, deviceId);
 
                 res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, {
-                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict'
+                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Lax'
                 });
                 res.cookie(process.env.REFRESH_TOKEN_NAME, refreshToken, {
-                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict'
+                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Lax'
                 });
 
                 return res.status(200).json({

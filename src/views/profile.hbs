@@ -1,5 +1,3 @@
-{{!-- Sử dụng layout "main" --}}
-
 <main id="MyProfile" class="divide-y">
     <section id="titleProfile" class="mx-8 my-4 bg-white">
         <h3 class="mb-2">My profile</h3>
@@ -32,15 +30,19 @@
             <div class="flex-1 p-2 m-2 mt-0 w-full flex flex-col">
                 <div tabindex="0" onclick="showContent('profile')"
                     class="p-5 mb-4 text-lg cursor-default top-0 select-none focus:bg-[#36802d] focus:text-white">
-                    Edit Information </div>
-                {{!-- <div tabindex="0" onclick="showContent('booking')"
+                    Public profile </div>
+                <div tabindex="0" onclick="showContent('account')"
                     class="p-5 mb-4 text-lg cursor-default select-none focus:bg-[#36802d] focus:text-white">
-                    Order History </div> --}}
+                    Account </div>
+                <div tabindex="0" onclick="showContent('bookingHistory')"
+                    class="p-5 mb-4 text-lg cursor-default select-none focus:bg-[#36802d] focus:text-white">
+                    History Booking </div>
             </div>
-
         </div>
-        <div id="contentProfile" class="flex-[7] bg-white border border-green-900 "></div>
 
+        <!-- Giữ nguyên kích thước và tránh bị đẩy xuống -->
+        <div id="infoContainer"
+            class="flex-[7] bg-white border border-green-900 overflow-auto max-h-[calc(100vh-80px)]"></div>
     </section>
 </main>
 

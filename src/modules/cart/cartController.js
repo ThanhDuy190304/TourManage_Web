@@ -1,5 +1,5 @@
 const cartService = require("./cartService");
-
+const userService = require('../user/userService');
 class CartController {
     static async addToCart(req, res) {
         try {
@@ -12,8 +12,9 @@ class CartController {
                 });
             }
             else {
-                await cartService.addTourToUserCart(user.userId, tourId, scheduleId, quantity);
-                let count = String(await cartService.getItemCountsOfUserCart(user.userId));
+                let touristId = await userService.getTouristId(user.userId);
+                await cartService.addTourToUserCart(touristId, tourId, scheduleId, quantity);
+                let count = String(await cartService.getItemCountsOfUserCart(touristId));
                 return res.status(200).json({ success: true, count: count });
             }
 
@@ -40,7 +41,8 @@ class CartController {
                 });
 
             } else {
-                let cartItems = await cartService.getUserCartItems(user.userId);
+                let touristId = await userService.getTouristId(user.userId);
+                let cartItems = await cartService.getUserCartItems(touristId);
                 res.render('shoppingCart', {
                     layout: 'main',
                     cartItems: cartItems,
@@ -66,7 +68,8 @@ class CartController {
                 let cartItems = await cartService.getCartItems(cartDataArray);
                 return res.json(cartItems);
             } else {
-                let cartItems = await cartService.getUserCartItems(user.userId) || [];
+                let touristId = await userService.getTouristId(user.userId);
+                let cartItems = await cartService.getUserCartItems(touristId) || [];
                 return res.json(cartItems);
             }
         } catch (error) {
@@ -86,8 +89,9 @@ class CartController {
                     success: true,
                 });
             } else {
-                await cartService.changeQuantityCartItems(user.userId, tourId, scheduleId, quantity);
-                return res.status(200).json({ success: true});
+                let touristId = await userService.getTouristId(user.userId);
+                await cartService.changeQuantityCartItems(touristId, tourId, scheduleId, quantity);
+                return res.status(200).json({ success: true });
             }
 
         } catch (error) {
@@ -101,14 +105,15 @@ class CartController {
     static async deleteCartItems(req, res) {
         try {
             const user = res.locals.user;
-            const { tourId, scheduleId} = req.body;
+            const { tourId, scheduleId } = req.body;
             if (!user) {
                 return res.status(401).json({
                     success: true,
                 });
             } else {
-                await cartService.deleteCartItems(user.userId, tourId, scheduleId);
-                return res.status(200).json({ success: true});
+                let touristId = await userService.getTouristId(user.userId);
+                await cartService.deleteCartItems(touristId, tourId, scheduleId);
+                return res.status(200).json({ success: true });
             }
 
         } catch (error) {

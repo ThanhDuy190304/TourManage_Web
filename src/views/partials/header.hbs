@@ -40,7 +40,7 @@
             <form action="/cart" method="GET" id="cartForm" class="relative">
                 <input type="hidden" name="cartDataArray" id="cartDataArrayInput">
                 <button type="submit" class="relative bg-transparent border-none">
-                    <i class="fa-solid fa-cart-shopping text-white text-3xl"></i>
+                    <span class="fas fa-solid fa-cart-shopping text-white text-3xl"></span>
                     <span id="cartCount"
                         class="absolute top-0 right-0 transform translate-x-1/2 translate-y-1/2 bg-green-600 text-white text-xs rounded-full px-2 py-1"></span>
                 </button>
@@ -61,7 +61,7 @@
                 <ul id="registeredUser_menu"
                     class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 shadow-lg z-10 hidden">
                     <li>
-                        <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Information</a>
+                        <a href="/user" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Your Information</a>
                     </li>
                     <li>
                         <form id="logoutForm" action="/logout" method="POST" style="display: inline;">

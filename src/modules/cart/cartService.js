@@ -1,11 +1,13 @@
 const cartModel = require('./cartModel');
 const tourModel = require(`../tour/tourModel`);
-const userModel = require(`../user/userModel`);
+
+const { format } = require('date-fns');
+const { vi } = require('date-fns/locale');
+
 class CartService {
 
-    static async addTourToUserCart(userId, tourId, scheduleId, quantity) {
+    static async addTourToUserCart(touristId, tourId, scheduleId, quantity) {
         try {
-            let touristId = await userModel.getTouristId(userId);
             let cartId = await cartModel.getCartId(touristId);
             let checkExistsCartItem = await cartModel.checkExistsCartItem(cartId, tourId, scheduleId);
             if (checkExistsCartItem) {
@@ -19,9 +21,8 @@ class CartService {
         }
     }
 
-    static async getItemCountsOfUserCart(userId) {
+    static async getItemCountsOfUserCart(touristId) {
         try {
-            let touristId = await userModel.getTouristId(userId);
             let cartId = await cartModel.getCartId(touristId);
             let count = await cartModel.getItemCounts(cartId);
             return count;
@@ -31,9 +32,8 @@ class CartService {
         }
 
     }
-    static async syncCartWithDB(userId, cartDataArray) {
+    static async syncCartWithDB(touristId, cartDataArray) {
         try {
-            let touristId = await userModel.getTouristId(userId);
             let cartId = await cartModel.getCartId(touristId);
 
             for (let item of cartDataArray) {
@@ -54,21 +54,16 @@ class CartService {
         }
     }
 
-    static async getUserCartItems(userId) {
+    static async getUserCartItems(touristId) {
         try {
-            let touristId = await userModel.getTouristId(userId);
             let cartId = await cartModel.getCartId(touristId);
             let cartItems = await cartModel.getCartItems(cartId);
 
-            if(cartItems==null) return [];
+            if (cartItems == null) return [];
 
             cartItems = cartItems.map(item => {
                 if (item.tourDate) {
-                    item.tourDate = new Date(item.tourDate).toLocaleDateString('vi-VN', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                    });
+                    item.tourDate = format(new Date(item.tourDate), 'dd-MM-yyyy', { locale: vi });
                 }
                 return item;
             });
@@ -87,11 +82,9 @@ class CartService {
         const cartPromises = cartDataArray.map(async (item) => {
             const { tourId, scheduleId } = item;
             const tourDetail = await tourModel.getTourScheduleDetail(tourId, scheduleId);
-            const formattedTourDate = tourDetail.tourDate ? new Date(tourDetail.tourDate).toLocaleDateString('vi-VN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }) : null;
+            const formattedTourDate = tourDetail.tourDate ?
+                format(new Date(tourDetail.tourDate), 'dd-MM-yyyy', { locale: vi }) : null;
+
             return {
                 ...item, // Thêm các thuộc tính từ cartDataArray vào kết quả
                 ...tourDetail,// Thêm các chi tiết tour từ phương thức getTourScheduleDetail
@@ -103,9 +96,8 @@ class CartService {
         return cartItemsWithDetails;
     }
 
-    static async changeQuantityCartItems(userId, tourId, scheduleId, quantity) {
+    static async changeQuantityCartItems(touristId, tourId, scheduleId, quantity) {
         try {
-            let touristId = await userModel.getTouristId(userId);
             let cartId = await cartModel.getCartId(touristId);
 
             let checkExistsCartItem = await cartModel.checkExistsCartItem(cartId, tourId, scheduleId);
@@ -120,9 +112,8 @@ class CartService {
         }
     }
 
-    static async deleteCartItems(userId, tourId, scheduleId) {
+    static async deleteCartItems(touristId, tourId, scheduleId) {
         try {
-            let touristId = await userModel.getTouristId(userId);
             let cartId = await cartModel.getCartId(touristId);
 
             let checkExistsCartItem = await cartModel.checkExistsCartItem(cartId, tourId, scheduleId);

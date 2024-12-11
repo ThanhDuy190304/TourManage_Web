@@ -27,8 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleSearch() {
         const query = searchInput.value.trim(); // Lấy giá trị từ input và loại bỏ khoảng trắng dư thừa
         if (query) {
-            // Nếu có giá trị tìm kiếm, chuyển hướng đến trang với query string
-            console.log(query);
+
             window.location.href = `/tours?query=${encodeURIComponent(query)}`;
         } else {
             // Nếu không có giá trị tìm kiếm, có thể hiển thị cảnh báo hoặc không làm gì

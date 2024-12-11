@@ -67,6 +67,9 @@ class UserModel {
         }
     }
 
+    static async getTouristHistoryBooking(touristId) {
+
+    }
 }
 
 module.exports = UserModel;

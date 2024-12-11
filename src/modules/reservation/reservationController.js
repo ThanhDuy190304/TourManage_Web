@@ -1,5 +1,5 @@
 const reservationService = require('./reservationService');
-const userModel = require('../user/userModel');
+const userService = require('../user/userService');
 
 class reservationController {
     static async showInvoices(req, res) {
@@ -12,7 +12,7 @@ class reservationController {
 
             // Lấy thông tin người dùng nếu có userId
             if (user) {
-                userProfile = await userModel.getProfileUser(user.userId);
+                userProfile = await userService.getPublicProfile(user.userId);
             }
 
             // Tính toán invoice bằng service
@@ -28,12 +28,7 @@ class reservationController {
             });
 
         } catch (error) {
-            // Log lỗi chi tiết
-            console.error("Error in showInvoices:", error);
-            // Trả về lỗi chung cho người dùng
-            return res.status(500).json({
-                message: 'Order error, please try again.'
-            });
+            return next(new AppError("Order error, please try again.", 500));
         }
     }
 
@@ -45,15 +40,13 @@ class reservationController {
             }
             const { reservationDataArray } = req.body;
             let reservationArray = Array.isArray(reservationDataArray) ? reservationDataArray : JSON.parse(reservationDataArray);
-            await reservationService.confirmReservation(user.userId, reservationArray);
+            let touristId = await userService.getTouristId(user.userId);
+            await reservationService.confirmReservation(touristId, reservationArray);
             res.render('reservationSucessfully', {
                 layout: false
             });
         } catch (error) {
-            console.error("Error in confirmReservation:", error);
-            return res.status(500).json({
-                message: 'Order error, please try again.'
-            });
+            return next(new AppError("Order error, please try again.", 500));
         }
     }
 }

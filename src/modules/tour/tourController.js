@@ -1,5 +1,4 @@
 const Tour = require('./tourModel');
-const CTour = require('./Ctour');
 const tourController = {
 
     getAllToursAPI: async (req, res) => {

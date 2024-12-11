@@ -159,9 +159,9 @@ async function handleAddToCart(tourId, scheduleId, quantity) {
 
         if (response.status === 200 && data.success) {
             document.getElementById('cartCount').innerText = data.count.toString();
+            localStorage.setItem('countCartItem', data.count.toString());
         } else if (response.status === 401) {
             let cartDataArray = JSON.parse(localStorage.getItem('cartDataArray')) || [];
-            console.log(1);
             const existingItem = cartDataArray.find(item => item.tourId === tourId && item.scheduleId === scheduleId);
 
             if (existingItem) {

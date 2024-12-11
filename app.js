@@ -25,7 +25,7 @@ const registerRoutes = require('./src/routes/registerRoutes'); // Điều hướ
 const loginRoutes = require('./src/routes/loginRoutes'); // Điều hướng đến đăng nhập
 const logoutRoute = require('./src/routes/logoutRoutes'); // Điều hướng đăng xuất
 const verifyRoutes = require('./src/routes/verifyRoutes'); // Điều hướng xác nhận email
-const profileRoutes = require('./src/routes/profileRoutes'); // Điều hướng đén thông tin cá nhân
+const userRoutes = require('./src/routes/userRoutes'); // Điều hướng đén thông tin cá nhân
 const reservationRoutes = require('./src/routes/reservationRoutes'); // Điều hướng đến trang đặt chỗ
 const cartRoutes = require('./src/routes/cartRoutes'); // Điều hướng đén trang giỏ hàng
 
@@ -57,11 +57,12 @@ app.use('/logout', requireAuth, logoutRoute);
 
 app.use('/verify', checkout, verifyRoutes);
 
-app.use('/profile', requireAuth, profileRoutes);
+app.use('/user', requireAuth, userRoutes);
 
 app.use('/reservation', reservationRoutes);
 
 app.use('/cart', cartRoutes);
+
 
 
 app.listen(PORT, () => {

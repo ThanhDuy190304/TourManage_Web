@@ -3,7 +3,7 @@
  * @returns { Promise<void> }
  */
 exports.up = async function (knex) {
-    return await knex.raw(`
+  return await knex.raw(`
     -- Tạo trigger function để cập nhật items_count trong bảng carts khi có sự thay đổi trong cart_items
     CREATE OR REPLACE FUNCTION update_cart_item_count()
     RETURNS TRIGGER AS $$
@@ -40,7 +40,7 @@ exports.up = async function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = async function (knex) {
-    return await knex.raw(`
+  return await knex.raw(`
     -- Xóa trigger và trigger function nếu cần rollback migration
     DROP TRIGGER IF EXISTS update_cart_item_count_trigger ON cart_items;
     DROP FUNCTION IF EXISTS update_cart_item_count;
