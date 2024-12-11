@@ -1,0 +1,81 @@
+<main class="my-8 shadow-xl	">
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-4xl font-semibold text-green-900 mb-6">INVOICE</h2>
+
+        <!-- Customer Information Section -->
+        <div class="mb-6 text-sm text-gray-700 space-y-4">
+            <p><strong>Customer Name:</strong> {{#if
+                userProfile.user_fullname}}{{userProfile.user_fullname}}{{else}}Name not
+                updated{{/if}}</p>
+            <p><strong>Contact:</strong> {{#if userProfile.user_contact}}{{userProfile.user_contact}}{{else}}Contact
+                info not
+                updated{{/if}}</p>
+            <p><strong>Email:</strong> {{#if userProfile.email}}{{userProfile.email}}{{else}}Email not updated{{/if}}
+            </p>
+            <p><strong>Date:</strong> {{invoiceDate}}</p>
+        </div>
+
+        <table class="min-w-full">
+            <colgroup>
+                <col class="w-full sm:w-1/4">
+                <col class="sm:w-1/6">
+                <col class="sm:w-1/6">
+                <col class="sm:w-1/6">
+                <col class="sm:w-1/6">
+            </colgroup>
+            <thead class="border-b border-green-900"> <!-- Changed to border-green-900 -->
+                <tr>
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-green-900 sm:pl-0">
+                        TOUR NAME</th>
+                    <th scope="col"
+                        class="hidden px-3 py-3.5 text-center text-sm font-semibold text-green-900 sm:table-cell">
+                        QUANTITY</th>
+                    <th scope="col"
+                        class="hidden px-3 py-3.5 text-center text-sm font-semibold text-green-900 sm:table-cell">
+                        PRICE
+                    </th>
+                    <th scope="col"
+                        class="hidden px-3 py-3.5 text-center text-sm font-semibold text-green-900 sm:table-cell">
+                        VOUCHER
+                    </th>
+                    <th scope="col" class="py-3.5 pl-3 pr-4 text-center text-sm font-semibold text-green-900 sm:pr-0">
+                        AMOUNT</th>
+                </tr>
+            </thead>
+            <tbody id="invoice-items">
+                {{#each invoiceItems}}
+                <tr class="border-b border-green-700">
+                    <td class="max-w-0 py-2 pl-4 pr-3 text-sm sm:pl-0">
+                        <div class="font-medium text-gray-900">{{this.tourName}}</div>
+                        <div class="mt-1 truncate text-gray-500">Tour Date: {{this.tourDate}}</div>
+                    </td>
+                    <td class="hidden px-3 py-5 text-center text-sm text-gray-500 sm:table-cell">{{this.quantity}}</td>
+                    <td class="hidden px-3 py-5 text-center text-sm text-gray-500 sm:table-cell">${{this.price}}</td>
+                    <td class="hidden px-3 py-5 text-center text-sm text-gray-500 sm:table-cell">{{this.voucher}}%</td>
+                    <td class="py-5 pl-3 pr-4 text-center text-sm text-gray-500 sm:pr-0">${{this.amountAfterVoucher}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row" colspan="4"
+                        class="hidden px-3 py-5 text-right text-sm font-semibold text-green-900 sm:table-cell sm:px-3">
+                        TOTAL
+                    </th>
+                    <td id="total" class="px-3 py-5 text-center text-sm font-semibold text-gray-900">{{total}}</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="text-right mt-6 mx-4">
+            <button id="confirmButton"
+                class="px-6 py-4 bg-green-900 text-white text-lg font-semibold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-900">
+                Confirm
+            </button>
+        </div>
+
+    </div>
+
+</main>
+
+<script src="/js/reservation.js"></script>

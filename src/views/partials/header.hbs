@@ -18,7 +18,7 @@
             <li><a href="/about"
                     class="transition-transform duration-200 transform hover:scale-110 hover:font-bold hover:text-green-700">About
                     Us</a></li>
-            <li><a href="/tours"
+            <li><a href="/tours?page=1"
                     class="transition-transform duration-200 transform hover:scale-110 hover:font-bold hover:text-green-700">Tours</a>
             </li>
             <li><a href="/contact"
@@ -37,11 +37,20 @@
                 </div>
             </li>
 
+            <form action="/cart" method="GET" id="cartForm" class="relative">
+                <input type="hidden" name="cartDataArray" id="cartDataArrayInput">
+                <button type="submit" class="relative bg-transparent border-none">
+                    <span class="fas fa-solid fa-cart-shopping text-white text-3xl"></span>
+                    <span id="cartCount"
+                        class="absolute top-0 right-0 transform translate-x-1/2 translate-y-1/2 bg-green-600 text-white text-xs rounded-full px-2 py-1"></span>
+                </button>
+            </form>
+
             {{#if user}}
             <!-- User button and dropdown -->
             <li class="relative">
                 <button id="registeredUser_btn" class="text-white text-base flex items-center focus:outline-none">
-                    <span class="hidden lg:block">{{user.user_name}}</span>
+                    <span class="hidden lg:block">{{user.userName}}</span>
                     <img src="/img/user-icon.png" class="ml-2 w-8 h-8 rounded-full border-none">
                     <svg class="ml-2 w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -50,14 +59,21 @@
                 </button>
 
                 <ul id="registeredUser_menu"
-                    class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 shadow-lg z-10 hidden">
+                    class="absolute right-0 mt-2 w-56 bg-white border border-gray-300 shadow-lg z-10 hidden text-left flex flex-col">
                     <li>
-                        <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Information</a>
+                        <a href="/user" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                            <i class="fa fa-user mr-2"></i> Your Information
+                        </a>
                     </li>
                     <li>
-                        <a href="/logout" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                        <form id="logoutForm" action="/logout" method="POST" style="display: inline;">
+                            <button type="submit" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 text-left">
+                                <i class="fa fa-sign-out-alt mr-2"></i> Logout
+                            </button>
+                        </form>
                     </li>
                 </ul>
+
             </li>
 
             {{else}}
@@ -70,9 +86,6 @@
             {{/if}}
 
         </ul>
-
-
-
 
     </nav>
 </header>

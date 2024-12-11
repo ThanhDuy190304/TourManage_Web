@@ -27,15 +27,15 @@ passport.use(
                 }
 
                 // Kiểm tra mật khẩu
-                const hashedPassword = hashPassword(password, user.getSalt());
-                if (hashedPassword !== user.getHashPassword()) {
+                const hashedPassword = hashPassword(password, user.salt);
+                if (hashedPassword !== user.userPassword) {
                     return done(null, false, { message: 'Invalid username/email or password.' });
                 }
 
                 // Nếu xác thực thành công
-
                 return done(null, user);
             } catch (error) {
+                console.error('Error during authentication:', error);
                 return done(error);
             }
         }

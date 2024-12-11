@@ -1,5 +1,5 @@
 <section class="my-16" id="listTour">
-    <div class="mb-8 mx-4 sm:mx-8 md:mx-16"  id="divide">
+    <div class="mb-8 mx-4 sm:mx-8 md:mx-16" id="divide">
         <div class="w-full ">
             <h2 class="text-3xl sm:text-4xl md:text-6xl font-semibold mb-4">{{location_name}}</h2>
             <p class="text-base sm:text-lg font-medium text-gray-600 mb-8">{{loc_detail}}</p>
@@ -229,46 +229,52 @@
 
         <div class="basis-4/6">
             <div id="showTours" class="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-6 mx-0 md:mx-8">
-                {{!-- {{#each allTours}}
-                <a href="/tours/tour_detail/{{this.tour_id}}/{{this.location_id}}" class="w-80 md:w-96 lg:w-80 mx-auto">
-                    <div
-                        class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 md:w-96 lg:w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105 mx-auto">
-                        <div>
-                            <!-- Giảm kích thước hình ảnh -->
-                            <img src="{{this.img_url}}" alt="" class="img w-full h-36 object-cover">
-                            <div class="p-4">
-                                <div class="flex justify-between mt-4 h-16">
-                                    <h3 class="name text-lg font-semibold">{{this.title}}</h3>
-                                    <p class="price text-gray-600">${{this.prices}}</p>
+                {{#each allTours}}
+                    <a href="/tours/{{tour_id}}" class="w-80 md:w-96 lg:w-80 mx-auto">
+                        <div
+                            class="flex flex-col justify-between bg-white rounded-lg shadow-lg overflow-hidden w-80 md:w-96 lg:w-80 h-96 tour transition-transform duration-300 ease-in-out hover:scale-105 mx-auto">
+                            <div>
+                                <!-- Giảm kích thước hình ảnh -->
+                                <img src="{{img_url}}" alt="" class="img w-full h-36 object-cover">
+                                <div class="p-4">
+                                    <div class="flex justify-between mt-4 h-16">
+                                        <h3 class="name text-lg font-semibold">{{title}}</h3>
+                                        <p class="price text-gray-600">${{prices}}</p>
+                                    </div>
+                                    <p class="text-gray-600 w-full overflow-hidden text-ellipsis line-clamp-2">
+                                    {{brief}}
+                                    </p>
                                 </div>
-                                <p class="text-gray-600 w-full overflow-hidden text-ellipsis line-clamp-2">
-                                    {{this.brief}}
-                                </p>
+                            </div>
+                            <div class="flex justify-between px-4">
+                                <div class="flex">
+                                    <i class="fa-solid fa-star text-yellow-500"></i>
+                                    <i class="fa-solid fa-star text-yellow-500"></i>
+                                    <i class="fa-solid fa-star text-yellow-500"></i>
+                                    <i class="fa-solid fa-star text-yellow-500"></i>
+                                    <i class="fa-solid fa-star text-yellow-500"></i>
+                                </div>
+                                <button type="button"
+                                    class="self-end mb-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
+                                    value="{{tour_id}}" onclick="StoreId(this)">View
+                                    Detail</button>
                             </div>
                         </div>
-                        <div class="flex justify-between px-4">
-                            <div class="flex">
-                                <i class="fa-solid fa-star text-yellow-500"></i>
-                                <i class="fa-solid fa-star text-yellow-500"></i>
-                                <i class="fa-solid fa-star text-yellow-500"></i>
-                                <i class="fa-solid fa-star text-yellow-500"></i>
-                                <i class="fa-solid fa-star text-yellow-500"></i>
-                            </div>
-                            <button type="button"
-                                class="self-end mb-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-950 btn"
-                                value="{{this.tour_id}}" data-name="{{this.location_id}}" onclick="StoreId(this)">View
-                                Detail</button>
-                        </div>
-                    </div>
-                </a>
-                {{/each}} --}}
+                    </a>
+                {{/each}}
             </div>
-            <div class="pagination flex col-start-1 max-h-10 mt-4 px-8 ">
+            <div value={{totalPages}} class="pagination flex col-start-1 max-h-10 mt-4 px-8 ">
                 <button id="prev-page" onclick="prevPage()">Previous</button>
-                <div id="pageNumbers"></div> <!-- Container for page number buttons -->
+                <div id="pageNumbers">
+                    {{#times totalPages}}
+                        <button>{{this}}</button>
+                    {{/times}}
+                </div>
                 <button id="next-page" onclick="nextPage()">Next</button>
             </div>
         </div>
     </div>
 
 </section>
+
+<script src="/js/tours.js"></script>

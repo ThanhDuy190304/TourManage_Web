@@ -1,19 +1,16 @@
 const express = require('express');
+const userController = require('../modules/user/userController');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
     res.render('profile', {
         layout: 'main',
         title: 'Profile page',
-        scripts: '<script src="/js/profile.js"></script>',
-
     });
 });
 
 
-router.get('/editProfile', (req, res) => {
-    res.render('editProfile', {
-        layout: false,
-    });
-});
+router.get('/api/getProfile', userController.getUserProfile);
+router.get('/api/getBookingHistory', userController.getUserBookingHistory);
 module.exports = router;

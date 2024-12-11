@@ -1,31 +1,39 @@
-const registerModel = require('./registerModel');
-const { generateSalt, hashPassword } = require('../../utils/passwordUtils');
+const registerService = require('./registerService');
 
 class RegisterController {
     static async registerUser(req, res) {
         const { user_name, email, password, confirmPassword } = req.body;
 
+        // Kiểm tra xem mật khẩu và xác nhận mật khẩu có khớp không
         if (password !== confirmPassword) {
             return res.render('register', {
-                message: 'Confirmation password does not match', layout: false,
+                message: 'Confirmation password does not match!',
+                layout: false,
                 title: 'Register Page',
             });
         }
 
         try {
-            const salt = generateSalt();
-            const encryptedPassword = hashPassword(password, salt);
+            // Gọi service đăng ký
+            const result = await registerService.register(user_name, email, password);
 
-            await registerModel.registerUser(user_name, email, encryptedPassword, salt);
+            if (result.success) {
+                return res.render('register', {
+                    message: 'Registration successful, please check your email for verifying!',
+                    layout: false,
+                    title: 'Register Page',
+                });
+            }
 
-            res.render('register', {
-                message: 'Registration successful, please check your email for verifying',
+            return res.render('register', {
+                message: result.error,
                 layout: false,
                 title: 'Register Page',
             });
         } catch (error) {
+            // Nếu có lỗi không lường trước được
             return res.render('register', {
-                message: error.message || 'An unexpected error occurred. Please try again later.',
+                message: 'An unexpected error occurred. Please try again later!',
                 layout: false,
                 title: 'Register Page',
             });

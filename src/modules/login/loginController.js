@@ -1,7 +1,8 @@
-require('dotenv').config();
 const passport = require("../../config/passportConfig");
-const { generateAccessToken, generateRefreshToken } = require("../../utils/generateTokensUtils");
-const loginModel = require("./loginModel");
+const loginService = require("./loginService");
+const cartService = require("../cart/cartService");
+const userService = require("../user/userService");
+require('dotenv').config();
 const { getDeviceId } = require("../../utils/deviceID")
 
 
@@ -11,7 +12,8 @@ class loginController {
         // Sử dụng passport để xác thực người dùng
         passport.authenticate('local', { session: false }, async (err, user, info) => {
             if (err) {
-                return res.status(500).json({ message: 'Authentication failed.', error: err.message });
+                console.error("Error during authentication:", err.message);
+                return res.status(500).json({ message: 'Authentication failed. Please try again later.' });
             }
 
             if (!user) {
@@ -21,20 +23,40 @@ class loginController {
                     title: 'Login Page'
                 });
             }
-
             try {
-                const device_id = getDeviceId(req); // Lấy device_id từ request
+                let countItem = 0;
+                if (user.roleId === 2) {
+                    const touristId = await userService.getTouristId(user.userId);
+                    const cartDataArray = req.body.cartDataArray;
+                    if (cartDataArray.length > 0) {
+                        await cartService.syncCartWithDB(touristId, cartDataArray);
+                    }
+                    countItem = await cartService.getItemCountsOfUserCart(touristId);
+                }
+                else {
 
-                const accessToken = generateAccessToken(user.getId(), user.getUserName(), user.getRole(), device_id);
-                const refreshToken = generateRefreshToken(user.getId(), user.getUserName(), user.getRole(), device_id);
-                loginModel.saveRefreshToken(user.getId(), refreshToken, device_id);
+                }
 
-                res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-                res.cookie(process.env.REFRESH_TOKEN_NAME, refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-                res.redirect('/');
+                const userAgent = req.headers['user-agent']; // Lấy thông tin user-agent từ headers
+                const deviceId = getDeviceId(userAgent);
+
+                const { accessToken, refreshToken } = await loginService.authenticateUser(user.userId, user.userName, user.roleId, deviceId);
+
+                res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, {
+                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Lax'
+                });
+                res.cookie(process.env.REFRESH_TOKEN_NAME, refreshToken, {
+                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Lax'
+                });
+
+                return res.status(200).json({
+                    countItem: countItem,
+                });
+
 
             } catch (error) {
-                res.status(500).json({ message: 'Error creating tokens', error: error.message });
+                console.error("Error in loginController:", error.message); // In ra để debug
+                res.status(500).json({ message: 'Failed to log in. Please try again later.' });
             }
         })(req, res);
     }
