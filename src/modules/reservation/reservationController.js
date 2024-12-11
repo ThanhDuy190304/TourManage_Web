@@ -28,7 +28,9 @@ class reservationController {
             });
 
         } catch (error) {
-            return next(new AppError("Order error, please try again.", 500));
+            res.status(500).json({
+                message: "Order error, please try again."
+            });
         }
     }
 
@@ -46,7 +48,9 @@ class reservationController {
                 layout: false
             });
         } catch (error) {
-            return next(new AppError("Order error, please try again.", 500));
+            res.status(500).json({
+                message: "Order error, please try again."
+            });
         }
     }
 }
