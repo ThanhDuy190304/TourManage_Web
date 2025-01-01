@@ -185,19 +185,243 @@ async function handleAddToCart(tourId, scheduleId, quantity) {
     }
 }
 
-
-
-// Khởi tạo các xử lý khi DOM đã sẵn sàng
 document.addEventListener('DOMContentLoaded', () => {
-
     const bookTourButton = document.getElementById('bookTour');
     const addToCartButton = document.getElementById('addToCart');
 
     bookTourButton.addEventListener('click', () => {
-        initBookingDialog('booking'); // Gọi hàm initBookingDialog với chế độ 'booking'
+        initBookingDialog('booking');
     });
 
     addToCartButton.addEventListener('click', () => {
-        initBookingDialog('addToCart'); // Gọi hàm initBookingDialog với chế độ 'addToCart'
+        initBookingDialog('addToCart');
     });
+
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const reviewDialog = document.getElementById('reviewDialog');
+    const addReviewButton = document.getElementById('addReviewButton');
+    const closeReviewDialog = document.getElementById('closeReviewDialog');
+    const dialogReviewForm = document.getElementById('dialogReviewForm');
+    const ratingStarsContainer = document.getElementById('ratingStars');
+    const reviewsList = document.getElementById('reviewsList');
+
+    let selectedRating = 0;
+
+    // Tạo các ngôi sao đánh giá
+    function createRatingStars() {
+        ratingStarsContainer.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.className = 'text-2xl cursor-pointer';
+            star.innerHTML = '☆';
+            star.dataset.rating = i;
+            ratingStarsContainer.appendChild(star);
+
+            // Sự kiện chọn sao
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.dataset.rating, 10);
+                updateStarColors();
+            });
+        }
+    }
+
+    // Cập nhật màu sắc ngôi sao
+    function updateStarColors() {
+        const stars = ratingStarsContainer.querySelectorAll('span');
+        stars.forEach((star, index) => {
+            if (index < selectedRating) {
+                star.classList.add('text-yellow-500');
+                star.classList.remove('text-gray-300');
+                star.innerHTML = '★';
+            } else {
+                star.classList.add('text-gray-300');
+                star.classList.remove('text-yellow-500');
+                star.innerHTML = '☆';
+            }
+        });
+    }
+
+    // Mở dialog
+    addReviewButton.addEventListener('click', () => {
+        reviewDialog.classList.remove('hidden');
+        createRatingStars();
+    });
+
+    // Đóng dialog
+    closeReviewDialog.addEventListener('click', () => {
+        reviewDialog.classList.add('hidden');
+        dialogReviewForm.reset();
+        selectedRating = 0;
+        updateStarColors();
+    });
+
+    // Gửi review tới bảng feedbacks thông qua API
+    async function submitReviewToAPI(reviewData) {
+        console.log(reviewData)
+        try {
+            const response = await fetch('/user/createFeedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tourId: reviewData.tourId,
+                    comment: reviewData.comment,
+                    rating: reviewData.rating,
+                }),
+            });
+
+            if (response.ok) {
+                alert('Review submitted successfully!');
+                reviewDialog.classList.add('hidden'); // Ẩn hộp thoại sau khi gửi thành công
+                dialogReviewForm.reset(); // Reset form
+                selectedRating = 0; // Reset số sao
+                updateStarColors(); // Cập nhật lại màu sao
+                loadReviews(); // Làm mới danh sách review (nếu cần)
+            } else {
+                const error = await response.json();
+                alert(`Error: ${error.message || 'Failed to submit review'}`);
+            }
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            alert('An error occurred while submitting your review. Please try again later.');
+        }
+    }
+
+    // Xử lý form submit
+    dialogReviewForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const comment = document.getElementById('dialogReviewComment').value;
+
+        if (!comment || selectedRating === 0) {
+            alert('Please fill in all fields and select a rating.');
+            return;
+        }
+
+        const tourId = document.getElementById('detailed_tour').dataset.tourId;
+        console.log(tourId)
+        // Dữ liệu gửi lên API
+        const reviewData = {
+            tourId: tourId,
+            comment: comment,
+            rating: selectedRating,
+        };
+        // Gửi dữ liệu qua API
+        submitReviewToAPI(reviewData);
+    });
+
+    document.getElementById('starFilter').addEventListener('change', (e) => {
+        const starFilter = e.target.value;
+        loadReviews(1, 5, starFilter); // Reset về trang 1 khi lọc
+    });
+    function scrollToProductList() {
+        const productList = document.getElementById('feedback'); // Phần tử danh sách sản phẩm
+        if (productList) {
+            productList.scrollIntoView({ behavior: 'smooth' }); // Cuộn mượt mà đến phần tử
+        }
+    }
+    // Tải danh sách review
+    async function loadReviews(page = 1, pageSize = 5, starFilter = '') {
+        const tourId = document.getElementById('detailed_tour').dataset.tourId;
+        try {
+            // Fetch danh sách review từ API
+            const response = await fetch(`/feedback/api/getFeedbackByTourId/${tourId}?page=${page}&pageSize=${pageSize}&starFilter=${starFilter}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch reviews');
+            }
+
+            const reviews = await response.json();
+            console.log( reviews)
+            // Làm trống danh sách review cũ
+            reviewsList.innerHTML = '';
+            const totalReviews = reviews.feedbackList.total || 0;
+
+            if (reviews.feedbackList.feedbacks.length === 0) {
+                reviewsList.innerHTML = `<p class="text-gray-500">No reviews yet. Be the first to leave a review!</p>`;
+                return;
+            }
+            // Render danh sách review
+            reviews.feedbackList.feedbacks.forEach(review => {
+                const reviewItem = document.createElement('div');
+                reviewItem.classList.add('review-item', 'p-4', 'border', 'rounded', 'shadow-sm');
+
+                reviewItem.innerHTML = `
+                    <div class="flex items-center mb-2">
+                        ${renderStars(review.star)}
+                    </div>
+                    <p class="text-gray-700">${review.rate}</p>
+                    <span class="text-sm text-gray-500">By User ${review.user_name || 'Anonymous'}</span>
+                `;
+
+                reviewsList.appendChild(reviewItem);
+            });
+
+            renderPagination(page, pageSize, totalReviews, starFilter);
+            scrollToProductList()
+        } catch (error) {
+            console.error('Error loading reviews:', error);
+            reviewsList.innerHTML = `<p class="text-red-500">Failed to load reviews. Please try again later.</p>`;
+        }
+    }
+
+    function renderPagination(currentPage, pageSize, total, starFilter) {
+        console.log(currentPage, pageSize, total, starFilter)
+        const totalPages = Math.ceil(total / pageSize);
+        
+        // Lấy các phần tử DOM
+        const previousPageButton = document.getElementById('previousPage');
+        const nextPageButton = document.getElementById('nextPage');
+        const pageNumbersContainer = document.getElementById('pageNumbers');
+        
+        // Cập nhật trạng thái nút phân trang
+        previousPageButton.disabled = currentPage <= 1;
+        nextPageButton.disabled = currentPage >= totalPages;
+        
+        // Hiển thị các nút trang số
+        pageNumbersContainer.innerHTML = '';
+        
+        // Tạo các nút phân trang số, hạn chế chỉ hiển thị 5 nút xung quanh trang hiện tại (ví dụ: nếu có 10 trang, ta chỉ hiển thị 5 nút)
+        let startPage = Math.max(1, currentPage - 2);  // Hiển thị 2 trang trước
+        let endPage = Math.min(totalPages, currentPage + 2);  // Hiển thị 2 trang sau
+    
+        // Nếu trang hiện tại là gần trang đầu hoặc cuối, điều chỉnh phạm vi số trang
+        if (currentPage <= 3) {
+            endPage = Math.min(5, totalPages);
+        } else if (currentPage >= totalPages - 2) {
+            startPage = Math.max(totalPages - 4, 1);
+        }
+    
+        // Tạo các nút trang số
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.innerText = i;
+            if (i == currentPage) {
+                pageButton.classList.add('active');
+            }
+            
+            // Thêm sự kiện click
+            pageButton.onclick = () => loadReviews(i, pageSize, starFilter);
+            
+            // Thêm nút trang vào container
+            pageNumbersContainer.appendChild(pageButton);
+        }
+    
+        // Đảm bảo các nút phân trang chuyển trang khi click
+        previousPageButton.onclick = () => loadReviews(currentPage - 1, pageSize, starFilter);
+        nextPageButton.onclick = () => loadReviews(currentPage + 1, pageSize, starFilter);
+    }
+
+    // Hàm render sao từ số sao (rating)
+    function renderStars(rating) {
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            stars += `<span class="${i <= rating ? 'text-yellow-500' : 'text-gray-300'}">★</span>`;
+        }
+        return stars;
+    }
+
+    // Gọi loadReviews khi DOMContentLoaded
+    loadReviews();
 });

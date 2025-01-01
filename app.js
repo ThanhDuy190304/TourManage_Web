@@ -34,6 +34,7 @@ const verifyRoutes = require('./src/routes/verifyRoutes'); // Điều hướng x
 const userRoutes = require('./src/routes/userRoutes'); // Điều hướng đén thông tin cá nhân
 const reservationRoutes = require('./src/routes/reservationRoutes'); // Điều hướng đến trang đặt chỗ
 const cartRoutes = require('./src/routes/cartRoutes'); // Điều hướng đén trang giỏ hàng
+const feedbackRoutes = require('./src/routes/feedbackRoutes'); // Điều hướng đén review
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -64,6 +65,8 @@ app.use('/logout', requireAuth, logoutRoute);
 app.use('/verify', checkout, verifyRoutes);
 
 app.use('/user', requireAuth, userRoutes);
+
+app.use('/feedback', feedbackRoutes);
 
 app.use('/reservation', reservationRoutes);
 

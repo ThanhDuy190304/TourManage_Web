@@ -34,6 +34,17 @@ class userService {
             throw new Error("Error getUserHistoryBooking in userService");
         }
     }
+
+    static async createFeedback(touristId,comment, rating, tourId) {
+        try {
+
+            await userModel.createFeedback(touristId,comment, rating, tourId);
+
+        } catch (error) {
+            console.log("Error createFeedback in userService: ", error.message);
+            throw new Error("Error createFeedback in userService");
+        }
+    }
 }
 
 module.exports = userService

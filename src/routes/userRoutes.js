@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
     });
 });
 
-
+router.post('/createFeedback', userController.createFeedback);
 router.get('/api/getProfile', userController.getUserProfile);
 router.get('/api/getBookingHistory', userController.getUserBookingHistory);
 module.exports = router;

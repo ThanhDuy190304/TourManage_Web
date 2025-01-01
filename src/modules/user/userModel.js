@@ -70,6 +70,18 @@ class UserModel {
     static async getTouristHistoryBooking(touristId) {
 
     }
+
+    static async createFeedback(touristId,comment, rating, tourId) {
+        console.log(touristId,comment, rating, tourId)
+        try {
+            const query = `INSERT INTO feedbacks (tourist_id, tour_id, star, rate, dateofreview)
+                           VALUES ($1, $4, $3, $2, now())`;
+            await db.query(query, [touristId,comment, rating, tourId]);
+        } catch (error) {
+            console.error("Error create feedback in userModel: ", error);
+            throw new Error("Error create feedback in userModel: ");
+        }
+    }
 }
 
 module.exports = UserModel;

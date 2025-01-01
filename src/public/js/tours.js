@@ -7,6 +7,12 @@ function StoreId(button) {
 let currentPage = 1;
 let totalpage;
 
+const minPrice = document.getElementById('min-price');
+const maxPrice = document.getElementById('max-price');
+const minPriceLabel = document.getElementById('min-price-label');
+const maxPriceLabel = document.getElementById('max-price-label');
+const sliderRange = document.getElementById('slider-range');
+
 // Mỗi lần ấn filter, chuyển trang di chuyển lên đầu
 function scrollToProductList() {
     const productList = document.getElementById('divide'); // Phần tử danh sách sản phẩm
@@ -38,6 +44,39 @@ function restoreFiltersFromURL() {
             createFilterElement(key, value, label); // Tạo filter trong container
         }
     });
+
+    // Khôi phục giá trị minPrice và maxPrice
+    const minPriceParam = params.get("minPrice");
+    const maxPriceParam = params.get("maxPrice");
+    if (minPriceParam) {
+        const minPrice = document.getElementById("min-price");
+        if (minPrice) {
+            minPrice.value = minPriceParam; // Đặt giá trị minPrice
+        }
+    }
+    if (maxPriceParam) {
+        const maxPrice = document.getElementById("max-price");
+        if (maxPrice) {
+            maxPrice.value = maxPriceParam; // Đặt giá trị maxPrice
+        }
+    }
+
+    // Cập nhật lại thanh slider
+    updateSlider();
+
+    const sortParam = params.get("sort"); // Lấy giá trị sort từ URL
+    if (sortParam) {
+        const sortSelect = document.getElementById("sortSelect");
+        console.log(sortSelect)
+        if (sortSelect) {
+            // Chọn option có value khớp với `sortParam`
+            const optionToSelect = Array.from(sortSelect.options).find(option => option.value === sortParam);
+            if (optionToSelect) {
+                sortSelect.value = sortParam; // Gán đúng giá trị value
+            }
+        }
+    }
+
     currentPage = params.get("page") || 1;
 }
 
@@ -106,10 +145,26 @@ function applyFilters() {
             filters[name] = value;
         }
     });
+
     const searchInput = document.getElementById("searchInput");
     if (searchInput && searchInput.value) {
         filters["query"] = searchInput.value;  // Thêm giá trị tìm kiếm vào filters
     }
+    // Thêm giá trị minPrice và maxPrice
+    const minPrice = document.getElementById('min-price');
+    const maxPrice = document.getElementById('max-price');
+    if (minPrice && minPrice.value) {
+        filters["minPrice"] = minPrice.value; // Giá trị minPrice
+    }
+    if (maxPrice && maxPrice.value) {
+        filters["maxPrice"] = maxPrice.value; // Giá trị maxPrice
+    }
+    // Thêm giá trị sắp xếp
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect && sortSelect.value) {
+        filters["sort"] = sortSelect.value; // Giá trị sắp xếp
+    }
+    console.log(filters)
     filters["page"] = currentPage;
 
     // Tạo query parameters từ bộ lọc (filters)
@@ -230,6 +285,14 @@ function prevPage() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    const sortSelect = document.getElementById('sortSelect');
+    
+    if (sortSelect) {
+        sortSelect.addEventListener("change", function () {
+            applyFilters();
+        });
+    }
+
     const locationRadios = document.querySelectorAll('input[name="location"]');
     const priceRadios = document.querySelectorAll('input[name="price"]');
     const rateRadios = document.querySelectorAll('input[name="rate"]');
@@ -240,14 +303,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const selectedLabel = radio.nextElementSibling?.textContent;
             currentPage = 1;
             handleSelectionChange("location", radio.value, selectedLabel);
-        });
-    });
-
-    priceRadios.forEach(radio => {
-        radio.addEventListener("change", function () {
-            const selectedLabel = radio.nextElementSibling?.textContent;
-            currentPage = 1;
-            handleSelectionChange("price", radio.value, selectedLabel);
         });
     });
 
@@ -267,9 +322,41 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    minPrice.addEventListener('input', ()=>{
+        currentPage = 1;
+        updateSlider()
+    });
+    maxPrice.addEventListener('input', ()=>{
+        currentPage = 1;
+        updateSlider()
+    });
 
     restoreFiltersFromURL();
     const totalPages = parseInt(document.querySelector('.pagination').getAttribute('value')) || 1;
     totalpage=totalPages
     renderPageButtons(totalPages)
 });
+
+function updateSlider() {
+    const min = parseInt(minPrice.value);
+    const max = parseInt(maxPrice.value);
+
+    // Prevent overlap
+    if (min >= max) {
+        if (this.id === 'min-price') {
+            minPrice.value = max - 10000;
+        } else {
+            maxPrice.value = min + 10000;
+        }
+    }
+    // Update labels
+    minPriceLabel.textContent = `${minPrice.value} vnd`;
+    maxPriceLabel.textContent = `${maxPrice.value} vnd`;
+
+    // Update range highlight
+    const percentMin = (minPrice.value / maxPrice.max) * 100;
+    const percentMax = (maxPrice.value / maxPrice.max) * 100;
+    sliderRange.style.left = `${percentMin}%`;
+    sliderRange.style.right = `${100 - percentMax}%`;
+    applyFilters()
+}
