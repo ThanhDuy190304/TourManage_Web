@@ -45,6 +45,17 @@ class userService {
             throw new Error("Error createFeedback in userService");
         }
     }
+
+    static async updateProfile(userId,fullname,birthdate,contact,address) {
+        try {
+
+            await userModel.updateProfile(userId,fullname,birthdate,contact,address);
+
+        } catch (error) {
+            console.log("Error createFeedback in userService: ", error.message);
+            throw new Error("Error createFeedback in userService");
+        }
+    }
 }
 
 module.exports = userService

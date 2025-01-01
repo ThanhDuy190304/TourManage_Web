@@ -11,6 +11,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/createFeedback', userController.createFeedback);
+router.put('/updateProfile', userController.updateProfile);
 router.get('/api/getProfile', userController.getUserProfile);
 router.get('/api/getBookingHistory', userController.getUserBookingHistory);
 module.exports = router;

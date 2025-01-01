@@ -72,11 +72,22 @@ class UserModel {
     }
 
     static async createFeedback(touristId,comment, rating, tourId) {
-        console.log(touristId,comment, rating, tourId)
         try {
             const query = `INSERT INTO feedbacks (tourist_id, tour_id, star, rate, dateofreview)
                            VALUES ($1, $4, $3, $2, now())`;
             await db.query(query, [touristId,comment, rating, tourId]);
+        } catch (error) {
+            console.error("Error create feedback in userModel: ", error);
+            throw new Error("Error create feedback in userModel: ");
+        }
+    }
+
+    static async updateProfile(userId,fullname,birthdate,contact,address) {
+        try {
+            const query = `UPDATE profile_users
+                            SET user_fullname = $2, user_birthdate = $3, user_contact=$4, user_address=$5
+                           WHERE user_id = $1`;
+            await db.query(query, [userId,fullname,birthdate,contact,address]);
         } catch (error) {
             console.error("Error create feedback in userModel: ", error);
             throw new Error("Error create feedback in userModel: ");

@@ -63,6 +63,24 @@ class userController {
             });
         }
     }
+
+    static async updateProfile(req, res) {
+        const user = res.locals.user;
+        if (!user) {
+            return res.status(401);
+        }
+        const { fullname,birthdate,contact,address} = req.body;
+        try {
+            await userService.updateProfile(user.userId,fullname,birthdate,contact,address);
+            return res.status(200).json({ success: true });
+        } catch (error) {
+            console.error("Error in updateProfile:", error);
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            });
+        }
+    }
 }
 
 module.exports = userController;
