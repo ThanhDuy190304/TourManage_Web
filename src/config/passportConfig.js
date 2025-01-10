@@ -47,7 +47,9 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: process.env.GOOGLE_CALLBACK_URL,
+            callbackURL: process.env.NODE_ENV === 'development'
+                ? process.env.GOOGLE_CALLBACK_URL_DEVELOPMENT // Môi trường phát triển
+                : process.env.GOOGLE_CALLBACK_URL_PRODUCTION, // Môi trường sản xuất
         },
         async (accessToken, refreshToken, profile, done) => {
             try {

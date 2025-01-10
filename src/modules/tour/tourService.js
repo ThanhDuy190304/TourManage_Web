@@ -3,9 +3,9 @@ const tourModel = require('./tourModel');
 const { format } = require('date-fns');
 
 class TourService {
-    static async getTours(page, query, location, rate, price, voucher) {
+    static async getTours(page, query,sort, location, rate, minPrice,maxPrice, voucher) {
         try {
-            return await tourModel.getTours(page, query, location, rate, price, voucher);
+            return await tourModel.getTours(page, query,sort,  location, rate, minPrice,maxPrice, voucher);
         } catch (err) {
             throw new Error(err.message);
         }

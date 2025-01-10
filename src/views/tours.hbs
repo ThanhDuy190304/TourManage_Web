@@ -6,6 +6,16 @@
         </div>
     </div>
     <hr class="w-full	border-gray-200 my-8 mx-auto">
+    <div class="flex items-center mb-4 sm:mx-8 md:mx-16">
+        <label for="sortSelect" class="mr-2">Sort By:</label>
+        <select id="sortSelect" class="bg-gray-200 px-4 py-2 rounded">
+            <option value="">Select</option>
+            <option value="asc_price">Price: Increase</option>
+            <option value="desc_price">Price: Decrease</option>
+            <option value="asc_rate">Rate: Increase</option>
+            <option value="desc_rate">Rate: Decrease</option>
+        </select>
+    </div>
     <div id="selected-filters" class="flex flex-wrap gap-4 my-4 mx-4">
         <!-- Các lựa chọn sẽ được thêm vào đây -->
     </div>
@@ -87,56 +97,28 @@
 
 
                 <!-- Lọc theo price -->
-                <fieldset id="price" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-4">
-                    <legend class="font-medium text-xl my-4">Choose a price range</legend>
-
-                    <div class="flex items-center gap-2 cursor-pointer">
-                        <input id="price-1" type="radio" name="price" value="1"
-                            class="peer accent-emerald-900 cursor-pointer" />
-                        <label for="price-1"
-                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
-                            <span>$001 - $100</span>
-                        </label>
+                <fieldset class="price-range mt-6">
+                    <label for="price-range" class="font-medium text-xl block mb-4">Select Price Range</label>
+                    <div class="relative w-full h-10">
+                        <!-- Track -->
+                        <div class="absolute bg-gray-300 h-1 w-full rounded top-1/2 transform -translate-y-1/2"></div>
+                        <!-- Range Highlight -->
+                        <div id="slider-range" 
+                            class="absolute bg-emerald-600 h-1 rounded top-1/2 transform -translate-y-1/2"
+                            style="left: 20%; right: 20%;">
+                        </div>
+                        <!-- Min Price Slider -->
+                        <input type="range" id="min-price" 
+                            class="absolute w-1/2 h-1 bg-transparent appearance-none pointer-events-auto z-20"
+                            min="0" max="300" value="0" step="30">
+                        <!-- Max Price Slider -->
+                        <input type="range" id="max-price" 
+                            class="absolute left-1/2 w-1/2 h-1 bg-transparent appearance-none pointer-events-auto z-20"
+                            min="300" max="600" value="600" step="30">
                     </div>
-                    <div class="flex items-center gap-2 cursor-pointer">
-                        <input id="price-2" type="radio" name="price" value="101"
-                            class="peer accent-emerald-900 cursor-pointer" />
-                        <label for="price-2"
-                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
-                            <span>$101 - $200</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center gap-2 cursor-pointer">
-                        <input id="price-3" type="radio" name="price" value="201"
-                            class="peer accent-emerald-900 cursor-pointer" />
-                        <label for="price-3"
-                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
-                            <span>$201 - $300</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center gap-2 cursor-pointer">
-                        <input id="price-4" type="radio" name="price" value="301"
-                            class="peer accent-emerald-900 cursor-pointer" />
-                        <label for="price-4"
-                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
-                            <span>$301 - $400</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center gap-2 cursor-pointer">
-                        <input id="price-5" type="radio" name="price" value="401"
-                            class="peer accent-emerald-900 cursor-pointer" />
-                        <label for="price-5"
-                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
-                            <span>$401 - $500</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center gap-2 cursor-pointer">
-                        <input id="price-6" type="radio" name="price" value="501"
-                            class="peer accent-emerald-900 cursor-pointer" />
-                        <label for="price-6"
-                            class="flex items-center gap-2 peer-checked:text-emerald-900 whitespace-nowrap cursor-pointer">
-                            <span>$501 - $600</span>
-                        </label>
+                    <div class="flex justify-between mt-4">
+                        <span id="min-price-label" class="text-gray-700 text-sm">0 vnd</span>
+                        <span id="max-price-label" class="text-gray-700 text-sm">500000 vnd</span>
                     </div>
                 </fieldset>
 

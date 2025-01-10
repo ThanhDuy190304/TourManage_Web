@@ -67,10 +67,6 @@ function enableEditModeProfile() {
                         <input id="editFullname" type="text" class="w-full p-2 border rounded-md" value="${fullname}" />
                     </div>
                     <div class="mb-4">
-                        <label class="font-medium">Email:</label>
-                        <input id="editEmail" type="email" class="w-full p-2 border rounded-md" value="${email}" />
-                    </div>
-                    <div class="mb-4">
                         <label class="font-medium">Birthdate:</label>
                         <input id="editBirthdate" type="date" class="w-full p-2 border rounded-md" value="${birthdate}" />
                     </div>
@@ -94,6 +90,79 @@ function enableEditModeProfile() {
                     </button>
                 </div>
             `;
+}
+
+async function saveProfile() {
+    // Lấy dữ liệu từ các trường input
+    const fullname = document.getElementById('editFullname').value;
+    const birthdate = document.getElementById('editBirthdate').value;
+    const contact = document.getElementById('editContact').value;
+    const address = document.getElementById('editAddress').value;
+
+    // Verify user input
+    if (!fullname) {
+        alert('Full Name is required.');
+        return;
+    }
+
+    if (!birthdate || isNaN(new Date(birthdate).getTime())) {
+        alert('Invalid birthdate. Please select a valid date.');
+        return;
+    }
+
+    const currentDate = new Date();
+    const birthDateObj = new Date(birthdate);
+
+    // Kiểm tra ngày nhập vào có nhỏ hơn ngày hiện tại
+    if (birthDateObj >= currentDate) {
+        alert('Birthdate must be in the past.');
+        return;
+    }
+
+    // Kiểm tra người dùng có đủ 18 tuổi hay không
+    const age = currentDate.getFullYear() - birthDateObj.getFullYear();
+
+    if (age < 18) {
+        alert('You must be at least 18 years old.');
+        return;
+    }
+
+    if (!contact || !/^\d{10}$/.test(contact)) {
+        alert('Invalid contact number. It should contain exactly 10 digits.');
+        return;
+    }
+
+    if (!address) {
+        alert('Address is required.');
+        return;
+    }
+
+    try {
+        // Gửi dữ liệu qua API
+        const response = await fetch('/user/updateProfile', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                fullname: fullname,
+                birthdate: birthdate,
+                contact: contact,
+                address: address,
+            }),
+        });
+
+        if (!response.ok) {
+            alert('Update profile failed!');
+            throw new Error('Failed to update profile');
+        }
+
+        alert('Profile updated successfully!');
+        // Reload lại thông tin người dùng sau khi lưu thành công
+        fetchUserProfile();
+    } catch (error) {
+        console.error('Error updating profile:', error);
+    }
 }
 
 async function fetchUserBookingHistory() {

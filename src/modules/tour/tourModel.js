@@ -1,11 +1,10 @@
 const db = require('../../config/db'); // Giả sử bạn có một tệp db.js để kết nối với cơ sở dữ liệu
 
 class tourModel {
-	static async getTours(page, searchQuery, locationQuery, rateQuery, priceQuery, voucherQuery) {
+	static async getTours(page, searchQuery, sort, locationQuery, rateQuery,minPriceQuery,maxPriceQuery, voucherQuery) {
 		if (!Array.isArray(rateQuery)) { rateQuery = [rateQuery]; }
 		if (!Array.isArray(voucherQuery)) { voucherQuery = [voucherQuery]; }
 		if (!Array.isArray(locationQuery)) { locationQuery = [locationQuery]; }
-		if (!Array.isArray(priceQuery)) { priceQuery = [priceQuery]; }
 
 		const query = `
             FROM tours t
@@ -15,11 +14,8 @@ class tourModel {
             AND ('${searchQuery}' = 'default' OR t.title LIKE CONCAT('%', '${searchQuery}', '%'))
             AND ('${searchQuery}' = 'default' OR t.brief LIKE CONCAT('%', '${searchQuery}', '%'))
             AND (
-                ${priceQuery[0]} = -1 OR
-                ${priceQuery.map((price, index) => `
-                (t.prices >= CAST(${price} AS REAL) AND t.prices <= CAST(${price} AS REAL) + 99)
-                ${index < priceQuery.length - 1 ? 'OR' : ''}
-                `).join('')}
+                ${minPriceQuery} = -1 OR ${maxPriceQuery} = -1 OR
+                (t.prices >= CAST(${minPriceQuery} AS REAL) AND t.prices <= CAST(${maxPriceQuery} AS REAL))
             )
             AND (
                 ${rateQuery[0]} = -1 OR
@@ -43,17 +39,37 @@ class tourModel {
                 `).join('')}
             )
         `;
-
 		const countSelect = `SELECT COUNT(*) AS total_rows`;
 		const dataSelect = `SELECT t.tour_id, t.title, t.brief, t.prices, t_i.img_url, t.location_id`;
+
+        let filterSort
+        if (sort) {
+            switch (sort) {
+                case 'asc_price':
+                    filterSort = 'ORDER BY t.prices ASC';
+                    break;
+                case 'desc_price':
+                    filterSort =  'ORDER BY t.prices DESC';
+                    break;
+                case 'asc_rate':
+                    filterSort = 'ORDER BY t.rate ASC';
+                    break;
+                case 'desc_rate':
+                    filterSort = 'ORDER BY t.rate DESC';
+                    break;
+                default:
+                    filterSort = ''; // Giá trị mặc định nếu không khớp
+                    break;
+            }
+        }
 
 		const countQuery = `${countSelect} ${query}`;
 		const dataQuery = `
             ${dataSelect}
             ${query}
+            ${filterSort}
             LIMIT 6 OFFSET ${(page - 1) * 6}
         `;
-
 		try {
 			const paginatedTours = await db.query(dataQuery);
 			const totalPages = await db.query(countQuery);

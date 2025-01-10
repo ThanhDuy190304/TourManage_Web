@@ -36,6 +36,8 @@ const userRoutes = require('./src/routes/userRoutes'); // Điều hướng đén
 const reservationRoutes = require('./src/routes/reservationRoutes'); // Điều hướng đến trang đặt chỗ
 const cartRoutes = require('./src/routes/cartRoutes'); // Điều hướng đén trang giỏ hàng
 const googleAuthRoutes = require('./src/routes/googleAuthRoutes'); // Điều hướng đến trang xác thực
+const feedbackRoutes = require('./src/routes/feedbackRoutes'); // Điều hướng đén review
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -60,6 +62,8 @@ app.use('/forgetPassword', checkout, forgetPasswordRoutes);
 app.use('/logout', requireAuth, logoutRoute);
 app.use('/verify', checkout, verifyRoutes);
 app.use('/user', requireAuth, userRoutes);
+
+app.use('/feedback', feedbackRoutes);
 app.use('/reservation', reservationRoutes);
 app.use('/cart', cartRoutes);
 app.use('/googleAuth', checkout, googleAuthRoutes);
