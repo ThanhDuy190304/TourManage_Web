@@ -1,42 +1,38 @@
 const registerService = require('./registerService');
-
+const validatePassword = require('../../utils/passwordUtils').validatePassword;
 class RegisterController {
     static async registerUser(req, res) {
-        const { user_name, email, password, confirmPassword } = req.body;
-
+        let { userName, email, password, confirmPassword } = req.body;
+        if (!userName || !email || !password || !confirmPassword) {
+            return res.status(400).json({ message: 'Please fill in all fields!' });
+        }
+        userName = userName.trim();
+        email = email.trim();
+        password = password.trim();
+        confirmPassword = confirmPassword.trim();
+        if (email.indexOf('@') === -1 || email.indexOf('.') === -1) {
+            return res.status(400).json({ message: 'Email is invalid!' });
+        }
         // Kiểm tra xem mật khẩu và xác nhận mật khẩu có khớp không
         if (password !== confirmPassword) {
-            return res.render('register', {
-                message: 'Confirmation password does not match!',
-                layout: false,
-                title: 'Register Page',
-            });
+            return res.status(400).json({ message: 'Confirmation password does not match.' });
+        }
+        const checkValidPassword = validatePassword(password);
+        if (!checkValidPassword.valid) {
+            return res.status(400).json({ message: checkValidPassword.message });
         }
 
         try {
-            // Gọi service đăng ký
-            const result = await registerService.register(user_name, email, password);
+            const result = await registerService.register(userName, email, password);
 
             if (result.success) {
-                return res.render('register', {
-                    message: 'Registration successful, please check your email for verifying!',
-                    layout: false,
-                    title: 'Register Page',
-                });
+                return res.status(200).json({ message: 'Registration successful, please check your email for verifying!' });
             }
 
-            return res.render('register', {
-                message: result.error,
-                layout: false,
-                title: 'Register Page',
-            });
+            return res.status(400).json({ message: result.message });
         } catch (error) {
             // Nếu có lỗi không lường trước được
-            return res.render('register', {
-                message: 'An unexpected error occurred. Please try again later!',
-                layout: false,
-                title: 'Register Page',
-            });
+            return res.status(500).json({ message: 'An error occurred, please try again later.' });
         }
     }
 }

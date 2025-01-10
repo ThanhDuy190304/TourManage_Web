@@ -3,17 +3,35 @@
         <h2 class="text-4xl font-semibold text-green-900 mb-6">INVOICE</h2>
 
         <!-- Customer Information Section -->
-        <div class="mb-6 text-sm text-gray-700 space-y-4">
-            <p><strong>Customer Name:</strong> {{#if
-                userProfile.user_fullname}}{{userProfile.user_fullname}}{{else}}Name not
-                updated{{/if}}</p>
-            <p><strong>Contact:</strong> {{#if userProfile.user_contact}}{{userProfile.user_contact}}{{else}}Contact
-                info not
-                updated{{/if}}</p>
-            <p><strong>Email:</strong> {{#if userProfile.email}}{{userProfile.email}}{{else}}Email not updated{{/if}}
-            </p>
-            <p><strong>Date:</strong> {{invoiceDate}}</p>
+        <div class="mb-6 text-sm text-gray-700 space-y-6">
+            <div class="space-y-2">
+                <label for="user_fullname" class="font-semibold text-gray-800">Customer Name:</label>
+                <input type="text" id="user_fullname" name="user_fullname"
+                    value="{{#if userProfile.user_fullname}}{{userProfile.user_fullname}}{{else}}{{/if}}"
+                    class="w-full border rounded-lg p-3 text-gray-800 focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter your full name">
+            </div>
+
+            <div class="space-y-2">
+                <label for="user_contact" class="font-semibold text-gray-800">Contact:</label>
+                <input type="text" id="user_contact" name="user_contact"
+                    value="{{#if userProfile.user_contact}}{{userProfile.user_contact}}{{else}}{{/if}}"
+                    class="w-full border rounded-lg p-3 text-gray-800 focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter your contact information">
+            </div>
+
+            <div class="space-y-2">
+                <label class="font-semibold text-gray-800">Email:</label>
+                <p class="text-gray-600">{{#if userProfile.email}}{{userProfile.email}}{{else}}Email not updated{{/if}}
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="font-semibold text-gray-800">Date:</label>
+                <p class="text-gray-600">{{invoiceDate}}</p>
+            </div>
         </div>
+
 
         <table class="min-w-full">
             <colgroup>
@@ -75,6 +93,28 @@
         </div>
 
     </div>
+
+    <!-- Payment Method Dialog -->
+    <div id="paymentDialog" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Choose Payment Method</h3>
+            <div class="space-y-4">
+                <button id="payByCash"
+                    class="w-full py-3 bg-green-900 text-white text-center font-semibold rounded-lg hover:bg-green-700">
+                    Pay by Cash
+                </button>
+                <button id="payOnline"
+                    class="w-full py-3 bg-blue-900 text-white text-center font-semibold rounded-lg hover:bg-blue-700">
+                    Pay Online
+                </button>
+            </div>
+            <button id="closeDialog"
+                class="mt-4 w-full py-2 bg-gray-300 text-center font-semibold rounded-lg hover:bg-gray-400">
+                Cancel
+            </button>
+        </div>
+    </div>
+
 
 </main>
 

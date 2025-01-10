@@ -8,7 +8,6 @@ require('dotenv').config();
 async function authenticateToken(req, res, next) {
     const accessToken = req.cookies[process.env.ACCESS_TOKEN_NAME];
     const refreshToken = req.cookies[process.env.REFRESH_TOKEN_NAME];
-
     if (accessToken) {
         try {
             const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
@@ -57,7 +56,7 @@ async function authenticateToken(req, res, next) {
  */
 function requireAuth(req, res, next) {
     if (!res.locals.user) {
-        return next(new AppError('Unauthorized access', 401));
+        return res.status(401).json({ message: 'Unauthorized access' });
     }
     next();
 }

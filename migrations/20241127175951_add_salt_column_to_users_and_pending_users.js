@@ -5,12 +5,12 @@
 exports.up = async function (knex) {
     // Thêm cột 'salt' vào bảng 'users'
     await knex.schema.table('users', function (table) {
-        table.string('salt', 64).notNullable();
+        table.string('salt', 64);
     });
 
     // Thêm cột 'salt' vào bảng 'pending_users'
     await knex.schema.table('pending_users', function (table) {
-        table.string('salt', 64).notNullable();
+        table.string('salt', 64);
     });
 };
 

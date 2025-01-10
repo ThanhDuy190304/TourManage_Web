@@ -35,14 +35,10 @@ function initBookingDialog(action) {
         increaseButton.style.color = quantity >= maxQuantity ? 'gray' : 'black';
     }
     updateButtonState(); // Cập nhật trạng thái ban đầu
-
-
-
     closeDialogButton.addEventListener('click', () => {
         dialog.classList.add('hidden');
         overlay.classList.add('hidden');
     });
-
     increaseButton.addEventListener('click', () => {
         if (quantity < maxQuantity) {
             quantity++;
@@ -105,14 +101,15 @@ function initBookingDialog(action) {
                 tourDate,
                 quantityDisplay.textContent,
                 scheduleId,
-                tour.voucher
+                tour.voucher,
+                tour.tourImg,
             );
         }
     });
 
 }
 
-function handleBooking(tourId, title, prices, tourDate, quantity, scheduleId, voucher) {
+function handleBooking(tourId, title, prices, tourDate, quantity, scheduleId, voucher, tourImg) {
     const reservationDataArray = [
         {
             tourId: tourId,
@@ -122,6 +119,7 @@ function handleBooking(tourId, title, prices, tourDate, quantity, scheduleId, vo
             quantity: quantity,
             scheduleId: scheduleId,
             voucher: voucher,
+            img: tourImg
         }
     ];
     const jsonReservationDataArray = JSON.stringify(reservationDataArray);
@@ -140,6 +138,7 @@ function handleBooking(tourId, title, prices, tourDate, quantity, scheduleId, vo
     // Thêm form vào body và submit
     document.body.appendChild(form);
     form.submit();
+    document.body.removeChild(form);
 }
 
 
@@ -154,27 +153,23 @@ async function handleAddToCart(tourId, scheduleId, quantity) {
             },
             body: JSON.stringify({ tourId: tourId, scheduleId: scheduleId, quantity: quantity })
         });
-
         const data = await response.json();
-
         if (response.status === 200 && data.success) {
             document.getElementById('cartCount').innerText = data.count.toString();
             localStorage.setItem('countCartItem', data.count.toString());
         } else if (response.status === 401) {
             let cartDataArray = JSON.parse(localStorage.getItem('cartDataArray')) || [];
             const existingItem = cartDataArray.find(item => item.tourId === tourId && item.scheduleId === scheduleId);
-
             if (existingItem) {
                 existingItem.quantity = (
                     parseInt(existingItem.quantity, 10) + parseInt(quantity, 10)
                 ).toString();
                 alert(`Increase quantity this tour!`);
-
             } else {
                 cartDataArray.push({ tourId: tourId, scheduleId: scheduleId, quantity: quantity });
+                localStorage.setItem('countCartItem', cartDataArray.length.toString());
                 alert(`Added new item to cart`);
             }
-
             localStorage.setItem('cartDataArray', JSON.stringify(cartDataArray));
             document.getElementById('cartCount').innerText = cartDataArray.length;
         } else {

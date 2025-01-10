@@ -40,10 +40,15 @@ class reservationController {
             if (!user) {
                 return res.status(401);
             }
-            const { reservationDataArray } = req.body;
+            const { userFullName, userContact, payMethod, reservationDataArray } = req.body;
+            if (!userFullName || !userContact || !reservationDataArray || !payMethod) {
+                return res.status(400).json({
+                    message: "Invalid request."
+                });
+            }
             let reservationArray = Array.isArray(reservationDataArray) ? reservationDataArray : JSON.parse(reservationDataArray);
             let touristId = await userService.getTouristId(user.userId);
-            await reservationService.confirmReservation(touristId, reservationArray);
+            await reservationService.confirmReservation(touristId, userFullName, userContact, payMethod, reservationArray);
             res.render('reservationSucessfully', {
                 layout: false
             });

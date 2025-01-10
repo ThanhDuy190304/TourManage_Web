@@ -13,4 +13,6 @@ router.get('/', (req, res) => {
 
 router.get('/api/getProfile', userController.getUserProfile);
 router.get('/api/getBookingHistory', userController.getUserBookingHistory);
+router.get('/api/getAccount', userController.getAccount);
+router.post('/api/changePassword', userController.changePassword);
 module.exports = router;

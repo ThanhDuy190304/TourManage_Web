@@ -1,22 +1,17 @@
 const { generateAccessToken, generateRefreshToken } = require("../../utils/generateTokensUtils");
 const loginModel = require("./loginModel");
 
-const loginService = {
-    async authenticateUser(userId, userName, roleID, deviceId) {
+class LoginService {
+    static async authenticateUser(userId, userName, roleId, deviceId) {
         try {
-            const accessToken = generateAccessToken(userId, userName, roleID, deviceId);
-            const refreshToken = generateRefreshToken(userId, userName, roleID, deviceId);
-
-            // Lưu refresh token vào cơ sở dữ liệu
+            const accessToken = generateAccessToken(userId, userName, roleId, deviceId);
+            const refreshToken = generateRefreshToken(userId, userName, roleId, deviceId);
             await loginModel.saveRefreshToken(userId, refreshToken, deviceId);
-
             return { accessToken, refreshToken };
         } catch (error) {
-            console.error("Error in authenticateUser:", error); // In lỗi chi tiết
-            // Ném lỗi có thông điệp rõ ràng
-            throw new Error(`Failed to authenticate user`);
+            console.error("Error in authenticateUser:", error);
+            throw new Error("Failed to authenticate user");
         }
     }
-};
-
-module.exports = loginService;
+}
+module.exports = LoginService;

@@ -12,5 +12,5 @@ router.post('/api/addToCart', cartController.addToCart);
 router.post('/api/changeQuantityCartItems', cartController.changeQuantityCartItems);
 
 router.post('/api/deleteCartItems', cartController.deleteCartItems);
-
+router.post('/sync', cartController.syncCartWithDB);
 module.exports = router;

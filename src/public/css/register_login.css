@@ -904,3 +904,42 @@ input.email {
     color: #000c00;
     /* Màu của dấu gạch đứng */
 }
+
+.google-btn {
+    display: inline-block;
+    color: #000;
+    /* Màu chữ và viền là màu xanh Google */
+    border: 1px solid #000;
+    /* Viền màu xanh Google */
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    transition: border-color 0.3s, color 0.3s;
+    /* Chuyển đổi màu viền và màu chữ khi hover */
+}
+
+.google-btn:hover {
+    border-color: #357AE8;
+    /* Màu viền khi hover */
+    color: #357AE8;
+    /* Màu chữ khi hover */
+}
+
+.google-btn-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.google-btn img {
+    width: 20px;
+    height: 20px;
+}

@@ -30,28 +30,25 @@
 
         <div class="main-agileinfo">
             <div class="agileits-top">
-                <form id="registerForm" autocomplete="off" action="/register/postRegister" method="post">
-                    <input class="text" type="text" name="user_name" placeholder="Username" required="">
-                    <input class="text email" type="email" name="email" placeholder="Email" required="">
-                    <input class="text" type="password" name="password" placeholder="Password" required="">
-                    <input class="text w3lpass" type="password" name="confirmPassword" placeholder="Confirm Password"
+                <div id="registerForm">
+                    <input class="text" name="username" type="text" placeholder="Username" required="">
+                    <input class="text email" name="email" type="email" placeholder="Email" required="">
+                    <input class="text" name="password" type="password" placeholder="Password" required="">
+                    <input class="text w3lpass" name="confirmPassword" type="password" placeholder="Confirm Password"
                         required="">
-                    {{#if message}}
-                    <div style="color: #b20000; text-align: center">
-                        {{message}}
+                    <div id="message" style="text-align: center;"></div>
+                    <input type="submit" value="SIGN UP"></input>
+                </div>
+                <a href="/googleAuth/google" class="google-btn">
+                    <div class="google-btn-content">
+                        <img src="/img/Google_Logo.png" alt="Google Logo">
+                        <span>Sign up with Google</span>
                     </div>
-                    {{/if}}
-                    <input type="submit" value="SIGN UP">
-                </form>
+                </a>
                 <p>Already have an account? <a href="/login">Login now!</a></p>
             </div>
         </div>
 
-        <!-- copyright -->
-        <div class="colorlibcopy-agile">
-            <p>© 2018 Colorlib Signup Form. All rights reserved | Design by <a href="https://colorlib.com/"
-                    target="_blank">Colorlib</a></p>
-        </div>
         <!-- //copyright -->
         <ul class="colorlib-bubbles">
             <li></li>
@@ -69,35 +66,6 @@
     <!-- //main -->
 
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById('registerForm');
-        const passwordField = document.querySelector('input[name="password"]');
-        const confirmPasswordField = document.querySelector('input[name="confirmPassword"]');
-
-        // Kiểm tra mật khẩu và xác nhận mật khẩu khi gửi form
-        form.addEventListener('submit', function (event) {
-            if (passwordField.value !== confirmPasswordField.value) {
-                confirmPasswordField.setCustomValidity('Confirmation password does not match');
-                event.preventDefault(); // Ngừng gửi form
-            } else {
-                confirmPasswordField.setCustomValidity(''); // Xóa thông báo lỗi nếu khớp
-            }
-        });
-
-        // Lắng nghe sự kiện thay đổi trên trường xác nhận mật khẩu
-        confirmPasswordField.addEventListener('input', function () {
-            // Kiểm tra lại khi người dùng thay đổi giá trị xác nhận mật khẩu
-            if (passwordField.value === confirmPasswordField.value) {
-                confirmPasswordField.setCustomValidity(''); // Xóa thông báo lỗi khi mật khẩu khớp
-            } else {
-                confirmPasswordField.setCustomValidity('Confirmation password does not match');
-                event.preventDefault(); // Ngừng gửi form
-
-            }
-        });
-    });
-</script>
-
+<script src="/js/register.js"></script>
 
 </html>

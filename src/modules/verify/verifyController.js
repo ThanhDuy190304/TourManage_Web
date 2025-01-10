@@ -9,7 +9,8 @@ async function verifyAccount(req, res) {
 
         if (!user) {
             return res.render('register', {
-                message: 'Invalid or expired token.',
+                message: 'Your account verification link is invalid or has expired. Please try registering again or contact support for assistance.',
+                success: false,
                 layout: false,
                 title: 'Verification Failed',
             });
@@ -21,8 +22,8 @@ async function verifyAccount(req, res) {
         // Xóa người dùng khỏi bảng `pending_users`
         await verifyModel.deleteUserFromPending(token);
 
-        res.render('login', {
-            message: 'Account verified successfully, you can now login.',
+        return res.render('login', {
+            successMessage: 'Account verified successfully, you can now login.',
             layout: false,
             title: 'Account Verified',
         });

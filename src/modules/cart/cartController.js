@@ -123,6 +123,38 @@ class CartController {
             });
         }
     }
+
+    static async syncCartWithDB(req, res) {
+        try {
+            const user = res.locals.user;
+            const cartDataArray = req.body.cartDataArray;
+            if (!user) {
+                return res.status(401).json({
+                    message: 'Unauthorized',
+                });
+            }
+            if (!cartDataArray) {
+                return res.status(400).json({
+                    message: 'Bad request',
+                });
+            }
+            let countItem = 0;
+            if (user.userRole === 2) {
+                const touristId = await userService.getTouristId(user.userId);
+                if (cartDataArray.length > 0) {
+                    await cartService.syncCartWithDB(touristId, cartDataArray);
+                }
+                countItem = await cartService.getItemCountsOfUserCart(touristId);
+                console.log(countItem);
+            }
+            return res.status(200).json({ countItem: countItem });
+        } catch (error) {
+            console.error("Error in cartController.syncCartWithDB:", error.message);
+            return res.status(500).json({
+                message: 'Failed to sync cart with database. Please try again later.'
+            });
+        }
+    }
 }
 
 module.exports = CartController;

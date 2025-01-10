@@ -5,7 +5,6 @@ const { format, parse } = require('date-fns');
 const { vi } = require('date-fns/locale');
 
 
-
 class reservationService {
     static calculateInvoice(reservationDataArray) {
         let subtotal = 0;
@@ -29,14 +28,21 @@ class reservationService {
         return { invoiceItems, subtotal };
     }
 
-    static async confirmReservation(touristId, reservationDataArray) {
+    static async confirmReservation(touristId, userFullName, userContact, payMethod, reservationDataArray) {
         const client = await db.connect();
         try {
             await client.query('BEGIN');
-            let reservationId = await reservationModel.createReservation(touristId);
+            let status = 'reserved';
+            if (payMethod === 'payByCash') {
+                status = 'waiting';
+            }
+            else if (payMethod === 'payOnline') {
+                status = 'reserved';
+            }
+            let reservationId = await reservationModel.createReservation(touristId, status, client);
 
             for (let data of reservationDataArray) {
-                const { tourId, scheduleId, quantity, prices, title, tourDate, voucher } = data;
+                const { tourId, scheduleId, quantity, prices, title, tourDate, voucher, img } = data;
 
                 const total_price = prices * (voucher / 100) * quantity;
                 const formattedTourDate = format(parse(tourDate, 'dd-MM-yyyy', new Date()), 'yyyy-MM-dd');
@@ -48,7 +54,11 @@ class reservationService {
                     quantity,
                     total_price,
                     title,
-                    formattedTourDate
+                    formattedTourDate,
+                    userFullName,
+                    userContact,
+                    img,
+                    client
                 );
             }
             await client.query('COMMIT');
@@ -59,23 +69,19 @@ class reservationService {
         } finally {
             client.release();  // Giải phóng kết nối sau khi xong
         }
-
     }
-
-
-
     static async getReservationByUserId(touristId) {
         try {
             let reservationArray = await reservationModel.getReservationIdByTouristId(touristId);
             if (!reservationArray || reservationArray.length === 0) {
                 return [];
             }
-
             const reservationPromises = reservationArray.map(reservation =>
                 reservationModel.getDetailReservationById(reservation.reservationId)
                     .then(details => ({
                         reservationId: reservation.reservationId,
                         reservationDate: format(new Date(reservation.reservationDate), 'dd-MM-yyyy', { locale: vi }),
+                        reservationStatus: reservation.status === 'reserved' ? 'Paid' : 'Unpaid',
                         details: details.map(detail => {
                             const parsedDate = format(detail.tourDate, 'dd-MM-yyyy', { locale: vi });
                             return {
@@ -83,16 +89,14 @@ class reservationService {
                                 quantity: detail.quantity,
                                 totalPrice: detail.totalPrice,
                                 title: detail.title,
+                                img: detail.img,
                                 tourDate: parsedDate
                             };
                         })
                     }))
             );
             const detailedReservations = await Promise.all(reservationPromises);
-
             return detailedReservations;
-
-
         } catch (error) {
             console.error("Error fetching reservations in reservationService:", error.message);
             throw error;

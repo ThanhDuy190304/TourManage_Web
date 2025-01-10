@@ -1,5 +1,3 @@
-
-
 async function fetchUserProfile() {
     try {
         const response = await fetch('/user/api/getProfile', {
@@ -22,7 +20,7 @@ async function fetchUserProfile() {
 function displayUserProfile(userProfile) {
     const infoContainer = document.getElementById('infoContainer');
     infoContainer.innerHTML = `
-                <div class="p-6 bg-white shadow-md rounded-md">
+                <div class="p-6 bg-white">
                     <h2 class="text-xl font-bold mb-4">User Profile</h2>
                     <div class="mb-4">
                         <label class="font-medium">Full Name:</label>
@@ -45,15 +43,15 @@ function displayUserProfile(userProfile) {
                         <p id="address" class="text-gray-600">${userProfile.address}</p>
                     </div>
                     <button 
-                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                        onclick="enableEditMode()">
+                        class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-600"
+                        onclick="enableEditModeProfile()">
                         Edit
                     </button>
                 </div>
             `;
 }
 
-function enableEditMode() {
+function enableEditModeProfile() {
     const infoContainer = document.getElementById('infoContainer');
     const fullname = document.getElementById('fullname').textContent;
     const email = document.getElementById('email').textContent;
@@ -62,7 +60,7 @@ function enableEditMode() {
     const address = document.getElementById('address').textContent;
 
     infoContainer.innerHTML = `
-                <div class="p-6 bg-white shadow-md rounded-md">
+                <div class="p-6 bg-white">
                     <h2 class="text-xl font-bold mb-4">Edit Profile</h2>
                     <div class="mb-4">
                         <label class="font-medium">Full Name:</label>
@@ -85,7 +83,7 @@ function enableEditMode() {
                         <input id="editAddress" type="text" class="w-full p-2 border rounded-md" value="${address}" />
                     </div>
                     <button 
-                        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                        class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-600"
                         onclick="saveProfile()">
                         Save
                     </button>
@@ -97,7 +95,6 @@ function enableEditMode() {
                 </div>
             `;
 }
-
 
 async function fetchUserBookingHistory() {
     try {
@@ -137,31 +134,153 @@ function displayBookingHistory(bookings) {
         const bookingItem = document.createElement('div');
         bookingItem.classList.add('booking-item', 'p-4', 'mb-4', 'border', 'rounded-md', 'shadow-md');
 
-        // Hiển thị thông tin chính: reservationId và reservationDate
+        // Hiển thị thông tin chính: reservationId, reservationDate, reservationStatus
         const bookingHeader = `
-            <div class="flex justify-between">
-                <h3 class="text-xl font-medium">#${booking.reservationId}</h3>
-                <p class="text-gray-600">${booking.reservationDate}</p>
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-medium">#${booking.reservationId}</h3>
+                    <p class="text-gray-600">Date: ${booking.reservationDate}</p>
+                    <p class="text-gray-500">Status: ${booking.reservationStatus}</p>
+                </div>
+                <button 
+                    class="details-toggle px-4 py-2 bg-green-800 text-white rounded hover:bg-green-700"
+                    data-id="${booking.reservationId}"
+                >
+                    View Details
+                </button>
             </div>
         `;
-        const bookingDetails = booking.details.map(detail => {
-            return `
-            <div class="details-item mt-2 p-2 border-t hover:bg-gray-100 cursor-pointer">
-                <a href="/tours/${detail.tourId}" class="block">
-                    <p class="text-lg font-normal">Tour: ${detail.title}</p>
-                    <p class="text-gray-600">Tour Date: ${detail.tourDate}</p>
-                    <p class="text-gray-500">Quantity: ${detail.quantity}</p>
-                    <p class="text-green-700 font-normal">Total Price: $${detail.totalPrice}</p>
-                </a>
+
+        // Phần chứa chi tiết, ẩn ban đầu
+        const bookingDetails = `
+            <div class="details hidden mt-4 border-t pt-4">
+                ${booking.details.map(detail => `
+                <div class="details-item mt-2 p-2 border hover:bg-gray-100">
+                    <a href="/tours/${detail.tourId}" class="block">
+                        <img src="${detail.img}" alt="${detail.title}" class="w-16 h-16 rounded object-cover">
+                        <p class="text-lg font-normal mt-2">Tour: ${detail.title}</p>
+                        <p class="text-gray-600">Tour Date: ${detail.tourDate}</p>
+                        <p class="text-gray-500">Quantity: ${detail.quantity}</p>
+                        <p class="text-green-700 font-normal">Total Price: $${detail.totalPrice}</p>
+                    </a>
+                </div>
+                `).join('')}
             </div>
-            `;
-        }).join('');
+        `;
 
         bookingItem.innerHTML = bookingHeader + bookingDetails;
         infoContainer.appendChild(bookingItem);
     });
+
+    // Thêm sự kiện cho nút "View Details"
+    const toggleButtons = document.querySelectorAll('.details-toggle');
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const bookingId = button.dataset.id;
+            const details = button.parentElement.parentElement.querySelector('.details');
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                button.textContent = 'Hide Details';
+            } else {
+                details.classList.add('hidden');
+                button.textContent = 'View Details';
+            }
+        });
+    });
 }
 
+
+async function fetchUserAccount() {
+    try {
+        const response = await fetch('/user/api/getAccount', {
+            method: 'GET',
+            credentials: 'same-origin',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch user account');
+        }
+        else {
+            const data = await response.json();
+            displayUserAccount(data.userAccount);
+        }
+    } catch (error) {
+        console.error('Error fetching user account:', error);
+    }
+}
+function displayUserAccount(userAccount) {
+    if (userAccount) {
+        const infoContainer = document.getElementById('infoContainer');
+        infoContainer.innerHTML = `
+            <div class="p-6 bg-white">
+                <h2 class="text-xl font-bold mb-4">Account Information</h2>
+                <div class="mb-4">
+                    <label class="font-medium">Username:</label>
+                    <p id="username" class="text-gray-600">${userAccount.userName}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="font-medium">Email:</label>
+                    <p id="createdAt" class="text-gray-600">${userAccount.email}</p>
+                </div>
+                 <button id="changePasswordBtn" class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded">
+                    Change Password
+                </button>
+                <div id="passwordForm" style="display: none; margin-top: 20px;">
+                    <input id="currentPassword" type="password" placeholder="Current Password" 
+                        class="border p-2 mb-4 w-full">
+                    <input id="newPassword" type="password" placeholder="New Password" 
+                        class="border p-2 mb-4 w-full">
+                    <input id="confirmPassword" type="password" placeholder="Confirm New Password" 
+                        class="border p-2 mb-4 w-full">
+                    <button id="submitPasswordBtn" class="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        `;
+        document.getElementById('changePasswordBtn').addEventListener('click', () => {
+            document.getElementById('passwordForm').style.display = 'block';
+        });
+
+        // Gán sự kiện cho nút Submit
+        document.getElementById('submitPasswordBtn').addEventListener('click', () => {
+            changePassword();
+        });
+    }
+}
+
+async function changePassword() {
+    const currentPassword = document.getElementById('currentPassword').value.trim();
+    const newPassword = document.getElementById('newPassword').value.trim();
+    const confirmPassword = document.getElementById('confirmPassword').value.trim();
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        alert('Please fill in all fields.');
+        return;
+    }
+    if (newPassword !== confirmPassword) {
+        alert('New Password and Confirm Password do not match.');
+        return;
+    }
+    try {
+        const response = await fetch('/user/api/changePassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ currentPassword, newPassword })
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message || 'Failed to change password.'}`);
+            return;
+        }
+        alert('Password changed successfully');
+        document.getElementById('passwordForm').style.display = 'none';
+    } catch (error) {
+        console.error('Error changing password:', error);
+    }
+
+}
 
 function showContent(contentType) {
     // Remove highlight from all tabs
@@ -172,7 +291,7 @@ function showContent(contentType) {
 
     // Highlight the clicked tab
     const activeTab = document.getElementById(contentType + 'Tab');
-    activeTab.style.backgroundColor = '#36802d';
+    activeTab.style.backgroundColor = '#2e6b23';
     activeTab.style.color = 'white';
 
     // Handle content display based on the selected tab
@@ -190,6 +309,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const profileTab = document.getElementById('profileTab');
     profileTab.style.backgroundColor = '#36802d';
     profileTab.style.color = 'white';
-
     showContent('profile');  // Show profile content by default
 });

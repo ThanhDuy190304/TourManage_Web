@@ -12,9 +12,7 @@ async function refreshAccessToken(req, res, next) {
         const decodedRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         // Kiểm tra refreshToken từ DB
         const storedRefreshToken = await getRefreshTokenFromDb(refreshToken);
-
         if (storedRefreshToken) {
-
             // Tạo lại access token nếu refresh token hợp lệ
             const newAccessToken = generateAccessToken(decodedRefreshToken.userId, decodedRefreshToken.userName
                 , decodedRefreshToken.userRole, decodedRefreshToken.devideId);
@@ -29,6 +27,12 @@ async function refreshAccessToken(req, res, next) {
             res.locals.user = decodedRefreshToken;
 
         } else {
+            res.clearCookie(process.env.REFRESH_TOKEN_NAME, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Lax',
+                path: '/'
+            });
             res.locals.user = null;
         }
 

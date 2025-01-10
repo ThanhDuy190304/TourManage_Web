@@ -35,19 +35,15 @@ class CartService {
     static async syncCartWithDB(touristId, cartDataArray) {
         try {
             let cartId = await cartModel.getCartId(touristId);
-
             for (let item of cartDataArray) {
                 const { tourId, scheduleId, quantity } = item;
-
                 let checkExistsCartItem = await cartModel.checkExistsCartItem(cartId, tourId, scheduleId);
-
                 if (checkExistsCartItem) {
                     await cartModel.increaseCartItemQuantity(cartId, tourId, scheduleId, quantity);
                 } else {
                     await cartModel.insertCartItem(cartId, tourId, scheduleId, quantity);
                 }
             }
-
         } catch (error) {
             console.log(`Error syncCartWithDB in cartService: `, error.message);
             throw new Error(`Failed syncing the cart with the database`);

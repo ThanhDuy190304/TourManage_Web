@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+
+document.addEventListener('DOMContentLoaded', async () => {
     const registeredUserButton = document.getElementById('registeredUser_btn');
     const registeredUserDropdownMenu = document.getElementById('registeredUser_menu');
 
@@ -62,40 +63,55 @@ document.addEventListener('DOMContentLoaded', () => {
             registeredUserDropdownMenu.classList.toggle('hidden');
         });
     }
-
     // Đóng menu khi nhấn ra ngoài
     document.addEventListener('click', (event) => {
         closeMenu();
     });
-
-    const cartDataArray = JSON.parse(localStorage.getItem("cartDataArray")) || [];
-    let itemCount = cartDataArray.length;
-
-    if (itemCount === 0) {
-        itemCount = parseInt(localStorage.getItem('countCartItem'), 10) || 0;
+    const cartDataArray = JSON.parse(localStorage.getItem("cartDataArray"));
+    if (cartDataArray) {
+        await syncCartWithServer(cartDataArray);
     }
+    const itemCount = parseInt(localStorage.getItem('countCartItem'), 10) || 0;
     const cartCountElement = document.getElementById('cartCount');
     cartCountElement.innerText = itemCount;
-
-
     document.getElementById("cartForm").addEventListener('submit', function (event) {
         event.preventDefault();
         const cartDataArray = JSON.parse(localStorage.getItem('cartDataArray')) || [];
         document.getElementById('cartDataArrayInput').value = JSON.stringify(cartDataArray);
         this.submit();
     });
-
     if (document.getElementById('logoutForm')) {
         document.getElementById('logoutForm').addEventListener('submit', function (event) {
             event.preventDefault();
-
             // Xóa cart data khi logout
             localStorage.removeItem('cartDataArray');
             localStorage.removeItem('countCartItem');
-
             this.submit();
         });
     }
-
-
 });
+async function syncCartWithServer(cartData) {
+    try {
+        const response = await fetch('/cart/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cartDataArray: cartData }),
+        });
+        if (response.status === 200) {
+            // Xử lý thành công
+            const data = await response.json();
+            const countItem = data.countItem;
+            localStorage.removeItem('cartDataArray');
+            localStorage.setItem('countCartItem', countItem);
+        } else if (response.status === 401) {
+            // Xử lý trường hợp không được phép
+            const countItem = cartData.length;
+            localStorage.setItem('countCartItem', countItem);
+        } else {
+            // Xử lý các trạng thái khác
+            console.error("Cart sync failed with status:", response.status, await response.json());
+        }
+    } catch (error) {
+        console.error("Error syncing cart:", error);
+    }
+}

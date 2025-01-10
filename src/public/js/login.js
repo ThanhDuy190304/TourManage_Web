@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById("loginForm");
-
     // Xử lý khi click nút LOGIN
     loginForm.addEventListener('click', async function (event) {
         if (event.target.value === "LOGIN") {
@@ -23,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = passwordInput.value;
         const errorMessageElement = document.getElementById('errorMessage'); // Vùng hiển thị lỗi
         errorMessageElement.textContent = '';
-
+        const successMessageElement = document.getElementById('successMessage'); // Vùng hiển thị thông báo thành công      
+        successMessageElement.textContent = '';
         // Kiểm tra input
         if (!usernameEmail) {
             usernameInput.setCustomValidity("Please enter your Username or Email!");
@@ -41,8 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
             passwordInput.setCustomValidity("");
         }
 
-        const cartDataArray = JSON.parse(localStorage.getItem('cartDataArray')) || [];
-
         // Gửi yêu cầu tới server
         try {
             const response = await fetch('/login/postLogin', {
@@ -51,19 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify({
                     Username_Email: usernameEmail,
                     password: password,
-                    cartDataArray: cartDataArray,
                 }),
             });
 
             if (response.ok) {
-                const data = await response.json();
-                const countItem = data.countItem;
-
-                localStorage.removeItem('cartDataArray');
-
-                localStorage.setItem('countCartItem', countItem);
                 const returnTo = sessionStorage.getItem('returnTo');
-
                 if (returnTo) {
                     window.location.href = returnTo;
                     sessionStorage.removeItem('returnTo');

@@ -2,7 +2,6 @@ const logoutModel = require('./logoutModel');
 
 class logoutService {
     static async deleteRefreshToken(user_id, device_id) {
-        await logoutModel.deleteRefreshToken(user_id, device_id);
         try {
             await logoutModel.deleteRefreshToken(user_id, device_id);
         } catch (error) {

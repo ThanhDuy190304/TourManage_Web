@@ -156,7 +156,7 @@ async function handleBooking() {
             const scheduleId = item.querySelector('.date').getAttribute('data-schedual');
             const voucher = parseFloat(item.querySelector('.voucher').innerText.replace('Voucher: ', '').replace('%', '').trim());
             const quantity = parseInt(item.querySelector('.quantity').innerText);
-
+            const firstImage = item.querySelector('img').src;
             selectedItems.push({
                 tourId: tourId,
                 title: title,
@@ -164,11 +164,15 @@ async function handleBooking() {
                 tourDate: tourDate,
                 quantity: quantity,
                 scheduleId: scheduleId,
-                voucher: voucher
+                voucher: voucher,
+                img: firstImage
             });
         }
     });
-
+    if (selectedItems.length === 0) {
+        alert("Please select at least one tour to book.");
+        return;
+    }
     const jsonReservationDataArray = JSON.stringify(selectedItems);
     sessionStorage.setItem("reservationDataArray", jsonReservationDataArray);
     const form = document.createElement('form');
@@ -233,12 +237,13 @@ async function deleteCartItem(tourId, scheduleId) {
             currentCount = Math.max(0, currentCount - 1); // Đảm bảo không xuống dưới 0
             document.getElementById('cartCount').innerText = currentCount.toString();
             localStorage.setItem('countCartItem', currentCount.toString());
-
         }
         else if (response.status === 401) {
             const cart = JSON.parse(localStorage.getItem("cartDataArray")) || [];
             const updatedCart = cart.filter((item) => item.tourId !== tourId);
             localStorage.setItem("cartDataArray", JSON.stringify(updatedCart));
+            document.getElementById('cartCount').innerText = updatedCart.length
+            localStorage.setItem('countCartItem', updatedCart.length.toString());
         }
     } catch (error) {
         console.error("Error delete item to cart:", error);
