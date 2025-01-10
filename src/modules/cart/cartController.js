@@ -145,7 +145,6 @@ class CartController {
                     await cartService.syncCartWithDB(touristId, cartDataArray);
                 }
                 countItem = await cartService.getItemCountsOfUserCart(touristId);
-                console.log(countItem);
             }
             return res.status(200).json({ countItem: countItem });
         } catch (error) {
