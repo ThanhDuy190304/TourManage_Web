@@ -39,8 +39,8 @@ class reservationService {
             else if (payMethod === 'payOnline') {
                 status = 'reserved';
             }
-            let reservationId = await reservationModel.createReservation(touristId, status, client);
-
+            let reservationId = await reservationModel.createReservation(touristId, status, userFullName,
+                userContact, client);
             for (let data of reservationDataArray) {
                 const { tourId, scheduleId, quantity, prices, title, tourDate, voucher, img } = data;
 
@@ -55,8 +55,6 @@ class reservationService {
                     total_price,
                     title,
                     formattedTourDate,
-                    userFullName,
-                    userContact,
                     img,
                     client
                 );

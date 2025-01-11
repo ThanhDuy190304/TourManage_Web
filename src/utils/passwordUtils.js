@@ -20,7 +20,7 @@ function validatePassword(password) {
         valid: isValid,
         message: isValid
             ? 'Password is valid.'
-            : 'Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character (_!@#$%^&*-).'
+            : 'Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character (_!@#$%^&*-)'
     };
 }
 

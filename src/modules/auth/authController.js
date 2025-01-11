@@ -22,7 +22,7 @@ async function refreshAccessToken(req, res, next) {
                 {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'Lax'
+                    sameSite: 'Strict'
                 });
             res.locals.user = decodedRefreshToken;
 
@@ -30,7 +30,7 @@ async function refreshAccessToken(req, res, next) {
             res.clearCookie(process.env.REFRESH_TOKEN_NAME, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Lax',
+                sameSite: 'Strict',
                 path: '/'
             });
             res.locals.user = null;
@@ -42,7 +42,7 @@ async function refreshAccessToken(req, res, next) {
             {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Lax',
+                sameSite: 'Strict',
                 path: '/'
             });
         res.locals.user = null;

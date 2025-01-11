@@ -13,7 +13,8 @@ async function authenticateToken(req, res, next) {
             const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             res.locals.user = decoded;
             if (res.locals.user.userRole === 1) {
-                return res.redirect('/admin'); // Kết thúc ở đây nếu redirect
+                const adminPath = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : process.env.ADMIN_PATH;
+                return res.redirect(adminPath);
             }
             return next();
         } catch (err) {
@@ -48,8 +49,6 @@ async function authenticateToken(req, res, next) {
     res.locals.user = null;
     return next();
 }
-
-
 
 /**
  * Middleware yêu cầu người dùng phải đăng nhập.

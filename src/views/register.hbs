@@ -36,7 +36,13 @@
                     <input class="text" name="password" type="password" placeholder="Password" required="">
                     <input class="text w3lpass" name="confirmPassword" type="password" placeholder="Confirm Password"
                         required="">
-                    <div id="message" style="text-align: center;"></div>
+                    <span id="passwordHint"
+                        style="display: block;  color:#34495e; text-align: justify; font-size: 14px;">
+                        Password must be at least 8 characters long, include at least one uppercase letter, one
+                        lowercase letter, one digit,
+                        and one special character (_!@#$%^&*-).
+                    </span>
+                    <div id="message" style="text-align: center; margin-top: 4px;"></div>
                     <input type="submit" value="SIGN UP"></input>
                 </div>
                 <a href="/googleAuth/google" class="google-btn">

@@ -1,10 +1,11 @@
 const db = require('../../config/db');
 
 class reservationModel {
-    static async createReservation(touristId, status, client) {
+    static async createReservation(touristId, status, userFullName, userContact, client) {
         try {
-            const query = `insert into reservations(tourist_id, status) values ($1, $2) returning reservation_id`;
-            const result = await client.query(query, [touristId, status]);
+            const query = `insert into reservations(tourist_id, status, tourist_name, tourist_contact) 
+                            values ($1, $2, $3, $4) returning reservation_id`;
+            const result = await client.query(query, [touristId, status, userFullName, userContact]);
             if (result.rows.length > 0) {
                 return result.rows[0].reservation_id;
             }
@@ -13,14 +14,13 @@ class reservationModel {
             throw new Error("Error createReservation in reservationModel");
         }
     }
-
-    static async insertReservationDetail(reservationId, tourId, scheduleId, quantity, total_price, title, tourDate, userFullName, userContact, img, client) {
+    static async insertReservationDetail(reservationId, tourId, scheduleId, quantity, total_price, title, tourDate, img, client) {
         try {
             const query = `
             INSERT INTO detail_reservations 
-                (reservation_id, tour_id, detail_tour_id, quantity, total_price, tittle, tourdate, tourist_name, tourist_contact, tour_img) 
+                (reservation_id, tour_id, detail_tour_id, quantity, total_price, tittle, tourdate, tour_img) 
             VALUES 
-                ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                ($1, $2, $3, $4, $5, $6, $7, $8)
             `;
             await client.query(query, [
                 reservationId,
@@ -30,8 +30,6 @@ class reservationModel {
                 total_price,
                 title,
                 tourDate,
-                userFullName,
-                userContact,
                 img
             ]);
 
