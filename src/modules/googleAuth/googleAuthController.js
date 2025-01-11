@@ -25,11 +25,11 @@ class GoogleAuthController {
                 }
                 res.cookie(process.env.ACCESS_TOKEN_NAME, result.accessToken, {
                     httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
-                    domain: process.env.ADMIN_DOMAIN,
+                    path: '/',
                 });
                 res.cookie(process.env.REFRESH_TOKEN_NAME, result.refreshToken, {
                     httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
-                    domain: process.env.ADMIN_DOMAIN,
+                    path: '/',
                 });
                 res.redirect('/');
             })(req, res, next);
