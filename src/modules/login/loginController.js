@@ -20,11 +20,13 @@ class loginController {
                 const userAgent = req.headers['user-agent']; // Lấy thông tin user-agent từ headers
                 const deviceId = getDeviceId(userAgent);
                 const { accessToken, refreshToken } = await loginService.authenticateUser(user.userId, user.userName, user.roleId, deviceId);
-                res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, {
-                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict'
+                res.cookie(process.env.ACCESS_TOKEN_NAME, result.accessToken, {
+                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
+                    domain: process.env.ADMIN_DOMAIN,
                 });
-                res.cookie(process.env.REFRESH_TOKEN_NAME, refreshToken, {
-                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict'
+                res.cookie(process.env.REFRESH_TOKEN_NAME, result.refreshToken, {
+                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
+                    domain: process.env.ADMIN_DOMAIN,
                 });
                 return res.status(204).send();
             } catch (error) {

@@ -1,6 +1,7 @@
 const passport = require('../../config/passportConfig');
 const GoogleAuthService = require('./googleAuthService');
 const { getDeviceId } = require("../../utils/deviceID");
+require('dotenv').config();
 
 class GoogleAuthController {
     static googleAuth(req, res, next) {
@@ -23,10 +24,12 @@ class GoogleAuthController {
                     return res.status(401).json({ message: result.message });
                 }
                 res.cookie(process.env.ACCESS_TOKEN_NAME, result.accessToken, {
-                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Lax'
+                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
+                    domain: process.env.ADMIN_DOMAIN,
                 });
                 res.cookie(process.env.REFRESH_TOKEN_NAME, result.refreshToken, {
-                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Lax'
+                    httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
+                    domain: process.env.ADMIN_DOMAIN,
                 });
                 res.redirect('/');
             })(req, res, next);
