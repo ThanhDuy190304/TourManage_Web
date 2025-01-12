@@ -20,6 +20,23 @@ class loginController {
                 const userAgent = req.headers['user-agent']; // Lấy thông tin user-agent từ headers
                 const deviceId = getDeviceId(userAgent);
                 const { accessToken, refreshToken } = await loginService.authenticateUser(user.userId, user.userName, user.roleId, deviceId);
+                if (user.roleId === 1) {
+                    res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, {
+                        httpOnly: true, secure: process.env.NODE_ENV === 'production',
+                        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
+                        path: '/',
+                        domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : 'localhost',
+                    });
+                    res.cookie(process.env.REFRESH_TOKEN_NAME, refreshToken, {
+                        httpOnly: true, secure: process.env.NODE_ENV === 'production',
+                        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
+                        path: '/',
+                        domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : 'localhost',
+                    });
+                    const adminPath = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : process.env.ADMIN_PATH;
+                    console.log("Redirecting to admin:", adminPath);
+                    return res.status(200).json({ redirect: adminPath });
+                }
                 res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, {
                     httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
                     path: '/',
@@ -28,18 +45,6 @@ class loginController {
                     httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
                     path: '/',
                 });
-                if (user.roleId === 1) {
-                    res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, {
-                        httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None',
-                        path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : undefined,
-                    });
-                    res.cookie(process.env.REFRESH_TOKEN_NAME, refreshToken, {
-                        httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None',
-                        path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : undefined,
-                    });
-                }
                 return res.status(204).send();
             } catch (error) {
                 console.error("Error in loginController:", error.message); // In ra để debug

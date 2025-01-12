@@ -12,10 +12,6 @@ async function authenticateToken(req, res, next) {
         try {
             const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
             res.locals.user = decoded;
-            if (res.locals.user.userRole === 1) {
-                const adminPath = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : process.env.ADMIN_PATH;
-                return res.redirect(adminPath);
-            }
             return next();
         } catch (err) {
             console.log('Access token expired, trying to refresh:', err.message);

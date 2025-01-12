@@ -51,16 +51,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     password: password,
                 }),
             });
-
             if (response.ok) {
-                const returnTo = sessionStorage.getItem('returnTo');
-                if (returnTo) {
-                    window.location.href = returnTo;
-                    sessionStorage.removeItem('returnTo');
-                } else {
-                    window.location.href = '/';
+                const data = await response.json();
+                if (data.redirect) {
+                    window.location.href = data.redirect;
                 }
-
+                else {
+                    const returnTo = sessionStorage.getItem('returnTo');
+                    if (returnTo) {
+                        window.location.href = returnTo;
+                        sessionStorage.removeItem('returnTo');
+                    } else {
+                        window.location.href = '/';
+                    }
+                }
             } else {
                 const error = await response.json();
                 errorMessageElement.textContent = error.message || 'Login failed. Please try again.';
