@@ -45,7 +45,7 @@ class loginController {
                     httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
                     path: '/',
                 });
-                return res.status(204).send();
+                return res.status(200).json({ message: 'Login successful' });
             } catch (error) {
                 console.error("Error in loginController:", error.message); // In ra để debug
                 res.status(500).json({ message: 'Failed to log in. Please try again later.' });
