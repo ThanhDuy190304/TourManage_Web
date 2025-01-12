@@ -29,14 +29,13 @@ class loginController {
                     path: '/',
                 });
                 if (user.roleId === 1) {
-
                     res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, {
-                        httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
+                        httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None',
                         path: '/',
                         domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : undefined,
                     });
                     res.cookie(process.env.REFRESH_TOKEN_NAME, refreshToken, {
-                        httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict',
+                        httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None',
                         path: '/',
                         domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : undefined,
                     });
