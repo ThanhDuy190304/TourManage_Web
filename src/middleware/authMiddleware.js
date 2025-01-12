@@ -50,7 +50,7 @@ async function authenticateToken(req, res, next) {
  * Middleware yêu cầu người dùng phải đăng nhập.
  */
 function requireAuth(req, res, next) {
-    if (!res.locals.user) {
+    if (!res.locals.user || res.locals.user.userRole !== 2) {
         return res.status(401).json({ message: 'Unauthorized access' });
     }
     next();

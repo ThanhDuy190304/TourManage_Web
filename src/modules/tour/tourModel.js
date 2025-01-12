@@ -11,8 +11,8 @@ class tourModel {
             LEFT JOIN tour_images t_i ON t.tour_id = t_i.tour_id
             LEFT JOIN locations lo ON lo.location_id = t.location_id
             WHERE t_i.img_id = 1
-            AND ('${searchQuery}' = 'default' OR t.title LIKE CONCAT('%', '${searchQuery}', '%'))
-            OR ('${searchQuery}' = 'default' OR t.brief LIKE CONCAT('%', '${searchQuery}', '%'))
+            AND (('${searchQuery}' = 'default' OR t.title LIKE CONCAT('%', '${searchQuery}', '%'))
+            OR ('${searchQuery}' = 'default' OR t.brief LIKE CONCAT('%', '${searchQuery}', '%')))
             AND (
                 ${minPriceQuery} = -1 OR ${maxPriceQuery} = -1 OR
                 (t.prices >= CAST(${minPriceQuery} AS REAL) AND t.prices <= CAST(${maxPriceQuery} AS REAL))
