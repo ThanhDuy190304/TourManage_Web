@@ -34,7 +34,6 @@ class loginController {
                         domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : 'localhost',
                     });
                     const adminPath = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : process.env.ADMIN_PATH;
-                    console.log("Redirecting to admin:", adminPath);
                     return res.status(200).json({ redirect: adminPath });
                 }
                 res.cookie(process.env.ACCESS_TOKEN_NAME, accessToken, {
