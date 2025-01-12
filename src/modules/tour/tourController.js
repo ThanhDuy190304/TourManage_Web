@@ -4,8 +4,8 @@ const tourService = require('./tourService');
 class tourController {
     static async getAllToursAPI(req, res) {
         try {
-            const {page, query = 'default',sort = 'default', location = ['default'], rate = [-1], minPrice = -1, maxPrice = -1, voucher = [-1] } = req.query;
-            const allTours = await tourService.getTours(page, query,sort, location, rate, minPrice,maxPrice, voucher);
+            const { page = 1, query = 'default', sort = 'default', location = ['default'], rate = [-1], minPrice = -1, maxPrice = -1, voucher = [-1] } = req.query;
+            const allTours = await tourService.getTours(page, query, sort, location, rate, minPrice, maxPrice, voucher);
             res.json(allTours); // Trả về HTML
         } catch (err) {
             res.status(500).json({ success: false, error: err.message });
@@ -14,9 +14,9 @@ class tourController {
 
     static async getAllTours(req, res) {
         try {
-            const { page, query = 'default',sort = 'default', location = ['default'], rate = [-1], minPrice = -1, maxPrice = -1, voucher = [-1] } = req.query;
+            const { page = 1, query = 'default', sort = 'default', location = ['default'], rate = [-1], minPrice = -1, maxPrice = -1, voucher = [-1] } = req.query;
             // console.log(page, query,sort, location, rate, price, voucher)
-            const allTours = await tourService.getTours(page, query,sort, location, rate, minPrice,maxPrice, voucher);
+            const allTours = await tourService.getTours(page, query, sort, location, rate, minPrice, maxPrice, voucher);
             res.render('tours', {
                 layout: 'main',
                 location_name: 'Popular',
