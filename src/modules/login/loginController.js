@@ -25,13 +25,13 @@ class loginController {
                         httpOnly: true, secure: process.env.NODE_ENV === 'production',
                         sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
                         path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : 'localhost',
+                        domain: process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_DOMAIN : 'localhost',
                     });
                     res.cookie(process.env.REFRESH_TOKEN_NAME, refreshToken, {
                         httpOnly: true, secure: process.env.NODE_ENV === 'production',
                         sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
                         path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? process.env.ADMIN_DOMAIN : 'localhost',
+                        domain: process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_DOMAIN : 'localhost',
                     });
                     const adminPath = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : process.env.ADMIN_PATH;
                     return res.status(200).json({ redirect: adminPath });
