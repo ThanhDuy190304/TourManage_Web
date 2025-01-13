@@ -9,11 +9,24 @@ async function fetchUserProfile() {
         const data = await response.json();
         if (data.success) {
             displayUserProfile(data.userProfile);
+            changeProfilePicture(data.userProfile);
         } else {
             console.error('Error:', data.message);
         }
     } catch (error) {
         console.error('Error fetching profile:', error);
+    }
+}
+
+function changeProfilePicture(userProfile) {
+    // Lấy phần tử ảnh đại diện
+    const profilePicture = document.getElementById('profilePicture');
+    console.log(userProfile.avatar)
+    
+    console.log(profilePicture)
+    // Đảm bảo userProfile.avatar chứa URL ảnh đại diện mới
+    if (userProfile && userProfile.avatar) {
+        profilePicture.src = userProfile.avatar;  // Cập nhật URL ảnh
     }
 }
 
@@ -379,4 +392,66 @@ window.addEventListener('DOMContentLoaded', (event) => {
     profileTab.style.backgroundColor = '#36802d';
     profileTab.style.color = 'white';
     showContent('profile');  // Show profile content by default
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const uploadDialog = document.getElementById('uploadDialog');
+    const fileInput = document.getElementById('fileInput');
+    const previewImage = document.getElementById('previewImage');
+    const saveButton = document.getElementById('saveButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const selectPictureButton = document.getElementById('selectPictureButton');
+    const changePictureButton = document.getElementById('changePictureButton');
+    
+    // Hiển thị hộp thoại khi nhấn nút Thay đổi ảnh
+    changePictureButton.addEventListener('click', () => {
+        uploadDialog.classList.remove('hidden');
+    });
+
+    // Hiển thị ảnh được chọn trong input
+    selectPictureButton.addEventListener('click', () => {
+        fileInput.click();  // Mở trình chọn file khi nhấn nút Chọn ảnh
+    });
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Lưu ảnh khi ấn nút Save
+    saveButton.addEventListener('click', async () => {
+        const file = fileInput.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('profilePicture', file);
+            console.log(formData)
+            // Fetch API để gửi ảnh lên server
+            const response = await fetch('/user/uploadProfilePicture', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+            if (result.url) {
+                alert('Ảnh đã được lưu thành công.');
+                uploadDialog.classList.add('hidden');
+            } else {
+                alert('Lỗi khi lưu ảnh.');
+            }
+        } else {
+            alert('Vui lòng chọn một ảnh.');
+        }
+    });
+
+    // Đóng dialog khi ấn nút Cancel
+    cancelButton.addEventListener('click', () => {
+        uploadDialog.classList.add('hidden');
+    });
 });

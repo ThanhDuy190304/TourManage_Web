@@ -12,9 +12,9 @@
             class="flex-[3] bg-white border border-green-900 relative flex flex-col pt-10 pr-2 items-center">
             <div class="relative w-full h-full flex flex-col items-center">
                 <div class="relative w-[120px] h-[120px] flex justify-center items-center mb-6">
-                    <img src="/img/img_profile/PTD.jpg" alt="Profile Picture"
-                        class="w-full h-full rounded-full shadow-lg object-cover">
-                    <img src="/img/img_profile/pencil.png" alt="Edit Icon" class="absolute bottom-1 right-1 w-10 h-10">
+                    <img src="null" alt="Profile Picture"
+                        class="w-full h-full rounded-full shadow-lg object-cover" id="profilePicture">
+                    <img id="changePictureButton" src="/img/img_profile/pencil.png" alt="Edit Icon" class="absolute bottom-1 right-1 w-10 h-10 cursor-pointer">
                 </div>
                 <p class="text-2xl text-[#1C2B38] whitespace-nowrap overflow-hidden text-ellipsis">
                     TADTravels </p>
@@ -49,6 +49,36 @@
         <div id="infoContainer"
             class="flex-[7] bg-white border border-green-900 overflow-auto max-h-[calc(100vh-80px)]"></div>
     </section>
+
+    <!-- Hộp thoại thay đổi ảnh với thiết kế đẹp -->
+    <div id="uploadDialog" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Change Profile Picture</h2>
+            
+            <!-- Nút Chọn ảnh -->
+            <button id="selectPictureButton" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md mb-4 w-full">
+                Choose Image
+            </button>
+            
+            <!-- Input file cho việc chọn ảnh (ẩn đi) -->
+            <input type="file" id="fileInput" accept="image/*" class="hidden" />
+            
+            <!-- Container ảnh preview -->
+            <div id="previewContainer" class="flex justify-center mb-4">
+                <img id="previewImage" class="w-32 h-32 rounded-full object-cover border-4 border-gray-300" />
+            </div>
+
+            <!-- Các nút Save và Cancel -->
+            <div class="flex justify-between">
+                <button id="saveButton" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md w-full mr-2">
+                    Save
+                </button>
+                <button id="cancelButton" class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-md w-full">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script src="/js/profile.js"></script>
