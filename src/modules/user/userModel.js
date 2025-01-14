@@ -48,7 +48,7 @@ class UserModel {
     }
 
     static async getProfileUser(userId) {
-        const query = `SELECT u.email, p_u.user_fullname, p_u.user_birthdate, p_u.user_contact, p_u.user_address
+        const query = `SELECT u.email, p_u.user_fullname, p_u.user_birthdate, p_u.user_contact, p_u.user_address, p_u.avatar
                    FROM users u 
                    JOIN profile_users p_u ON u.user_id = p_u.user_id 
                    WHERE u.user_id = $1`; // Thêm điều kiện lọc theo userId
@@ -63,7 +63,8 @@ class UserModel {
                     email: userProfile.email,
                     birthdate: userProfile.user_birthdate,
                     contact: userProfile.user_contact,
-                    address: userProfile.user_address
+                    address: userProfile.user_address,
+                    avatar: userProfile.avatar,
                 };
                 return profileUser;
             }
@@ -90,6 +91,17 @@ class UserModel {
         try {
             const query = 'UPDATE users SET user_password = $1, salt = $2 WHERE user_id = $3';
             await db.query(query, [hashedPassword, salt, userId]);
+        } catch (error) {
+            console.log("Error updatePassword in userModel: ", error.message);
+            throw new Error("Error updatePassword in userModel");
+        }
+    }
+
+    static async updateAvatar(userId, imageUrl) {
+        console.log(userId, imageUrl)
+        try {
+            const query = 'UPDATE profile_users SET avatar = $2 WHERE user_id = $1';
+            await db.query(query, [userId, imageUrl]);
         } catch (error) {
             console.log("Error updatePassword in userModel: ", error.message);
             throw new Error("Error updatePassword in userModel");

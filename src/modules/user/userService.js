@@ -1,5 +1,6 @@
 const userModel = require("./userModel");
 const reservationService = require("../reservation/reservationService")
+const uploadService = require("../upload/uploadService")
 const { hashPassword, generateSalt } = require('../../utils/passwordUtils');
 const { format } = require('date-fns');
 
@@ -40,6 +41,18 @@ class userService {
         try {
             let user = await userModel.checkEmailExists(email);
             return user;
+        } catch (error) {
+            console.error("Error checkEmailExists in userService: ", error.message);
+            throw new Error("Error checkEmailExists in userService");
+        }
+    }
+
+    static async uploadProfilePicture(userId, fileBuffer, fileType) {
+        console.log(1)
+        try {
+            const imageUrl = await uploadService.uploadProfilePicture(fileBuffer, fileType);
+            await userModel.updateAvatar(userId, imageUrl);
+            return imageUrl
         } catch (error) {
             console.error("Error checkEmailExists in userService: ", error.message);
             throw new Error("Error checkEmailExists in userService");
