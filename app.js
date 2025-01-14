@@ -25,6 +25,7 @@ Handlebars.registerHelper('times', function (n, block) {
     return result;
 });
 
+// const uploadRoutes = require('./src/routes/uploadRoutes');
 const viewsRoutes = require('./src/routes/viewsRoutes'); // Điều hướng view
 const tourRoutes = require('./src/routes/tourRoutes');  // Điều hướng tour
 const registerRoutes = require('./src/routes/registerRoutes'); // Điều hướng đến đăng ký
@@ -43,6 +44,12 @@ app.use(express.json());
 
 app.use(cookieParser());
 app.use(authenticateToken);
+
+// Middleware to parse raw binary data
+app.use(express.raw({ type: 'image/*', limit: '5mb' }));
+
+// Use upload routes
+// app.use(uploadRoutes);
 
 //Handlebars
 app.engine('hbs', exphbs.engine({

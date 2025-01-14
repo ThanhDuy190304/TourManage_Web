@@ -1,5 +1,6 @@
 const userService = require("./userService");
 const { validatePassword } = require("../../utils/passwordUtils");
+
 class userController {
 
     static async getUserProfile(req, res) {
@@ -54,6 +55,32 @@ class userController {
             res.status(500).json({
                 message: 'Have an error. Please try again later.'
             });
+        }
+    }
+    
+    static async uploadProfilePicture(req, res) {
+        try {
+                // Kiểm tra xem file đã được tải lên chưa
+            if (!req.file) {
+                return res.status(400).send({ error: 'Không có file ảnh trong request' });
+            }
+
+            const file = req.file;
+            const fileBuffer = file.buffer; // Dữ liệu ảnh dưới dạng buffer
+            const fileType = file.mimetype; // MIME type của file
+    
+            // Lưu URL vào database (cập nhật profile của người dùng)
+            const user = res.locals.user;
+            if (!user) {
+                return res.status(401).send();
+            }
+            const imageUrl = await userService.uploadProfilePicture(user.userId, fileBuffer, fileType);
+    
+            // Trả URL ảnh cho frontend
+            res.send({ url: imageUrl });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ error: error.message });
         }
     }
 
