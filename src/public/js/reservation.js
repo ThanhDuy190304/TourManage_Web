@@ -1,4 +1,8 @@
 function confirmReservation() {
+
+    const totalAmount = document.getElementById('total');
+    const totalValue = totalAmount.innerText.trim();
+
     const fullname = document.getElementById('user_fullname').value.trim();
     const contact = document.getElementById('user_contact').value.trim();
 
@@ -55,12 +59,21 @@ function confirmReservation() {
         reservationDataInput.name = 'reservationDataArray';
         reservationDataInput.value = reservationDataArray;
         form.appendChild(reservationDataInput);
+
         // Gửi phương thức thanh toán
         const paymentMethodInput = document.createElement('input');
         paymentMethodInput.type = 'hidden';
         paymentMethodInput.name = 'payMethod';
         paymentMethodInput.value = byCash ? 'payByCash' : 'payOnline';
         form.appendChild(paymentMethodInput);
+
+        //Gửi totalMoney
+        const totalAmountInput = document.createElement('input');
+        totalAmountInput.type = 'hidden';
+        totalAmountInput.name = 'totalAmount';
+        totalAmountInput.value = totalValue;  // Gửi giá trị của total
+        form.appendChild(totalAmountInput);
+
         document.body.appendChild(form);
         form.submit();
         document.body.removeChild(form);

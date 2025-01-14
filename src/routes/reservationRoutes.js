@@ -6,4 +6,5 @@ const reservationController = require('../modules/reservation/reservationControl
 
 router.get('/save-reservation', reservationController.showInvoices);
 router.post('/api/confirm-reservation', requireAuth, reservationController.confirmReservation);
+
 module.exports = router;

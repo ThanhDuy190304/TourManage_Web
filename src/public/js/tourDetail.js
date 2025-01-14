@@ -134,7 +134,6 @@ function handleBooking(tourId, title, prices, tourDate, quantity, scheduleId, vo
     input.name = 'reservationDataArray';
     input.value = jsonReservationDataArray;
     form.appendChild(input);
-
     // Thêm form vào body và submit
     document.body.appendChild(form);
     form.submit();
@@ -328,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const reviews = await response.json();
-            console.log( reviews)
+            console.log(reviews)
             // Làm trống danh sách review cũ
             reviewsList.innerHTML = '';
             const totalReviews = reviews.feedbackList.total || 0;
@@ -364,30 +363,30 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPagination(currentPage, pageSize, total, starFilter) {
         console.log(currentPage, pageSize, total, starFilter)
         const totalPages = Math.ceil(total / pageSize);
-        
+
         // Lấy các phần tử DOM
         const previousPageButton = document.getElementById('previousPage');
         const nextPageButton = document.getElementById('nextPage');
         const pageNumbersContainer = document.getElementById('pageNumbers');
-        
+
         // Cập nhật trạng thái nút phân trang
         previousPageButton.disabled = currentPage <= 1;
         nextPageButton.disabled = currentPage >= totalPages;
-        
+
         // Hiển thị các nút trang số
         pageNumbersContainer.innerHTML = '';
-        
+
         // Tạo các nút phân trang số, hạn chế chỉ hiển thị 5 nút xung quanh trang hiện tại (ví dụ: nếu có 10 trang, ta chỉ hiển thị 5 nút)
         let startPage = Math.max(1, currentPage - 2);  // Hiển thị 2 trang trước
         let endPage = Math.min(totalPages, currentPage + 2);  // Hiển thị 2 trang sau
-    
+
         // Nếu trang hiện tại là gần trang đầu hoặc cuối, điều chỉnh phạm vi số trang
         if (currentPage <= 3) {
             endPage = Math.min(5, totalPages);
         } else if (currentPage >= totalPages - 2) {
             startPage = Math.max(totalPages - 4, 1);
         }
-    
+
         // Tạo các nút trang số
         for (let i = startPage; i <= endPage; i++) {
             const pageButton = document.createElement('button');
@@ -395,14 +394,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i == currentPage) {
                 pageButton.classList.add('active');
             }
-            
+
             // Thêm sự kiện click
             pageButton.onclick = () => loadReviews(i, pageSize, starFilter);
-            
+
             // Thêm nút trang vào container
             pageNumbersContainer.appendChild(pageButton);
         }
-    
+
         // Đảm bảo các nút phân trang chuyển trang khi click
         previousPageButton.onclick = () => loadReviews(currentPage - 1, pageSize, starFilter);
         nextPageButton.onclick = () => loadReviews(currentPage + 1, pageSize, starFilter);
